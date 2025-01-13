@@ -9,25 +9,31 @@
 <body>
     <header>
         <img src="logo.png" alt="Logo di Flavio" class="logo">
-        <button class="hamburger-menu">☰</button>
+        <button class="hamburger-menu" onclick="toggleMenu()">☰</button>
     </header>
-    <main>
-        <div class="card" id="progetti">
+    <div class="cards-container">
+        <div class="card" data-text="Project">
             <span class="letter">P</span>
             <span class="text">Project</span>
         </div>
-        <div class="card" id="panoramica">
+        <div class="card" data-text="Others">
             <span class="letter">O</span>
             <span class="text">Others</span>
         </div>
-        <div class="card" id="curriculum">
+        <div class="card" data-text="Road">
             <span class="letter">R</span>
             <span class="text">Road</span>
         </div>
-        <div class="card" id="contatti">
+        <div class="card" data-text="Text">
             <span class="letter">T</span>
             <span class="text">Text</span>
         </div>
-    </main>
+    </div>
+<script>
+    function toggleMenu() {
+        // Placeholder function for hamburger menu interaction
+        alert('Menu placeholder function triggered!');
+    }
+</script>
 </body>
 </html>
