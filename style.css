@@ -38,35 +38,89 @@ body {
   overflow: hidden; /* Nasconde eventuale testo fuori dal perimetro */
 }
 
-/* Stile per la lettera principale (visibile di default) */
+/* Stile per la lettera generale */
 .scheda .lettera {
-  font-size: 7rem;       /* Dimensione più grande per la lettera */
+  font-size: 14rem; /* Dimensione grande */
   font-weight: 900;
-  color: #000;           /* Nero */
+  color: #000; /* Nero */
   transition: opacity 0.3s ease;
-  position: relative;    /* Abilita il posizionamento relativo */
-  top: -10px;
+  position: relative; /* Permette di spostare ogni lettera individualmente */
+}
+
+/* Posizioni specifiche per ogni lettera */
+.lettera-p {
+  top: -80px; /* Più in alto */
+  left: 10px;
+}
+
+.lettera-o {
+  top: 10px;
+  left: 10px;
+}
+
+.lettera-r {
+  top: -150px;
+  left: 10px;
+}
+
+.lettera-t {
+  top: 120px;
+  left: 10px;
+}
+
+/* Numero in basso a sinistra di ogni scheda */
+.scheda .numero {
+  position: absolute; /* Posizionamento assoluto */
+  bottom: 10px; /* Posiziona in basso */
+  left: 10px; /* Posiziona a sinistra */
+  font-size: 1.5rem; /* Dimensione del numero */
+  font-weight: bold; /* Numero in grassetto */
+  color: #333; /* Colore grigio scuro */
+  opacity: 1; /* Leggera trasparenza per stile */
+}
+
+/* Personalizzazione specifica per la frase sotto la R */
+.frase-r {
+  color: #000000; /* Colore testo */
+  font-size: 1rem; /* Dimensione font */
+  font-style: italic; /* Corsivo */
+  position: absolute; /* Posizionamento assoluto */
+  top: 250px; /* Posiziona più in basso rispetto alla lettera */
+  left: 15px; /* Allinea a sinistra rispetto al contenitore */
+  width: 200px; /* Imposta una larghezza per il testo */
+  line-height: 1.5; /* Spaziatura tra le righe */
+  text-align: left; /* Allinea il testo a sinistra */
+  opacity: 1; /* Visibile di default */
+  overflow-wrap: break-word; /* Spezza le parole lunghe */
+  word-break: normal; /* Normale comportamento di interruzione parole */
+  transition: opacity 0.3s ease; /* Transizione per sparire */
+}
+
+/* Regola per l'hover: scompare la frase */
+.scheda:hover .frase-r {
+  opacity: 0; /* Rende il testo invisibile al passaggio del cursore */
 }
 
 /* Stile per la parola che compare al passaggio del mouse */
 .scheda .parola {
-  font-size: 2rem;     /* Dimensione diversa (più piccola) per la parola */
+  font-size: 2rem; /* Dimensione (più piccola) per la parola */
   font-weight: 900;
-  color: #000;           /* Nero */
+  color: #000; /* Nero */
   transition: opacity 0.3s ease;
   position: absolute;
-  opacity: 0;            /* Nascosta di default */
+  opacity: 0; /* Nascosta di default */
 }
 
 /* Hover: la lettera scompare e la parola appare */
 .scheda:hover .lettera {
   opacity: 0;
 }
+
 .scheda:hover .parola {
   opacity: 1;
 }
 
-/* Se desideri una classe dedicata per variazioni specifiche */
+/* Classe dedicata per variazioni specifiche (opzionale) */
 .playfair-display-sc-black {
   font-family: 'Playfair Display SC', serif;
   font-weight: 900;
