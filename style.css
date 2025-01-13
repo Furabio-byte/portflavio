@@ -90,7 +90,7 @@ body {
   left: 10px;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: #000000;
 }
 
 /* Personalizzazione per la frase sotto la R */
@@ -133,40 +133,71 @@ body {
   opacity: 1;
 }
 
-/* MEDIA QUERY per schermi fino a 768px (tablet / mobile) */
 @media (max-width: 768px) {
 
+  /* Contenitore schede */
   .schede-container {
-    justify-content: center; /* Centra le schede su righe multiple */
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
+  /* Singola scheda */
   .scheda-link {
-    margin: 0.5rem;      /* Margine intorno a ogni scheda */
-    flex: unset;         /* Rimuove il flex: 1 per gestire la larghezza come vogliamo */
-    max-width: 300px;    /* Limita la larghezza massima su dispositivi stretti */
+    margin: 0.5rem auto;
+    flex: unset;
+    max-width: 280px;
+    width: 100%;
+    position: relative; /* Assicura che gli elementi figli siano posizionati */
+    overflow: visible;  /* Evita il taglio di contenuti */
   }
 
-  /* Riduci la dimensione delle lettere e riadatta il posizionamento */
+  /* Lettera nella scheda */
   .scheda .lettera {
-    font-size: clamp(3rem, 8vw, 8rem); 
+    font-size: clamp(3rem, 7vw, 7rem);
+    position: relative;
+    top: 0;
+    text-align: center;
+    color: black;
+    transition: transform 0.3s, color 0.3s; /* Aggiunge un'animazione */
   }
 
-  /* Esempi di riduzione del top per evitare overflow */
-  .lettera-p {
-    top: -50px;
-  }
+  /* Regole specifiche per lettere */
+  .lettera-p,
+  .lettera-o,
+  .lettera-t,
   .lettera-r {
-    top: -80px;
-  }
-  .lettera-t {
-    top: 80px;
+    position: relative; /* Elimina gli spostamenti */
+    top: 0;             /* Reset posizione verticale */
   }
 
-  /* Riadattiamo la frase R se necessario */
+  /* Lettera R (controlla che non sia nascosta) */
+  .lettera-r {
+    font-size: clamp(3rem, 8vw, 8rem); /* Dimensione adattabile */
+    z-index: 1;                        /* Porta la lettera sopra eventuali elementi sovrapposti */
+    color: black;                      /* Colore visibile */
+  }
+
+  /* Effetto al tocco su mobile (simile a hover) */
+  .scheda-link:active .lettera,
+  .scheda-link:focus .lettera {
+    transform: scale(1.1);  /* Aumenta leggermente la dimensione */
+    color: #f39c12;         /* Cambia colore al tocco */
+  }
+
+  /* Frase "Lorem..." */
   .frase-r {
-    top: 60px;
-    left: 10px;
-    width: 80%;       /* Più larga su schermi piccoli */
-    text-align: left; /* o center, se preferisci */
+    position: relative;
+    top: 0;
+    margin-top: 2rem;
+    width: 90%;
+    text-align: center;
+    font-size: 1rem;
+    font-style: italic;
+  }
+
+  /* Padding globale */
+  body {
+    padding: 1rem;
   }
 }
