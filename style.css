@@ -5,131 +5,168 @@
   box-sizing: border-box;
 }
 
-/* Sfondo pagina */
+/* Sfondo e font base */
 body {
-  background-color: #ffffff; /* Bianco */
+  min-height: 100vh;                  /* Evita problemi su mobile rispetto a height: 100vh */
+  background-color: #ffffff;          /* Bianco */
   font-family: 'Playfair Display SC', serif;
-  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Contenitore delle schede */
+/* Contenitore delle schede (uso di nav in HTML) */
 .schede-container {
-  flex: 1; /* Occupa lo spazio verticale rimanente */
+  flex: 1;                            /* Occupa lo spazio verticale rimanente */
   display: flex;
-  justify-content: space-between; /* Spaziatura tra le schede */
-  align-items: stretch; /* Allinea le schede in altezza */
+  justify-content: space-between;     /* Spaziatura orizzontale tra le schede */
+  align-items: stretch;               /* Allinea le schede in altezza */
   padding: 1rem;
+  flex-wrap: wrap;                    /* Consente di "andare a capo" su schermi stretti */
 }
 
 /* Link che rende cliccabile tutta la scheda */
 .scheda-link {
-  text-decoration: none; /* Rimuove la sottolineatura dei link */
-  color: inherit;        /* Mantiene il colore del testo della scheda */
-  display: flex;         /* Si comporta come un contenitore flex */
-  flex: 1;               /* Occupa lo stesso spazio delle altre schede */
-  margin: 0 0.5rem;      /* Stesso margine delle schede */
-  border-radius: 10px;   /* Bordi smussati */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato */
-  overflow: hidden;      /* Nasconde eventuali overflow */
-  transition: all 0.5s ease; /* Effetto transizione */
+  text-decoration: none;  /* Rimuove la sottolineatura */
+  color: inherit;         /* Mantiene il colore del testo */
+  display: flex;          /* Gestisce il contenitore come flex */
+  flex: 1;                /* Le schede occupano spazio in modo uniforme */
+  margin: 0 0.5rem;       
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;       
+  transition: all 0.5s ease;
+  min-width: 200px;       /* Utile per evitare che le schede diventino troppo strette */
 }
 
 .scheda-link:hover {
-  transform: scale(1.05); /* Aggiunge un leggero ingrandimento all'hover */
+  transform: scale(1.05); /* Ingrandimento al passaggio del mouse */
 }
 
 /* Singola scheda */
 .scheda {
-  flex: 1; /* Occupa lo stesso spazio tra tutte le schede */
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: #ffffff; /* Bianco */
-  border-radius: 10px; /* Bordi smussati */
-  overflow: hidden; /* Nasconde eventuali overflow */
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
   transition: all 0.5s ease;
 }
 
 /* Stile per la lettera generale */
 .scheda .lettera {
-  font-size: 14rem; /* Dimensione grande */
+  /* Usando clamp diamo un range responsivo: min 4rem, max 14rem */
+  font-size: clamp(4rem, 10vw, 14rem);
   font-weight: 900;
-  color: #000; /* Nero */
+  color: #000;
   transition: opacity 0.3s ease;
-  position: relative; /* Permette di spostare ogni lettera individualmente */
+  position: relative;
 }
 
-/* Posizioni specifiche per ogni lettera */
+/* Posizioni specifiche per ogni lettera (con valori fissi, occhio su mobile) */
 .lettera-p {
-  top: -80px; /* Posizione specifica per la lettera P */
+  top: -80px;
   left: 10px;
 }
-
 .lettera-o {
-  top: 10px; /* Posizione specifica per la lettera O */
+  top: 10px;
   left: 10px;
 }
-
 .lettera-r {
-  top: -150px; /* Posizione specifica per la lettera R */
+  top: -150px;
   left: 10px;
 }
-
 .lettera-t {
-  top: 120px; /* Posizione specifica per la lettera T */
+  top: 120px;
   left: 10px;
 }
 
-/* Numero in basso a sinistra di ogni scheda */
+/* Numero in basso a sinistra */
 .scheda .numero {
-  position: absolute; /* Posizionamento assoluto */
-  bottom: 10px;       /* Posiziona in basso */
-  left: 10px;         /* Posiziona a sinistra */
-  font-size: 1.5rem;  /* Dimensione del numero */
-  font-weight: bold;  /* Numero in grassetto */
-  color: #333;        /* Colore grigio scuro */
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
-/* Personalizzazione specifica per la frase sotto la R */
+/* Personalizzazione per la frase sotto la R */
 .frase-r {
-  color: #000000;      /* Colore testo */
-  font-size: 1rem;     /* Dimensione font */
-  font-style: italic;  /* Corsivo */
-  position: absolute;  /* Posizionamento assoluto */
-  top: 250px;          /* Posiziona più in basso rispetto alla lettera */
-  left: 15px;          /* Allinea a sinistra rispetto al contenitore */
-  width: 200px;        /* Imposta una larghezza per il testo */
-  line-height: 1.5;    /* Spaziatura tra le righe */
-  text-align: left;    /* Allinea il testo a sinistra */
-  opacity: 1;          /* Visibile di default */
-  overflow-wrap: break-word; /* Spezza le parole lunghe */
-  word-break: normal;  /* Normale comportamento di interruzione parole */
-  transition: opacity 0.3s ease; /* Transizione per sparire */
+  color: #000000;
+  font-size: 1rem;
+  font-style: italic;
+  position: absolute;
+  top: 250px;
+  left: 15px;
+  width: 200px;
+  line-height: 1.5;
+  text-align: left;
+  opacity: 1;
+  overflow-wrap: break-word;
+  word-break: normal;
+  transition: opacity 0.3s ease;
 }
 
-/* Regola per l'hover: scompare la frase */
+/* Scompare la frase al passaggio del mouse */
 .scheda:hover .frase-r {
-  opacity: 0; /* Rende il testo invisibile al passaggio del cursore */
+  opacity: 0;
 }
 
-/* Stile per la parola che compare al passaggio del mouse */
+/* Parola che compare al passaggio del mouse */
 .scheda .parola {
-  font-size: 2rem; /* Dimensione per la parola */
+  font-size: 2rem;
   font-weight: 900;
-  color: #000;     /* Nero */
+  color: #000;
   transition: opacity 0.3s ease;
   position: absolute;
-  opacity: 0;     /* Nascosta di default */
+  opacity: 0; /* Nascosta di default */
 }
 
 /* Hover: la lettera scompare e la parola appare */
 .scheda:hover .lettera {
   opacity: 0;
 }
-
 .scheda:hover .parola {
   opacity: 1;
+}
+
+/* MEDIA QUERY per schermi fino a 768px (tablet / mobile) */
+@media (max-width: 768px) {
+
+  .schede-container {
+    justify-content: center; /* Centra le schede su righe multiple */
+  }
+
+  .scheda-link {
+    margin: 0.5rem;      /* Margine intorno a ogni scheda */
+    flex: unset;         /* Rimuove il flex: 1 per gestire la larghezza come vogliamo */
+    max-width: 300px;    /* Limita la larghezza massima su dispositivi stretti */
+  }
+
+  /* Riduci la dimensione delle lettere e riadatta il posizionamento */
+  .scheda .lettera {
+    font-size: clamp(3rem, 8vw, 8rem); 
+  }
+
+  /* Esempi di riduzione del top per evitare overflow */
+  .lettera-p {
+    top: -50px;
+  }
+  .lettera-r {
+    top: -80px;
+  }
+  .lettera-t {
+    top: 80px;
+  }
+
+  /* Riadattiamo la frase R se necessario */
+  .frase-r {
+    top: 60px;
+    left: 10px;
+    width: 80%;       /* Più larga su schermi piccoli */
+    text-align: left; /* o center, se preferisci */
+  }
 }

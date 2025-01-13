@@ -2,8 +2,11 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <!-- Assicura il rendering corretto su mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Portflavio</title>
+
   <!-- Collegamento Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,17 +14,19 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@900&display=swap"
     rel="stylesheet"
   >
+
   <!-- Collega il foglio di stile -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Contenitore principale delle schede -->
-  <div class="schede-container">
+  <!-- Navigazione contenente le schede -->
+  <nav class="schede-container">
 
     <!-- Prima scheda: P (Project) -->
     <a href="project.html" class="scheda-link">
       <div class="scheda">
+        <!-- Possibile heading semantico, es. <h2 class="lettera lettera-p">P</h2> -->
         <span class="lettera lettera-p">P</span>
         <span class="parola">Project</span>
         <span class="numero">2</span>
@@ -58,7 +63,7 @@
       </div>
     </a>
   
-  </div>
+  </nav>
 
 </body>
 </html>
