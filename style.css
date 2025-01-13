@@ -1,7 +1,8 @@
 /* Reset dei margini e del padding */
-body, h1, h2, ul, li, p {
+body, h1, h2, ul, li, p, button {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -12,35 +13,46 @@ body {
 }
 
 header {
-    background-color: #333;
-    color: white;
-    padding: 1rem 0;
-    text-align: center;
-}
-
-nav ul {
-    list-style: none;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
 }
 
-nav ul li {
-    padding: 0 20px;
+.logo {
+    width: 50px;
+    height: auto;
 }
 
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+.hamburger-menu {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 main {
+    display: flex;
+    justify-content: space-around;
     padding: 20px;
-    text-align: center;
 }
 
-section {
-    margin-bottom: 40px;
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 18%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+    font-size: 5rem;
+    font-weight: bold;
+    color: black;
 }
 
 footer {
