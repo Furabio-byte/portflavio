@@ -23,19 +23,34 @@ body {
   padding: 1rem;
 }
 
+/* Link che rende cliccabile tutta la scheda */
+.scheda-link {
+  text-decoration: none; /* Rimuove la sottolineatura dei link */
+  color: inherit;        /* Mantiene il colore del testo della scheda */
+  display: flex;         /* Si comporta come un contenitore flex */
+  flex: 1;               /* Occupa lo stesso spazio delle altre schede */
+  margin: 0 0.5rem;      /* Stesso margine delle schede */
+  border-radius: 10px;   /* Bordi smussati */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato */
+  overflow: hidden;      /* Nasconde eventuali overflow */
+  transition: all 0.5s ease; /* Effetto transizione */
+}
+
+.scheda-link:hover {
+  transform: scale(1.05); /* Aggiunge un leggero ingrandimento all'hover */
+}
+
 /* Singola scheda */
 .scheda {
-  background-color: #ffffff; /* Bianco */
-  flex: 1;
-  margin: 0 0.5rem;
-  border-radius: 10px; /* Bordi smussati */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato/ombreggiatura */
+  flex: 1; /* Occupa lo stesso spazio tra tutte le schede */
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  background-color: #ffffff; /* Bianco */
+  border-radius: 10px; /* Bordi smussati */
+  overflow: hidden; /* Nasconde eventuali overflow */
   transition: all 0.5s ease;
-  overflow: hidden; /* Nasconde eventuale testo fuori dal perimetro */
 }
 
 /* Stile per la lettera generale */
@@ -49,50 +64,49 @@ body {
 
 /* Posizioni specifiche per ogni lettera */
 .lettera-p {
-  top: -80px; /* Più in alto */
+  top: -80px; /* Posizione specifica per la lettera P */
   left: 10px;
 }
 
 .lettera-o {
-  top: 10px;
+  top: 10px; /* Posizione specifica per la lettera O */
   left: 10px;
 }
 
 .lettera-r {
-  top: -150px;
+  top: -150px; /* Posizione specifica per la lettera R */
   left: 10px;
 }
 
 .lettera-t {
-  top: 120px;
+  top: 120px; /* Posizione specifica per la lettera T */
   left: 10px;
 }
 
 /* Numero in basso a sinistra di ogni scheda */
 .scheda .numero {
   position: absolute; /* Posizionamento assoluto */
-  bottom: 10px; /* Posiziona in basso */
-  left: 10px; /* Posiziona a sinistra */
-  font-size: 1.5rem; /* Dimensione del numero */
-  font-weight: bold; /* Numero in grassetto */
-  color: #333; /* Colore grigio scuro */
-  opacity: 1; /* Leggera trasparenza per stile */
+  bottom: 10px;       /* Posiziona in basso */
+  left: 10px;         /* Posiziona a sinistra */
+  font-size: 1.5rem;  /* Dimensione del numero */
+  font-weight: bold;  /* Numero in grassetto */
+  color: #333;        /* Colore grigio scuro */
 }
 
 /* Personalizzazione specifica per la frase sotto la R */
 .frase-r {
-  color: #000000; /* Colore testo */
-  font-size: 1rem; /* Dimensione font */
-  font-style: italic; /* Corsivo */
-  position: absolute; /* Posizionamento assoluto */
-  top: 250px; /* Posiziona più in basso rispetto alla lettera */
-  left: 15px; /* Allinea a sinistra rispetto al contenitore */
-  width: 200px; /* Imposta una larghezza per il testo */
-  line-height: 1.5; /* Spaziatura tra le righe */
-  text-align: left; /* Allinea il testo a sinistra */
-  opacity: 1; /* Visibile di default */
+  color: #000000;      /* Colore testo */
+  font-size: 1rem;     /* Dimensione font */
+  font-style: italic;  /* Corsivo */
+  position: absolute;  /* Posizionamento assoluto */
+  top: 250px;          /* Posiziona più in basso rispetto alla lettera */
+  left: 15px;          /* Allinea a sinistra rispetto al contenitore */
+  width: 200px;        /* Imposta una larghezza per il testo */
+  line-height: 1.5;    /* Spaziatura tra le righe */
+  text-align: left;    /* Allinea il testo a sinistra */
+  opacity: 1;          /* Visibile di default */
   overflow-wrap: break-word; /* Spezza le parole lunghe */
-  word-break: normal; /* Normale comportamento di interruzione parole */
+  word-break: normal;  /* Normale comportamento di interruzione parole */
   transition: opacity 0.3s ease; /* Transizione per sparire */
 }
 
@@ -103,12 +117,12 @@ body {
 
 /* Stile per la parola che compare al passaggio del mouse */
 .scheda .parola {
-  font-size: 2rem; /* Dimensione (più piccola) per la parola */
+  font-size: 2rem; /* Dimensione per la parola */
   font-weight: 900;
-  color: #000; /* Nero */
+  color: #000;     /* Nero */
   transition: opacity 0.3s ease;
   position: absolute;
-  opacity: 0; /* Nascosta di default */
+  opacity: 0;     /* Nascosta di default */
 }
 
 /* Hover: la lettera scompare e la parola appare */
@@ -118,11 +132,4 @@ body {
 
 .scheda:hover .parola {
   opacity: 1;
-}
-
-/* Classe dedicata per variazioni specifiche (opzionale) */
-.playfair-display-sc-black {
-  font-family: 'Playfair Display SC', serif;
-  font-weight: 900;
-  font-style: normal;
 }
