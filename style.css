@@ -27,7 +27,7 @@ body {
 .logo {
     width: 40px;
     height: 40px;
-    background: #fff;
+    background: #fff; /* Assumi che il logo sia un'immagine. Se è un colore solido, questa riga può essere rimossa. */
 }
 
 .menu-toggle {
@@ -46,14 +46,13 @@ body {
 }
 
 .panels {
-    height: 100vh;
     display: flex;
     flex-direction: column;
+    height: 100vh; /* Assicura che le panel occupino tutto lo spazio verticale disponibile */
 }
 
 .panel {
     flex: 1;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,7 +64,6 @@ body {
 }
 
 .content {
-    position: relative;
     text-align: center;
 }
 
@@ -73,7 +71,6 @@ body {
     font-size: 15vw;
     font-weight: bold;
     line-height: 1;
-    display: block;
 }
 
 .word {
