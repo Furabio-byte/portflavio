@@ -8,7 +8,7 @@
 /* Sfondo e font base */
 body {
   min-height: 100vh;                  /* Evita problemi su mobile rispetto a height: 100vh */
-  background-color: #ffffff;          /* Bianco */
+  background-color: #E8E3D9;          /* Bianco */
   font-family: 'Playfair Display SC', serif;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: #ffffff;
+  background-color: #808000;
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.5s ease;
@@ -60,7 +60,7 @@ body {
   /* Usando clamp diamo un range responsivo: min 6rem, max 14rem */
   font-size: clamp(12rem, 20vw, 40rem);
   font-weight: 900;
-  color: #000;
+  color: #000000;
   transition: opacity 0.3s ease;
   position: relative;
 }
@@ -76,7 +76,7 @@ body {
 }
 .lettera-r {
   top: -150px;
-  left: 10px;
+  left: -40px;
 }
 .lettera-t {
   top: 120px;
