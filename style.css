@@ -4,79 +4,111 @@
     box-sizing: border-box;
 }
 
-body, h1, h2, ul, li, p, button {
+body {
+    background-color: black;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Imposta l'altezza totale della viewport */
-    background-color: #fff;
-}
-
+/* Header */
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #000;
-    color: #fff;
+    z-index: 1000;
 }
 
-.logo {
+.logo-placeholder {
+    width: 40px;
     height: 40px;
+    background-color: white;
 }
 
-.hamburger-menu {
-    font-size: 24px;
-    background: none;
-    border: none;
+.hamburger {
     cursor: pointer;
+    padding: 10px;
 }
 
-.cards-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column; /* Schede disposte verticalmente */
-    justify-content: space-around;
-    align-items: center; /* Centrare le schede orizzontalmente */
-    width: 100%; /* Occupa l'intera larghezza della viewport */
-    overflow: hidden; /* Evita lo scorrimento verticale */
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.3s;
 }
 
-.card {
-    background-color: #000;
-    color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 10px;
-    width: 80%; /* Larghezza delle schede rispetto al container */
-    height: 20%; /* Ogni scheda occupa un quarto dell'altezza disponibile */
+/* Panels */
+.panels-container {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s;
+    padding: 20px;
+    gap: 20px;
 }
 
-.card:hover {
-    transform: scale(1.1);
+.panel {
+    flex: 1;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .letter {
-    font-size: 5rem;
+    font-size: 4rem;
     font-weight: bold;
+    z-index: 2;
 }
 
-.text {
-    font-size: 2rem;
+.word {
+    position: absolute;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    top: 60%;
 }
 
-.card:hover .text {
+.panel:hover .word {
     opacity: 1;
-    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Hover effects */
+.panel:hover {
+    background-color: #111;
+}
+
+.hamburger:hover span {
+    background-color: #888;
+}
+
+/* Per mantenere il layout fisso */
+@media (min-height: 600px) {
+    .panels-container {
+        height: 100vh;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .letter {
+        font-size: 3rem;
+    }
+    
+    .word {
+        font-size: 1.2rem;
+    }
 }

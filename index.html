@@ -3,37 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio di Flavio</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <img src="logo.png" alt="Logo di Flavio" class="logo">
-        <button class="hamburger-menu" onclick="toggleMenu()">☰</button>
+        <div class="logo">
+            <!-- Placeholder per il logo -->
+            <div class="logo-placeholder"></div>
+        </div>
+        <div class="menu-button">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
     </header>
-    <div class="cards-container">
-        <div class="card" id="progetti">
-            <span class="letter">P</span>
-            <span class="text hidden">Project</span>
+
+    <main class="panels-container">
+        <div class="panel">
+            <div class="letter">P</div>
+            <div class="word">Project</div>
         </div>
-        <div class="card" id="panoramica">
-            <span class="letter">O</span>
-            <span class="text hidden">Others</span>
+        <div class="panel">
+            <div class="letter">O</div>
+            <div class="word">Others</div>
         </div>
-        <div class="card" id="curriculum">
-            <span class="letter">R</span>
-            <span class="text hidden">Road</span>
+        <div class="panel">
+            <div class="letter">R</div>
+            <div class="word">Road</div>
         </div>
-        <div class="card" id="contatti">
-            <span class="letter">T</span>
-            <span class="text hidden">Text</span>
+        <div class="panel">
+            <div class="letter">T</div>
+            <div class="word">Text</div>
         </div>
-    </div>
-<script>
-    function toggleMenu() {
-        // Placeholder function for hamburger menu interaction
-        alert('Menu placeholder function triggered!');
-    }
-</script>
+    </main>
 </body>
 </html>
