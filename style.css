@@ -58,7 +58,7 @@ body {
 /* Stile per la lettera generale */
 .scheda .lettera {
   /* Usando clamp diamo un range responsivo: min 6rem, max 14rem */
-  font-size: clamp(6rem, 10vw, 14rem);
+  font-size: clamp(12rem, 20vw, 40rem);
   font-weight: 900;
   color: #000;
   transition: opacity 0.3s ease;
