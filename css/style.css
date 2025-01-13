@@ -65,6 +65,92 @@ body {
   position: relative;
 }
 
+/* Scheda più larga */
+.scheda-larga {
+  flex: 2; /* Occupa più spazio rispetto alle altre */
+  display: flex;
+  flex-direction: column; /* Impilare gli elementi verticalmente */
+  justify-content: center;
+  align-items: center;
+  background-color: #808000; /* Stesso colore della scheda normale */
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  width: 80%; /* Rende la scheda più larga rispetto alle altre */
+  max-width: 800px; /* Limita la larghezza massima */
+  margin: 20px auto; /* Centra la scheda orizzontalmente */
+  padding: 30px; /* Aggiunge spaziatura interna maggiore */
+}
+
+/* Stile per il testo interno alla scheda larga */
+.scheda-larga .lettera {
+  font-size: 4rem; /* Dimensione ridotta rispetto alla scheda normale */
+  font-weight: bold;
+  color: #000000;
+}
+
+.scheda-larga .parola {
+  font-size: 2rem;
+  margin: 10px 0;
+  color: #000000;
+}
+
+.scheda-larga .descrizione {
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.5;
+  color: #000000;
+}
+
+/* Scheda larga fullscreen */
+.scheda-larga-fullscreen {
+  display: flex;
+  flex-direction: column; /* Impilare gli elementi verticalmente */
+  justify-content: center; /* Centrare verticalmente */
+  align-items: center; /* Centrare orizzontalmente */
+  position: relative;
+  width: calc(100% - 40px); /* Spazio ai lati (20px per lato) */
+  height: 100vh; /* Riempie l'intero schermo */
+  margin: 0 auto; /* Centra orizzontalmente */
+  background-color: #808000; /* Colore di sfondo della scheda */
+  border-radius: 20px; /* Bordo arrotondato */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombreggiatura */
+  padding: 30px; /* Spaziatura interna */
+  overflow: hidden; /* Nasconde eventuali contenuti che fuoriescono */
+}
+
+.scheda-larga-fullscreen .lettera {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.scheda-larga-fullscreen .parola {
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #ffffff;
+}
+
+.scheda-larga-fullscreen .descrizione {
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* Logo in alto a destra */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10; /* Assicurati che il logo sia sopra gli altri elementi */
+}
+
+.logo {
+  width: 100px; /* Dimensione del logo */
+  height: auto; /* Mantiene le proporzioni */
+}
+
 /* Posizioni specifiche per ogni lettera (con valori fissi, occhio su mobile) */
 .lettera-p {
   top: -80px;
