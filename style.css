@@ -9,18 +9,21 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    color: #000;
     background-color: #fff;
 }
 
 header {
-    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
 }
 
 .logo {
-    height: 50px;
+    height: 40px;
 }
 
 .hamburger-menu {
@@ -31,11 +34,10 @@ header {
 }
 
 .cards-container {
-    flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    align-items: stretch;
-    background-color: #f4f4f9;
+    flex-grow: 1;
 }
 
 .card {
@@ -44,15 +46,15 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 1rem;
+    margin: 10px;
     border-radius: 10px;
-    background-color: #fff;
-    cursor: pointer;
+    background-color: #000;
+    color: #fff;
     transition: transform 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-10px);
+    transform: scale(1.1);
 }
 
 .letter {
@@ -62,13 +64,18 @@ header {
 
 .text {
     font-size: 2rem;
-    color: black;
     opacity: 0;
-    transition: opacity 0.5s;
-    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .card:hover .text {
-    visibility: visible;
     opacity: 1;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.card:hover .hidden {
+    visibility: visible;
 }
