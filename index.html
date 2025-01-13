@@ -1,46 +1,39 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagina con 4 schede verticali</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header class="top-elements">
-        <!-- <img src="logo.png" alt="Logo del Portfolio" class="logo"> Commentato il logo -->
-        <button class="menu-toggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </header>
 
-    <div class="panels">
-        <section class="panel">
-            <div class="content">
-                <span class="letter">P</span>
-                <span class="word">Project</span>
-            </div>
-        </section>
-        <section class="panel">
-            <div class="content">
-                <span class="letter">O</span>
-                <span class="word">Others</span>
-            </div>
-        </section>
-        <section class="panel">
-            <div the "content">
-                <span class="letter">R</span>
-                <span class="word">Road</span>
-            </div>
-        </section>
-        <section class="panel">
-            <div class="content">
-                <span class="letter">T</span>
-                <span class="word">Text</span>
-            </div>
-        </section>
+  <!-- Menù ad hamburger in alto a destra -->
+  <div class="hamburger-menu">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- Contenitore delle schede -->
+  <div class="cards-container">
+    <div class="card">
+      <span class="letter">P</span>
+      <span class="full-word">Project</span>
     </div>
+    <div class="card">
+      <span class="letter">O</span>
+      <span class="full-word">Others</span>
+    </div>
+    <div class="card">
+      <span class="letter">R</span>
+      <span class="full-word">Road</span>
+    </div>
+    <div class="card">
+      <span class="letter">T</span>
+      <span class="full-word">Text</span>
+    </div>
+  </div>
+  
 </body>
 </html>

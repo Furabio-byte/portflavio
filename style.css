@@ -1,90 +1,89 @@
+/* RESET DI BASE (opzionale) */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    background: #000;
-    color: #fff;
-    min-height: 100vh;
+  }
+  
+  /* Impostazioni generali per la pagina */
+  body {
+    background-color: #ffffff; /* Sfondo bianco */
+    font-family: sans-serif;
+    color: #000000; /* Testo nero */
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-}
-
-.top-elements {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: flex-end; /* Modificato per allineare il pulsante a destra */
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #000;
-    z-index: 100;
-}
-
-.menu-toggle {
-    cursor: pointer;
-    border: none;
-    background: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.menu-toggle span {
-    display: block;
-    width: 30px;
-    height: 3px;
-    background-color: #fff;
-    margin-bottom: 4px;
-}
-
-.panels {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 100vh; /* Impostazioni per evitare lo scorrimento */
-    padding-top: 60px; /* Spazio per l'header */
-    width: 100%;
-}
-
-.panel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    width: 80%;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1); /* Sfondo semitrasparente */
-}
-
-.letter {
-    font-size: 6rem; /* Dimensione più grande per maggiore visibilità */
-    font-weight: bold;
-    position: relative;
-}
-
-.word {
+    overflow: hidden; /* Per evitare scroll se non necessario */
+  }
+  
+  /* Menù ad hamburger */
+  .hamburger-menu {
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+  }
+  
+  .hamburger-menu .line {
+    height: 3px;
+    background-color: #000;
+    border-radius: 3px;
+  }
+  
+  /* Contenitore principale per le schede */
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-around; /* Distribuisce verticalmente lo spazio */
+    align-items: center;
+    padding: 20px 0;
+  }
+  
+  /* Singola scheda */
+  .card {
+    position: relative;
+    width: 200px;       /* Larghezza scheda (modificabile a piacere) */
+    height: 100px;      /* Altezza scheda (modificabile a piacere)  */
+    background-color: #000000; /* Sfondo nero */
+    color: #ffffff;             /* Testo bianco */
+    border-radius: 10px;        /* Bordi smussati */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  /* Stile per la lettera principale */
+  .card .letter {
     font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  /* Testo esteso (inizialmente nascosto) */
+  .card .full-word {
+    position: absolute;
+    font-size: 1.2rem;
+    font-weight: normal;
+    opacity: 0;          /* Invisibile di default */
+    transition: opacity 0.3s;
+  }
+  
+  /* Al passaggio del mouse sulla scheda */
+  .card:hover {
+    background-color: #444; /* Cambia leggermente colore in hover */
+  }
+  
+  /* Mostra la parola completa e nasconde la lettera */
+  .card:hover .letter {
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    pointer-events: none;
-}
-
-.panel:hover .word {
+  }
+  
+  .card:hover .full-word {
     opacity: 1;
-}
+  }  
