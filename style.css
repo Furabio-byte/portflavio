@@ -5,15 +5,14 @@
 }
 
 body {
-    background-color: black;
-    color: white;
-    height: 100vh;
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
     overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
-/* Header */
-header {
+.top-elements {
     position: fixed;
     top: 0;
     left: 0;
@@ -22,93 +21,73 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 1000;
+    z-index: 100;
 }
 
-.logo-placeholder {
+.logo {
     width: 40px;
     height: 40px;
-    background-color: white;
+    background: #fff;
 }
 
-.hamburger {
+.menu-toggle {
+    background: none;
+    border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 5px;
 }
 
-.hamburger span {
+.menu-toggle span {
     display: block;
     width: 25px;
     height: 2px;
-    background-color: white;
+    background: #fff;
     margin: 5px 0;
-    transition: 0.3s;
 }
 
-/* Panels */
-.panels-container {
+.panels {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
 }
 
 .panel {
     flex: 1;
-    background-color: black;
-    border: 1px solid white;
-    border-radius: 15px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel:last-child {
+    border-bottom: none;
+}
+
+.content {
     position: relative;
-    overflow: hidden;
+    text-align: center;
 }
 
 .letter {
-    font-size: 4rem;
+    font-size: 15vw;
     font-weight: bold;
-    z-index: 2;
+    line-height: 1;
+    display: block;
 }
 
 .word {
     position: absolute;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+    left: 50%;
+    top: calc(100% + 10px);
+    transform: translateX(-50%) translateY(20px);
     font-size: 1.5rem;
-    top: 60%;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
 }
 
 .panel:hover .word {
     opacity: 1;
-    transform: translateY(0);
-}
-
-/* Hover effects */
-.panel:hover {
-    background-color: #111;
-}
-
-.hamburger:hover span {
-    background-color: #888;
-}
-
-/* Per mantenere il layout fisso */
-@media (min-height: 600px) {
-    .panels-container {
-        height: 100vh;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .letter {
-        font-size: 3rem;
-    }
-    
-    .word {
-        font-size: 1.2rem;
-    }
+    transform: translateX(-50%) translateY(0);
 }
