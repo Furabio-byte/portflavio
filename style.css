@@ -14,26 +14,6 @@
     flex-direction: column;
   }
   
-  /* Menù hamburger */
-  .hamburger-menu {
-    position: absolute; 
-    top: 1rem; 
-    right: 1rem; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 25px;
-    cursor: pointer;
-  }
-  
-  .hamburger-menu .bar {
-    width: 100%;
-    height: 3px;
-    background-color: #000; /* Nero */
-    border-radius: 3px;
-  }
-  
   /* Contenitore delle schede */
   .schede-container {
     flex: 1; /* Occupa lo spazio verticale rimanente */
@@ -49,12 +29,12 @@
     flex: 1; 
     margin: 0 0.5rem;
     border-radius: 10px; /* Bordi smussati */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Effetto rialzato/ombreggiatura */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato/ombreggiatura */
     display: flex;
     justify-content: center; 
     align-items: center;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
     overflow: hidden; /* Importante per nascondere testi fuori dal perimetro */
   }
   
