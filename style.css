@@ -1,69 +1,72 @@
 /* Impostazioni di base */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Sfondo pagina */
-  body {
-    background-color: #ffffff; /* Bianco */
-    font-family: 'Playfair Display SC', serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Contenitore delle schede */
-  .schede-container {
-    flex: 1; /* Occupa lo spazio verticale rimanente */
-    display: flex;
-    justify-content: space-between; /* Spaziatura tra le schede */
-    align-items: stretch; /* Allinea le schede in altezza */
-    padding: 1rem;
-  }
-  
-  /* Singola scheda */
-  .scheda {
-    background-color: #ffffff; /* Bianco */
-    flex: 1; 
-    margin: 0 0.5rem;
-    border-radius: 10px; /* Bordi smussati */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato/ombreggiatura */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    transition: all 0.5s ease;
-    overflow: hidden; /* Nasconde eventuale testo fuori dal perimetro */
-  }
-  
-  /* Stile di base per la lettera e la parola */
-  .scheda .lettera,
-  .scheda .parola {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #000; /* Nero */
-    transition: opacity 0.3s ease;
-  }
-  
-  /* Inizialmente la parola è nascosta */
-  .scheda .parola {
-    position: absolute;
-    opacity: 0;
-  }
-  
-  /* Hover: la lettera scompare e la parola appare */
-  .scheda:hover .lettera {
-    opacity: 0;
-  }
-  .scheda:hover .parola {
-    opacity: 1;
-  }
-  
-  /* Se desideri una classe dedicata per variazioni specifiche */
-  .playfair-display-sc-black {
-    font-family: 'Playfair Display SC', serif;
-    font-weight: 900;
-    font-style: normal;
-  }  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Sfondo pagina */
+body {
+  background-color: #ffffff; /* Bianco */
+  font-family: 'Playfair Display SC', serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenitore delle schede */
+.schede-container {
+  flex: 1; /* Occupa lo spazio verticale rimanente */
+  display: flex;
+  justify-content: space-between; /* Spaziatura tra le schede */
+  align-items: stretch; /* Allinea le schede in altezza */
+  padding: 1rem;
+}
+
+/* Singola scheda */
+.scheda {
+  background-color: #ffffff; /* Bianco */
+  flex: 1;
+  margin: 0 0.5rem;
+  border-radius: 10px; /* Bordi smussati */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato/ombreggiatura */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: all 0.5s ease;
+  overflow: hidden; /* Nasconde eventuale testo fuori dal perimetro */
+}
+
+/* Stile per la lettera principale (visibile di default) */
+.scheda .lettera {
+  font-size: 3rem;       /* Dimensione più grande per la lettera */
+  font-weight: 900;
+  color: #000;           /* Nero */
+  transition: opacity 0.3s ease;
+}
+
+/* Stile per la parola che compare al passaggio del mouse */
+.scheda .parola {
+  font-size: 1.5rem;     /* Dimensione diversa (più piccola) per la parola */
+  font-weight: 900;
+  color: #000;           /* Nero */
+  transition: opacity 0.3s ease;
+  position: absolute;
+  opacity: 0;            /* Nascosta di default */
+}
+
+/* Hover: la lettera scompare e la parola appare */
+.scheda:hover .lettera {
+  opacity: 0;
+}
+.scheda:hover .parola {
+  opacity: 1;
+}
+
+/* Se desideri una classe dedicata per variazioni specifiche */
+.playfair-display-sc-black {
+  font-family: 'Playfair Display SC', serif;
+  font-weight: 900;
+  font-style: normal;
+}
