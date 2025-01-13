@@ -1,95 +1,102 @@
+/* Palette colori provvisoria */
 body {
+    font-family: 'Arial', sans-serif;
     background-color: #000;
     color: #fff;
-    font-family: serif;
+    margin: 0;
+    padding: 0;
 }
 
-.soul-container {
-    min-height: 100vh;
-    background-color: #f2e4e1;
+/* Header con logo e menù */
+.portfolio-header {
+    background-color: #222;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-.letter-panel {
+/* Sezione principale */
+.portfolio-section {
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px; /* Altezza dell'header */
+}
+
+.portfolio-content {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Pannelli */
+.panel {
+    flex: 1 1 25%;
+    background-color: #d9b3b3; /* Colore di esempio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s ease-in-out;
     position: relative;
     overflow: hidden;
-    background-color: #f2e4e1;
-    color: #000;
-    border-right: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid #000; /* Divider tra i pannelli */
 }
 
-.mega-letter {
-    font-size: 15rem;
-    font-weight: 700;
+.panel:last-child {
+    border-right: none;
+}
+
+.panel:hover {
+    flex: 1.5; /* Espansione al passaggio del mouse */
+}
+
+/* Testo all'interno dei pannelli */
+.panel h1 {
+    font-size: 10vw;
+    font-weight: bold;
+    margin: 0;
+    z-index: 2;
+    color: #000; /* Contrasto con il background */
+}
+
+.text-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Per aggiungere immagini di sfondo */
+.panel::before {
+    content: '';
     position: absolute;
-    line-height: 1;
-    font-family: "Times New Roman", serif;
-}
-
-.panel-s .mega-letter {
-    bottom: 2rem;
-    right: -2rem;
-}
-
-.panel-o {
-    background-image: url('/api/placeholder/400/800');
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     background-position: center;
+    opacity: 0.3;
+    z-index: 1;
 }
 
-.panel-o .mega-letter {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    mix-blend-mode: overlay;
-}
+/* Responsività */
+@media (max-width: 768px) {
+    .panel {
+        flex: 1 1 100%;
+    }
 
-.panel-u .mega-letter {
-    top: 2rem;
-    left: 2rem;
-}
+    .panel h1 {
+        font-size: 15vw;
+    }
 
-.panel-l .mega-letter {
-    bottom: 2rem;
-    right: 2rem;
-}
+    .portfolio-content {
+        flex-direction: column;
+    }
 
-.nav-icons {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
-    z-index: 1000;
-}
-
-.nav-dots {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-.nav-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #000;
-    border-radius: 50%;
-    margin: 0 4px;
-    opacity: 0.5;
-}
-
-.nav-dot.active {
-    opacity: 1;
-}
-
-.panel-text {
-    position: absolute;
-    font-size: 0.9rem;
-    max-width: 200px;
-}
-
-.panel-u .panel-text {
-    top: 40%;
-    left: 2rem;
+    .portfolio-header {
+        padding: 10px;
+    }
 }
