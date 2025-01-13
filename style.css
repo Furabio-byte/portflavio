@@ -40,7 +40,7 @@ body {
 
 /* Stile per la lettera principale (visibile di default) */
 .scheda .lettera {
-  font-size: 3rem;       /* Dimensione più grande per la lettera */
+  font-size: 5rem;       /* Dimensione più grande per la lettera */
   font-weight: 900;
   color: #000;           /* Nero */
   transition: opacity 0.3s ease;
