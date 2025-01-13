@@ -20,7 +20,7 @@ function incrementaContatore() {
 }
 
 // Calcola il tempo fino al prossimo primo dell'anno
-const tempoRimanente = 5000;
+const tempoRimanente = calcolaTempoAlProssimoAnno();
 
 // Imposta un timer per incrementare il numero a mezzanotte del prossimo 1 gennaio
 setTimeout(() => {
