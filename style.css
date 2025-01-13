@@ -1,183 +1,51 @@
-:root {
-    --primary-color: #f2e4e1;
-    --text-color: #2c2c2c;
-    --accent-color: #d9b3b3;
-    --transition-speed: 0.6s;
-    --header-height: 70px;
+/* Reset dei margini e del padding */
+body, h1, h2, ul, li, p {
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: 'Inter', 'Arial', sans-serif;
-    background-color: #000;
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* Header Styling */
-.portfolio-header {
-    background-color: rgba(34, 34, 34, 0.95);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-}
-
-.menu-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.menu-btn span {
-    display: block;
-    width: 25px;
-    height: 2px;
-    background-color: white;
-    transition: var(--transition-speed);
-}
-
-.menu-btn:hover span {
-    transform: scaleX(1.2);
-}
-
-/* Main Portfolio Section */
-.portfolio-section {
-    height: calc(100vh - var(--header-height));
-    margin-top: var(--header-height);
-    position: relative;
-}
-
-.portfolio-content {
-    display: flex;
-    height: 100%;
-    position: relative;
-}
-
-/* Panel Styling */
-.panel {
-    flex: 1;
-    background-color: var(--primary-color);
-    position: relative;
-    overflow: hidden;
-    transition: flex var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.panel:last-child {
-    border-right: none;
-}
-
-.panel:hover {
-    flex: 1.5;
-}
-
-.panel:hover .panel-description {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.text-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
     text-align: center;
 }
 
-.panel h1 {
-    font-size: clamp(5rem, 10vw, 12rem);
-    font-weight: 800;
-    margin: 0;
-    color: var(--text-color);
-    transition: transform var(--transition-speed);
-    line-height: 1;
-}
-
-.panel-description {
-    font-size: 1rem;
-    margin-top: 1rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all var(--transition-speed);
-    color: var(--text-color);
-}
-
-/* Navigation Dots */
-.navigation-dots {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+nav ul {
+    list-style: none;
     display: flex;
-    gap: 0.5rem;
-    z-index: 1000;
+    justify-content: center;
 }
 
-.dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--text-color);
-    border-radius: 50%;
-    opacity: 0.3;
-    transition: all var(--transition-speed);
-    cursor: pointer;
+nav ul li {
+    padding: 0 20px;
 }
 
-.dot.active {
-    opacity: 1;
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .portfolio-content {
-        flex-direction: column;
-    }
-
-    .panel {
-        flex: 1;
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .panel:hover {
-        flex: 1.2;
-    }
-
-    .panel h1 {
-        font-size: clamp(3rem, 15vw, 5rem);
-    }
-
-    .navigation-dots {
-        flex-direction: column;
-        left: auto;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-    }
+main {
+    padding: 20px;
+    text-align: center;
 }
 
-/* Animations */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+section {
+    margin-bottom: 40px;
 }
 
-.animate__fadeInUp {
-    animation: fadeUp 0.6s ease-out forwards;
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
 }
