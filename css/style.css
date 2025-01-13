@@ -110,45 +110,35 @@ body {
   align-items: center; /* Centrare orizzontalmente */
   position: relative;
   width: calc(100% - 40px); /* Spazio ai lati (20px per lato) */
-  height: 100vh; /* Riempie l'intero schermo */
-  margin: 0 auto; /* Centra orizzontalmente */
+  max-width: 1200px; /* Limita la larghezza massima */
+  height: calc(100vh - 100px); /* Riduce l'altezza per lasciare spazio sopra e sotto */
+  max-height: calc(100vh - 100px); /* Compatibilità con schermi piccoli */
+  margin: 60px auto 20px; /* Margine superiore per il logo e inferiore per spazio */
   background-color: #808000; /* Colore di sfondo della scheda */
   border-radius: 20px; /* Bordo arrotondato */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombreggiatura */
   padding: 30px; /* Spaziatura interna */
   overflow: hidden; /* Nasconde eventuali contenuti che fuoriescono */
+  box-sizing: border-box; /* Include il padding nelle dimensioni */
 }
 
-.scheda-larga-fullscreen .lettera {
-  font-size: 4rem;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-.scheda-larga-fullscreen .parola {
-  font-size: 2rem;
-  margin: 20px 0;
-  color: #ffffff;
-}
-
-.scheda-larga-fullscreen .descrizione {
-  font-size: 1rem;
-  text-align: center;
-  line-height: 1.5;
-  color: #ffffff;
-}
-
-/* Logo in alto a destra */
+/* Logo in alto a sinistra */
 .logo-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10; /* Assicurati che il logo sia sopra gli altri elementi */
+  position: fixed; /* Fissa il logo nella stessa posizione durante lo scroll */
+  top: 20px; /* Posizione dall'alto */
+  left: 20px; /* Posizione dal lato sinistro */
+  z-index: 1000; /* Assicura che il logo sia sopra altri elementi */
 }
 
-.logo {
-  width: 100px; /* Dimensione del logo */
+.logo-container .logo {
+  width: 80px; /* Regola la dimensione del logo */
   height: auto; /* Mantiene le proporzioni */
+  cursor: pointer; /* Cambia il cursore per indicare che è cliccabile */
+  transition: transform 0.2s ease; /* Aggiunge un leggero effetto di animazione */
+}
+
+.logo-container .logo:hover {
+  transform: scale(1.1); /* Ingrandisce leggermente il logo al passaggio del mouse */
 }
 
 /* Posizioni specifiche per ogni lettera (con valori fissi, occhio su mobile) */
@@ -217,6 +207,20 @@ body {
 }
 .scheda:hover .parola {
   opacity: 1;
+}
+
+/* Disabilita l'effetto hover nella pagina text */
+.scheda-larga-fullscreen:hover .lettera,
+.scheda-larga-fullscreen:hover .numero,
+.scheda-larga-fullscreen:hover .frase-r,
+.scheda-larga-fullscreen:hover .parola {
+  opacity: 1 !important;
+}
+
+/* Disabilita l'effetto hover specifico per la classe parola */
+.scheda-larga-fullscreen .parola {
+  opacity: 1 !important;
+  transition: none !important;
 }
 
 @media (max-width: 768px) {
