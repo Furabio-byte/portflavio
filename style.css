@@ -8,83 +8,88 @@ body {
     background: #000;
     color: #fff;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
 .top-elements {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: #000;
     z-index: 100;
 }
 
 .logo {
-    width: 40px;
-    height: 40px;
-    background: #fff; /* Assumi che il logo sia un'immagine. Se è un colore solido, questa riga può essere rimossa. */
+    background-image: url('logo.png'); /* Assumi che questo sia il percorso del tuo logo */
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background-position: center;
 }
 
 .menu-toggle {
-    background: none;
-    border: none;
     cursor: pointer;
-    padding: 5px;
+    border: none;
+    background: none;
 }
 
 .menu-toggle span {
     display: block;
-    width: 25px;
-    height: 2px;
-    background: #fff;
-    margin: 5px 0;
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    margin-bottom: 4px;
 }
 
 .panels {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Assicura che le panel occupino tutto lo spazio verticale disponibile */
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100vh; /* Impostazioni per evitare lo scorrimento */
+    padding-top: 60px; /* Spazio per l'header */
+    width: 100%;
 }
 
 .panel {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.panel:last-child {
-    border-bottom: none;
-}
-
-.content {
-    text-align: center;
+    flex: 1;
+    width: 80%;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1); /* Sfondo semitrasparente */
 }
 
 .letter {
-    font-size: 15vw;
+    font-size: 6rem; /* Dimensione più grande per maggiore visibilità */
     font-weight: bold;
-    line-height: 1;
+    position: relative;
 }
 
 .word {
     position: absolute;
+    top: 100%;
     left: 50%;
-    top: calc(100% + 10px);
-    transform: translateX(-50%) translateY(20px);
-    font-size: 1.5rem;
+    transform: translateX(-50%);
+    font-size: 2rem;
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: opacity 0.5s ease-in-out;
     pointer-events: none;
 }
 
 .panel:hover .word {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
 }
