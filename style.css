@@ -8,7 +8,7 @@
   /* Sfondo pagina */
   body {
     background-color: #ffffff; /* Bianco */
-    font-family: sans-serif;
+    font-family: 'Playfair Display SC', serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@
     flex: 1; /* Occupa lo spazio verticale rimanente */
     display: flex;
     justify-content: space-between; /* Spaziatura tra le schede */
-    align-items: stretch; /* Allinea tutte le schede in altezza */
+    align-items: stretch; /* Allinea le schede in altezza */
     padding: 1rem;
   }
   
@@ -31,18 +31,18 @@
     border-radius: 10px; /* Bordi smussati */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Effetto rialzato/ombreggiatura */
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     position: relative;
     transition: all 0.5s ease;
-    overflow: hidden; /* Importante per nascondere testi fuori dal perimetro */
+    overflow: hidden; /* Nasconde eventuale testo fuori dal perimetro */
   }
   
   /* Stile di base per la lettera e la parola */
   .scheda .lettera,
   .scheda .parola {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 900;
     color: #000; /* Nero */
     transition: opacity 0.3s ease;
   }
@@ -57,7 +57,13 @@
   .scheda:hover .lettera {
     opacity: 0;
   }
-  
   .scheda:hover .parola {
     opacity: 1;
+  }
+  
+  /* Se desideri una classe dedicata per variazioni specifiche */
+  .playfair-display-sc-black {
+    font-family: 'Playfair Display SC', serif;
+    font-weight: 900;
+    font-style: normal;
   }  
