@@ -1,3 +1,5 @@
+// Parte esistente: gestione del numero
+
 // Seleziona l'elemento del numero
 const numeroElement = document.getElementById('numero-text');
 
