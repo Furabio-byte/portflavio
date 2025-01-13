@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pagina con 4 schede verticali</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Pagina con 4 Schede</title>
+  <!-- Collega il file CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Menù ad hamburger in alto a destra -->
+  <!-- Menù Hamburger in alto a destra -->
   <div class="hamburger-menu">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
   </div>
 
-  <!-- Contenitore delle schede -->
-  <div class="cards-container">
+  <!-- Contenitore principale delle schede -->
+  <div class="container">
+    <!-- Scheda P -->
     <div class="card">
       <span class="letter">P</span>
-      <span class="full-word">Project</span>
+      <div class="tooltip">Project</div>
     </div>
+    <!-- Scheda O -->
     <div class="card">
       <span class="letter">O</span>
-      <span class="full-word">Others</span>
+      <div class="tooltip">Others</div>
     </div>
+    <!-- Scheda R -->
     <div class="card">
       <span class="letter">R</span>
-      <span class="full-word">Road</span>
+      <div class="tooltip">Road</div>
     </div>
+    <!-- Scheda T -->
     <div class="card">
       <span class="letter">T</span>
-      <span class="full-word">Text</span>
+      <div class="tooltip">Text</div>
     </div>
   </div>
-  
+
 </body>
 </html>

@@ -1,89 +1,80 @@
-/* RESET DI BASE (opzionale) */
+/* Impostazioni di base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* Impostazioni generali per la pagina */
-  body {
-    background-color: #ffffff; /* Sfondo bianco */
+  html, body {
+    width: 100%;
+    height: 100%;
     font-family: sans-serif;
-    color: #000000; /* Testo nero */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Per evitare scroll se non necessario */
+    background-color: #fff; /* Sfondo bianco */
   }
   
-  /* Menù ad hamburger */
+  /* Menù Hamburger */
   .hamburger-menu {
     position: absolute;
     top: 20px;
     right: 20px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     width: 30px;
-    height: 22px;
+    cursor: pointer;
+    z-index: 10; /* In primo piano rispetto alle schede */
   }
   
-  .hamburger-menu .line {
-    height: 3px;
-    background-color: #000;
-    border-radius: 3px;
+  .hamburger-menu .bar {
+    width: 100%;
+    height: 4px;
+    background-color: #000; /* Nero */
+    margin: 5px 0;
+    border-radius: 2px;
   }
   
-  /* Contenitore principale per le schede */
-  .cards-container {
+  /* Contenitore schede */
+  .container {
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    justify-content: space-around; /* Distribuisce verticalmente lo spazio */
-    align-items: center;
-    padding: 20px 0;
+    height: 100%;
+    width: 100%;
+    gap: 10px;               /* Leggero distacco orizzontale tra le schede */
+    padding: 10px;          /* Margine interno, così le schede non toccano i bordi */
   }
   
   /* Singola scheda */
   .card {
-    position: relative;
-    width: 200px;       /* Larghezza scheda (modificabile a piacere) */
-    height: 100px;      /* Altezza scheda (modificabile a piacere)  */
-    background-color: #000000; /* Sfondo nero */
-    color: #ffffff;             /* Testo bianco */
-    border-radius: 10px;        /* Bordi smussati */
-    display: flex;
-    justify-content: center;
+    flex: 1;                /* Tutte le schede hanno uguale larghezza */
+    background-color: #000; /* Nero */
+    border-radius: 12px;    /* Bordi smussati */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Effetto "rialzato" */
+    position: relative;     /* Necessario per il posizionamento della tooltip */
+    display: flex;          /* Per centrare il contenuto */
     align-items: center;
-    transition: background-color 0.3s;
+    justify-content: center;
+    overflow: hidden;       /* Gestione tooltip */
   }
   
-  /* Stile per la lettera principale */
-  .card .letter {
-    font-size: 2rem;
-    font-weight: bold;
+  /* Lettera centrale */
+  .letter {
+    font-size: 5rem;
+    color: #fff;            /* Bianco, per contrasto su sfondo nero */
+    pointer-events: none;   /* In modo che il mouse si appoggi all'area della scheda */
   }
   
-  /* Testo esteso (inizialmente nascosto) */
-  .card .full-word {
+  /* Tooltip */
+  .tooltip {
     position: absolute;
-    font-size: 1.2rem;
-    font-weight: normal;
-    opacity: 0;          /* Invisibile di default */
-    transition: opacity 0.3s;
+    bottom: 20px;           /* Distanza dal fondo della scheda */
+    background-color: #fff; /* Bianco */
+    color: #000;            /* Nero */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: none;          /* Nascosta di default */
+    pointer-events: none;   /* Non deve interferire col cursore */
+    transition: opacity 0.2s ease-in-out;
   }
   
-  /* Al passaggio del mouse sulla scheda */
-  .card:hover {
-    background-color: #444; /* Cambia leggermente colore in hover */
-  }
-  
-  /* Mostra la parola completa e nasconde la lettera */
-  .card:hover .letter {
-    opacity: 0;
-  }
-  
-  .card:hover .full-word {
+  /* Mostra la parola completa al passaggio del mouse sulla scheda */
+  .card:hover .tooltip {
+    display: block;
     opacity: 1;
   }  
