@@ -44,6 +44,8 @@ body {
   font-weight: 900;
   color: #000;           /* Nero */
   transition: opacity 0.3s ease;
+  position: relative;    /* Abilita il posizionamento relativo */
+  top: -10px;
 }
 
 /* Stile per la parola che compare al passaggio del mouse */
