@@ -20,7 +20,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Modificato per allineare il pulsante a destra */
     align-items: center;
     position: fixed;
     top: 0;
@@ -30,18 +30,13 @@ body {
     z-index: 100;
 }
 
-.logo {
-    background-image: url('logo.png'); /* Assumi che questo sia il percorso del tuo logo */
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    background-position: center;
-}
-
 .menu-toggle {
     cursor: pointer;
     border: none;
     background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .menu-toggle span {
