@@ -1,33 +1,133 @@
-// Parte esistente: gestione del numero
+document.addEventListener('DOMContentLoaded', () => {
+  // Gestione smooth scroll
+  const easeInOutSextuple = (t) => {
+    return t < 0.5
+      ? 32 * t * t * t * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 6) / 2;
+  };
 
-// Seleziona l'elemento del numero
-const numeroElement = document.getElementById('numero-text');
+  const smoothScroll = (targetElement) => {
+    const startPosition = window.pageYOffset;
+    const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
+    const distance = targetPosition - startPosition;
+    
+    const baseDuration = 2500;
+    const minDuration = 2000;
+    const maxDuration = 3000;
+    
+    let start = null;
 
-// Ottieni il numero iniziale dal contenuto HTML
-let numero = parseInt(numeroElement.textContent);
+    const adjustedDuration = Math.min(
+      maxDuration,
+      Math.max(
+        minDuration,
+        Math.abs(distance) / 500 * baseDuration
+      )
+    );
 
-// Funzione per calcolare il tempo fino al prossimo 1 gennaio
-function calcolaTempoAlProssimoAnno() {
-  const oggi = new Date(); // Data corrente
-  const prossimoAnno = oggi.getFullYear() + 1; // Anno successivo
-  const primoGennaio = new Date(prossimoAnno, 0, 1, 0, 0, 0); // 1 gennaio ore 00:00
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      const percentage = Math.min(progress / adjustedDuration, 1);
+      
+      const easing = easeInOutSextuple(percentage);
+      const currentPosition = startPosition + (distance * easing);
+      
+      window.scrollTo({
+        top: currentPosition,
+        behavior: 'auto'
+      });
 
-  return primoGennaio - oggi; // Tempo in millisecondi fino al 1 gennaio
-}
+      if (progress < adjustedDuration) {
+        window.requestAnimationFrame(step);
+      } else {
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'auto'
+        });
+      }
+    };
 
-// Funzione per incrementare il numero
-function incrementaContatore() {
-  numero++; // Incrementa il numero
-  numeroElement.textContent = numero; // Aggiorna il numero nell'HTML
-}
+    window.requestAnimationFrame(step);
+  };
 
-// Calcola il tempo fino al prossimo primo dell'anno
-const tempoRimanente = calcolaTempoAlProssimoAnno();
+  // Gestione incremento annuale dei numeri
+  class ContatoreSchede {
+    constructor() {
+      this.numeriElements = document.querySelectorAll('.scheda .numero');
+      
+      if (!this.numeriElements.length) {
+        console.warn('Nessun elemento con classe .numero trovato nelle schede');
+        return;
+      }
 
-// Imposta un timer per incrementare il numero a mezzanotte del prossimo 1 gennaio
-setTimeout(() => {
-  incrementaContatore();
+      this.numeri = {};
+      this.inizializzaContatori();
+    }
 
-  // Dopo il primo incremento, imposta un intervallo di 1 anno per i successivi
-  setInterval(incrementaContatore, 365 * 24 * 60 * 60 * 1000); // 365 giorni in millisecondi
-}, tempoRimanente);
+    getNumeroIniziale(element) {
+      const numero = parseInt(element.textContent, 10);
+      return isNaN(numero) ? 0 : numero;
+    }
+
+    calcolaTempoAlProssimoAnno() {
+      const oggi = new Date();
+      const prossimoAnno = new Date(oggi.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
+      return prossimoAnno - oggi;
+    }
+
+    incrementaContatori() {
+      this.numeriElements.forEach((element, index) => {
+        const numeroAttuale = this.getNumeroIniziale(element);
+        const nuovoNumero = numeroAttuale + 1;
+        element.textContent = nuovoNumero;
+        localStorage.setItem(`numero_scheda_${index}`, nuovoNumero);
+      });
+    }
+
+    inizializzaContatori() {
+      this.numeriElements.forEach((element, index) => {
+        const valoreSalvato = localStorage.getItem(`numero_scheda_${index}`);
+        if (valoreSalvato !== null) {
+          element.textContent = valoreSalvato;
+        }
+      });
+
+      const tempoRimanente = this.calcolaTempoAlProssimoAnno();
+
+      setTimeout(() => {
+        this.incrementaContatori();
+        setInterval(() => {
+          this.incrementaContatori();
+        }, 365 * 24 * 60 * 60 * 1000);
+      }, tempoRimanente);
+    }
+  }
+
+  // Gestione scroll
+  let isScrolling = false;
+  
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (isScrolling) return;
+      
+      const targetId = this.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      
+      if (targetElement) {
+        isScrolling = true;
+        smoothScroll(targetElement);
+        history.pushState(null, '', targetId);
+        
+        setTimeout(() => {
+          isScrolling = false;
+        }, 3500);
+      }
+    });
+  });
+
+  // Inizializza i contatori
+  new ContatoreSchede();
+});
