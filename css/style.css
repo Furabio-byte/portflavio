@@ -29,6 +29,20 @@ body {
   padding: 20px;
 }
 
+/* Contenitore del logo */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.logo {
+  width: clamp(40px, 8vw, 60px);
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
 /* Contenitore delle schede */
 .schede-container {
   display: flex;
@@ -36,6 +50,7 @@ body {
   gap: 20px;
   justify-content: center;
   padding: 20px;
+  margin-top: 60px; /* Aggiunto margine superiore per il logo */
 }
 
 /* Link scheda */
@@ -183,27 +198,13 @@ body {
   margin: 0 auto;
 }
 
-/* Logo container specifico per la pagina Text */
-.text-page-container .logo-container {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-}
-
-.text-page-container .logo {
-  width: clamp(40px, 8vw, 60px);
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
 /* Supporto per reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .scheda-link,
   .scheda .lettera,
   .scheda .parola,
   .frase-r,
-  .text-page-container .logo {
+  .logo {
     transition: none;
   }
 }
@@ -226,7 +227,7 @@ body {
     opacity: 0;
   }
 
-  .text-page-container .logo:hover {
+  .logo:hover {
     transform: scale(1.1);
   }
 }
