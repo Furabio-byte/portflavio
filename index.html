@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Portfolio personale di Flavio con progetti, altri lavori, percorso e testi">
-  <meta name="theme-color" content="#808000"> <!-- Aggiornato per corrispondere al colore delle schede -->
-  <meta name="color-scheme" content="light dark"> <!-- Supporto per modalità chiara/scura -->
+  <meta name="theme-color" content="#808000">
+  <meta name="color-scheme" content="light dark">
   
-  <!-- Sicurezza migliorata -->
+  <!-- Sicurezza -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
@@ -28,12 +28,7 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
-  <!-- Skip link per accessibilità -->
-  <a href="#main-content" class="visually-hidden">Salta al contenuto principale</a>
-
   <header>
-    <h1 class="visually-hidden">Portflavio - Portfolio Personale</h1>
-    
     <nav class="schede-container" aria-label="Navigazione principale">
       <!-- Project Card -->
       <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
@@ -129,24 +124,44 @@
   </main>
 
   <script>
-    // Gestione smooth scroll migliorata
     document.addEventListener('DOMContentLoaded', () => {
+      const easingFunction = (t) => {
+        return t < 0.5 
+          ? 4 * t * t * t 
+          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      };
+
+      const smoothScroll = (targetElement) => {
+        const startPosition = window.pageYOffset;
+        const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
+        const distance = targetPosition - startPosition;
+        const duration = 1000;
+        let start = null;
+
+        const step = (timestamp) => {
+          if (!start) start = timestamp;
+          const progress = timestamp - start;
+          const percentage = Math.min(progress / duration, 1);
+          const easing = easingFunction(percentage);
+          
+          window.scrollTo(0, startPosition + distance * easing);
+
+          if (progress < duration) {
+            window.requestAnimationFrame(step);
+          }
+        };
+
+        window.requestAnimationFrame(step);
+      };
+
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
           e.preventDefault();
           const targetId = this.getAttribute('href');
           const targetElement = document.querySelector(targetId);
           
           if (targetElement) {
-            // Verifica il supporto per scrollBehavior
-            if ('scrollBehavior' in document.documentElement.style) {
-              targetElement.scrollIntoView({ behavior: 'smooth' });
-            } else {
-              // Fallback per browser che non supportano scrollBehavior
-              targetElement.scrollIntoView();
-            }
-            
-            // Aggiorna l'URL senza causare un salto
+            smoothScroll(targetElement);
             history.pushState(null, '', targetId);
           }
         });
