@@ -104,54 +104,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Gestione scroll
+  // Gestione scroll per desktop
   let isScrolling = false;
   
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
+  // Handler per dispositivi con hover
+  const handleClick = function(e) {
+    e.preventDefault();
+    
+    if (isScrolling) return;
+    
+    const targetId = this.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+      isScrolling = true;
+      smoothScroll(targetElement);
+      history.pushState(null, '', targetId);
       
-      if (isScrolling) return;
-      
-      const targetId = this.getAttribute('href');
+      setTimeout(() => {
+        isScrolling = false;
+      }, 3500);
+    }
+  };
+
+  // Gestione touch per mobile con sequenza
+  let activeScheda = null;
+  const schedaLinks = document.querySelectorAll('.scheda-link');
+
+  const handleTouch = (e) => {
+    e.preventDefault();
+    const currentScheda = e.currentTarget;
+    
+    // Se la scheda non è attiva, mostra solo la parola
+    if (!currentScheda.classList.contains('active')) {
+      // Disattiva qualsiasi altra scheda attiva
+      if (activeScheda) {
+        activeScheda.classList.remove('active');
+      }
+      currentScheda.classList.add('active');
+      activeScheda = currentScheda;
+    } else {
+      // Se la scheda è già attiva, esegui lo scroll
+      const targetId = currentScheda.getAttribute('href');
       const targetElement = document.querySelector(targetId);
       
-      if (targetElement) {
+      if (targetElement && !isScrolling) {
         isScrolling = true;
         smoothScroll(targetElement);
         history.pushState(null, '', targetId);
         
         setTimeout(() => {
           isScrolling = false;
+          // Rimuovi active dopo lo scroll
+          currentScheda.classList.remove('active');
+          activeScheda = null;
         }, 3500);
       }
-    });
-  });
-
-  // Inizializza i contatori
-  new ContatoreSchede();
-
-  // Gestione touch per mobile
-  const schedaLinks = document.querySelectorAll('.scheda-link');
-  let activeScheda = null;
-
-  const handleTouch = (e) => {
-    e.preventDefault(); // Previene lo scroll durante il touch
-    
-    // Se c'è già una scheda attiva, la disattiviamo
-    if (activeScheda && activeScheda !== e.currentTarget) {
-      activeScheda.classList.remove('active');
     }
-
-    // Toggle della classe active sulla scheda corrente
-    e.currentTarget.classList.toggle('active');
-    
-    // Aggiorniamo il riferimento alla scheda attiva
-    activeScheda = e.currentTarget.classList.contains('active') ? e.currentTarget : null;
   };
 
-  // Aggiungi gestione touch solo su dispositivi touch
+  // Applica i listener appropriati in base al dispositivo
   if (window.matchMedia('(hover: none)').matches) {
+    // Dispositivi touch
     schedaLinks.forEach(link => {
       link.addEventListener('touchstart', handleTouch);
     });
@@ -163,5 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         activeScheda = null;
       }
     }, { passive: true });
+  } else {
+    // Dispositivi desktop
+    schedaLinks.forEach(link => {
+      link.addEventListener('click', handleClick);
+    });
   }
+
+  // Inizializza i contatori
+  new ContatoreSchede();
 });
