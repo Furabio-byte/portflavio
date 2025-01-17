@@ -256,3 +256,21 @@ body {
     font-size: 1rem;
   }
 }
+
+@media (hover: none) {
+  .scheda-link.active {
+    transform: scale(1.02);
+  }
+
+  .scheda-link.active .lettera {
+    opacity: 0;
+  }
+
+  .scheda-link.active .parola {
+    opacity: 1;
+  }
+
+  .scheda-link.active .frase-r {
+    opacity: 0;
+  }
+}

@@ -130,4 +130,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Inizializza i contatori
   new ContatoreSchede();
+
+  // Gestione touch per mobile
+  const schedaLinks = document.querySelectorAll('.scheda-link');
+  let activeScheda = null;
+
+  const handleTouch = (e) => {
+    e.preventDefault(); // Previene lo scroll durante il touch
+    
+    // Se c'è già una scheda attiva, la disattiviamo
+    if (activeScheda && activeScheda !== e.currentTarget) {
+      activeScheda.classList.remove('active');
+    }
+
+    // Toggle della classe active sulla scheda corrente
+    e.currentTarget.classList.toggle('active');
+    
+    // Aggiorniamo il riferimento alla scheda attiva
+    activeScheda = e.currentTarget.classList.contains('active') ? e.currentTarget : null;
+  };
+
+  // Aggiungi gestione touch solo su dispositivi touch
+  if (window.matchMedia('(hover: none)').matches) {
+    schedaLinks.forEach(link => {
+      link.addEventListener('touchstart', handleTouch);
+    });
+
+    // Chiudi la scheda attiva quando si tocca fuori
+    document.addEventListener('touchstart', (e) => {
+      if (activeScheda && !activeScheda.contains(e.target)) {
+        activeScheda.classList.remove('active');
+        activeScheda = null;
+      }
+    }, { passive: true });
+  }
 });
