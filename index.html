@@ -122,51 +122,98 @@
       </div>
     </section>
   </main>
-
+  
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const easingFunction = (t) => {
-        return t < 0.5 
-          ? 4 * t * t * t 
-          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      // Funzione di easing più dolce
+      const easeInOutSextuple = (t) => {
+        return t < 0.5
+          ? 32 * t * t * t * t * t * t
+          : 1 - Math.pow(-2 * t + 2, 6) / 2;
       };
 
       const smoothScroll = (targetElement) => {
         const startPosition = window.pageYOffset;
         const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
         const distance = targetPosition - startPosition;
-        const duration = 1000;
+        
+        // Durate aumentate significativamente
+        const baseDuration = 2500; // 2.5 secondi come base
+        const minDuration = 2000;  // minimo 2 secondi
+        const maxDuration = 3000;  // massimo 3 secondi
+        
         let start = null;
+
+        // Calcolo durata in base alla distanza
+        const adjustedDuration = Math.min(
+          maxDuration,
+          Math.max(
+            minDuration,
+            Math.abs(distance) / 500 * baseDuration // Più lento per distanze maggiori
+          )
+        );
 
         const step = (timestamp) => {
           if (!start) start = timestamp;
           const progress = timestamp - start;
-          const percentage = Math.min(progress / duration, 1);
-          const easing = easingFunction(percentage);
+          const percentage = Math.min(progress / adjustedDuration, 1);
           
-          window.scrollTo(0, startPosition + distance * easing);
+          // Applica l'easing più dolce
+          const easing = easeInOutSextuple(percentage);
+          
+          // Calcolo posizione con più precisione
+          const currentPosition = startPosition + (distance * easing);
+          
+          // Scroll più fluido
+          window.scrollTo({
+            top: currentPosition,
+            behavior: 'auto'
+          });
 
-          if (progress < duration) {
+          if (progress < adjustedDuration) {
             window.requestAnimationFrame(step);
+          } else {
+            // Assicurati di arrivare esattamente a destinazione
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'auto'
+            });
           }
         };
 
         window.requestAnimationFrame(step);
       };
 
+      // Gestione eventi di scroll migliorata
+      let isScrolling = false;
+      
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
+          
+          // Previeni scroll multipli
+          if (isScrolling) return;
+          
           const targetId = this.getAttribute('href');
           const targetElement = document.querySelector(targetId);
           
           if (targetElement) {
+            isScrolling = true;
+            
             smoothScroll(targetElement);
+            
+            // Aggiorna URL senza salti
             history.pushState(null, '', targetId);
+            
+            // Reset del flag dopo un tempo superiore alla durata massima
+            setTimeout(() => {
+              isScrolling = false;
+            }, 3500);
           }
         });
       });
     });
   </script>
+  
 </body>
 </html>
