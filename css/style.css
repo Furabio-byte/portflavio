@@ -1,224 +1,131 @@
 /* Impostazioni di base */
+:root {
+  --colore-sfondo-principale: #f5f5f5;
+  --colore-sfondo-scheda: #808000;
+  --colore-testo: #000000;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Sfondo e font base */
 body {
-  min-height: 100vh;                  /* Evita problemi su mobile rispetto a height: 100vh */
-  background-color: #E8E3D9;          /* Bianco */
+  min-height: 100vh;
+  background-color: var(--colore-sfondo-principale);
   font-family: 'Playfair Display SC', serif;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
-/* Contenitore delle schede (uso di nav in HTML) */
+/* Contenitore delle schede */
 .schede-container {
-  flex: 1;                            /* Occupa lo spazio verticale rimanente */
   display: flex;
-  justify-content: space-between;     /* Spaziatura orizzontale tra le schede */
-  align-items: stretch;               /* Allinea le schede in altezza */
-  padding: 1rem;
-  flex-wrap: wrap;                    /* Consente di "andare a capo" su schermi stretti */
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
 }
 
-/* Link che rende cliccabile tutta la scheda */
+/* Link scheda */
 .scheda-link {
-  text-decoration: none;  /* Rimuove la sottolineatura */
-  color: inherit;         /* Mantiene il colore del testo */
-  display: flex;          /* Gestisce il contenitore come flex */
-  flex: 1;                /* Le schede occupano spazio in modo uniforme */
-  margin: 0 0.5rem;       
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  overflow: hidden;       
-  transition: all 0.5s ease;
-  min-width: 200px;       /* Utile per evitare che le schede diventino troppo strette */
-}
-
-.scheda-link:hover {
-  transform: scale(1.05); /* Ingrandimento al passaggio del mouse */
-}
-
-/* Singola scheda */
-.scheda {
+  text-decoration: none;
+  color: inherit;
   flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  aspect-ratio: 2/3;
+  transition: transform 0.3s ease;
+}
+
+/* Scheda */
+.scheda {
+  width: 100%;
+  height: 100%;
+  background-color: var(--colore-sfondo-scheda);
+  border-radius: 15px;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  background-color: #808000;
-  border-radius: 10px;
   overflow: hidden;
-  transition: all 0.5s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Stile per la lettera generale */
+/* Lettera */
 .scheda .lettera {
-  /* Usando clamp diamo un range responsivo: min 6rem, max 14rem */
-  font-size: clamp(12rem, 20vw, 40rem);
+  font-size: clamp(8rem, 15vw, 12rem);
   font-weight: 900;
-  color: #000000;
+  color: var(--colore-testo);
   transition: opacity 0.3s ease;
-  position: relative;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
-/* Scheda più larga */
-.scheda-larga {
-  flex: 2; /* Occupa più spazio rispetto alle altre */
-  display: flex;
-  flex-direction: column; /* Impilare gli elementi verticalmente */
-  justify-content: center;
-  align-items: center;
-  background-color: #808000; /* Stesso colore della scheda normale */
-  border-radius: 10px;
-  overflow: hidden;
-  transition: all 0.5s ease;
-  width: 80%; /* Rende la scheda più larga rispetto alle altre */
-  max-width: 800px; /* Limita la larghezza massima */
-  margin: 20px auto; /* Centra la scheda orizzontalmente */
-  padding: 30px; /* Aggiunge spaziatura interna maggiore */
+/* Parola che appare all'hover */
+.scheda .parola {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: var(--colore-testo);
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.3s ease;
 }
 
-/* Stile per il testo interno alla scheda larga */
-.scheda-larga .lettera {
-  font-size: 4rem; /* Dimensione ridotta rispetto alla scheda normale */
-  font-weight: bold;
-  color: #000000;
-}
-
-.scheda-larga .parola {
-  font-size: 2rem;
-  margin: 10px 0;
-  color: #000000;
-}
-
-.scheda-larga .descrizione {
-  font-size: 1rem;
-  text-align: center;
-  line-height: 1.5;
-  color: #000000;
-}
-
-/* Scheda larga fullscreen */
-.scheda-larga-fullscreen {
-  display: flex;
-  flex-direction: column; /* Impilare gli elementi verticalmente */
-  justify-content: center; /* Centrare verticalmente */
-  align-items: center; /* Centrare orizzontalmente */
-  position: relative;
-  width: calc(100% - 40px); /* Spazio ai lati (20px per lato) */
-  max-width: 1200px; /* Limita la larghezza massima */
-  height: calc(100vh - 100px); /* Riduce l'altezza per lasciare spazio sopra e sotto */
-  max-height: calc(100vh - 100px); /* Compatibilità con schermi piccoli */
-  margin: 60px auto 20px; /* Margine superiore per il logo e inferiore per spazio */
-  background-color: #808000; /* Colore di sfondo della scheda */
-  border-radius: 20px; /* Bordo arrotondato */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombreggiatura */
-  padding: 30px; /* Spaziatura interna */
-  overflow: hidden; /* Nasconde eventuali contenuti che fuoriescono */
-  box-sizing: border-box; /* Include il padding nelle dimensioni */
-}
-
-/* Logo in alto a sinistra */
-.logo-container {
-  position: fixed; /* Fissa il logo nella stessa posizione durante lo scroll */
-  top: 20px; /* Posizione dall'alto */
-  left: 20px; /* Posizione dal lato sinistro */
-  z-index: 1000; /* Assicura che il logo sia sopra altri elementi */
-}
-
-.logo-container .logo {
-  width: 80px; /* Regola la dimensione del logo */
-  height: auto; /* Mantiene le proporzioni */
-  cursor: pointer; /* Cambia il cursore per indicare che è cliccabile */
-  transition: transform 0.2s ease; /* Aggiunge un leggero effetto di animazione */
-}
-
-.logo-container .logo:hover {
-  transform: scale(1.1); /* Ingrandisce leggermente il logo al passaggio del mouse */
-}
-
-/* Posizioni specifiche per ogni lettera (con valori fissi, occhio su mobile) */
-.lettera-p {
-  top: -80px;
-  left: 10px;
-}
-.lettera-o {
-  top: 10px;
-  left: 10px;
-}
-.lettera-r {
-  top: -150px;
-  left: -40px;
-}
-.lettera-t {
-  top: 120px;
-  left: 10px;
-}
-
-/* Numero in basso a sinistra */
+/* Numero */
 .scheda .numero {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  font-size: 1.5rem;
+  bottom: 20px;
+  left: 20px;
+  font-size: 2rem;
   font-weight: bold;
-  color: #000000;
+  color: var(--colore-testo);
 }
 
-/* Personalizzazione per la frase sotto la R */
+/* Frase sotto la R */
 .frase-r {
-  color: #000000;
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
   font-size: 1rem;
   font-style: italic;
-  position: absolute;
-  top: 250px;
-  left: 15px;
-  width: 200px;
-  line-height: 1.5;
-  text-align: left;
-  opacity: 1;
-  overflow-wrap: break-word;
-  word-break: normal;
+  color: var(--colore-testo);
+  max-width: 80%;
   transition: opacity 0.3s ease;
 }
 
-/* Scompare la frase al passaggio del mouse */
-.scheda:hover .frase-r {
-  opacity: 0;
+/* Effetti hover */
+.scheda-link:hover {
+  transform: scale(1.02);
 }
 
-/* Parola che compare al passaggio del mouse */
-.scheda .parola {
-  font-size: 2rem;
-  font-weight: 900;
-  color: #000;
-  transition: opacity 0.3s ease;
-  position: absolute;
-  opacity: 0; /* Nascosta di default */
-}
-
-/* Hover: la lettera scompare e la parola appare */
 .scheda:hover .lettera {
   opacity: 0;
 }
+
 .scheda:hover .parola {
   opacity: 1;
 }
 
-/* Disabilita l'effetto hover nella pagina text */
-.scheda-larga-fullscreen:hover .lettera,
-.scheda-larga-fullscreen:hover .numero,
-.scheda-larga-fullscreen:hover .frase-r,
-.scheda-larga-fullscreen:hover .parola {
-  opacity: 1 !important;
+.scheda:hover .frase-r {
+  opacity: 0;
 }
 
-/* Disabilita l'effetto hover specifico per la classe parola */
-.scheda-larga-fullscreen .parola {
-  opacity: 1 !important;
-  transition: none !important;
+/* Media queries */
+@media (max-width: 768px) {
+  .scheda-link {
+    min-width: 100%;
+  }
+  
+  .scheda .lettera {
+    font-size: clamp(6rem, 12vw, 8rem);
+  }
+  
+  .scheda .parola {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
 }
