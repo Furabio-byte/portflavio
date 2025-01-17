@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Funzione di easing per scroll fluido
+  // Gestione smooth scroll
   const easeInOutSextuple = (t) => {
     return t < 0.5
       ? 32 * t * t * t * t * t * t
       : 1 - Math.pow(-2 * t + 2, 6) / 2;
   };
 
-  // Funzione di scroll smooth
   const smoothScroll = (targetElement) => {
     const startPosition = window.pageYOffset;
     const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
@@ -168,8 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Gestione scroll per desktop
   let isScrolling = false;
-  let activeScheda = null;
-  const schedaLinks = document.querySelectorAll('.scheda-link');
   
   // Handler per dispositivi con hover
   const handleClick = function(e) {
@@ -191,43 +188,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Gestore touch per dispositivi mobili
+  // Gestione touch per mobile con sequenza
+  let activeScheda = null;
+  const schedaLinks = document.querySelectorAll('.scheda-link');
+
   const handleTouch = (e) => {
     e.preventDefault();
     const currentScheda = e.currentTarget;
     
-    // Se la scheda non è attiva, prepara l'interazione
-    if (!currentScheda.classList.contains('active')) {
-      // Disattiva qualsiasi altra scheda attiva precedentemente
-      schedaLinks.forEach(link => {
-        if (link !== currentScheda) {
+    // Verifica se è stato toccato un elemento specifico (es. parola)
+    const touchedWord = e.target.closest('.scheda-parola');
+    
+    // Se è stato toccato l'elemento parola
+    if (touchedWord) {
+      if (!currentScheda.classList.contains('active')) {
+        // Disattiva qualsiasi altra scheda attiva
+        schedaLinks.forEach(link => {
           link.classList.remove('active');
+        });
+        
+        // Attiva la scheda corrente
+        currentScheda.classList.add('active');
+        activeScheda = currentScheda;
+      } else {
+        // Secondo tocco sulla parola: scorri alla sezione
+        const targetId = currentScheda.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement && !isScrolling) {
+          isScrolling = true;
+          smoothScroll(targetElement);
+          history.pushState(null, '', targetId);
+          
+          setTimeout(() => {
+            isScrolling = false;
+            // Rimuovi active dopo lo scroll
+            currentScheda.classList.remove('active');
+            activeScheda = null;
+          }, 3500);
         }
-      });
-      
-      // Attiva la scheda corrente
-      currentScheda.classList.add('active');
-      activeScheda = currentScheda;
+      }
     } else {
-      // Se la scheda è già attiva, esegui lo scroll
-      const targetId = currentScheda.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-      
-      if (targetElement && !isScrolling) {
-        isScrolling = true;
+      // Se la scheda è attiva, permetti lo scroll
+      if (currentScheda.classList.contains('active') && !isScrolling) {
+        const targetId = currentScheda.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
         
-        // Esegui lo scroll
-        smoothScroll(targetElement);
-        
-        // Aggiorna URL
-        history.pushState(null, '', targetId);
-        
-        setTimeout(() => {
-          // Reset dopo lo scroll
-          isScrolling = false;
-          currentScheda.classList.remove('active');
-          activeScheda = null;
-        }, 3500);
+        if (targetElement) {
+          isScrolling = true;
+          smoothScroll(targetElement);
+          history.pushState(null, '', targetId);
+          
+          setTimeout(() => {
+            isScrolling = false;
+          }, 3500);
+        }
       }
     }
   };
