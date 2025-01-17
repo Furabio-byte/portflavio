@@ -167,8 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Gestione scroll per desktop
   let isScrolling = false;
-  
-  // Handler per dispositivi con hover
+
   const handleClick = function(e) {
     e.preventDefault();
     
@@ -188,39 +187,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Gestione touch per mobile con sequenza
+  // Gestione delle gesture per dispositivi mobili
   let activeScheda = null;
   const schedaLinks = document.querySelectorAll('.scheda-link');
+  let lastTap = 0;
 
-  const handleTouch = (e) => {
+  const handleTap = (e) => {
     e.preventDefault();
     const currentScheda = e.currentTarget;
-    
-    // Se la scheda non è attiva, mostra solo la parola
-    if (!currentScheda.classList.contains('active')) {
-      // Disattiva qualsiasi altra scheda attiva
-      if (activeScheda) {
-        activeScheda.classList.remove('active');
-      }
-      currentScheda.classList.add('active');
-      activeScheda = currentScheda;
-    } else {
-      // Se la scheda è già attiva, esegui lo scroll
+    const currentTime = new Date().getTime();
+
+    if (currentTime - lastTap < 300) {
+      // Doppio tap
       const targetId = currentScheda.getAttribute('href');
       const targetElement = document.querySelector(targetId);
-      
-      if (targetElement && !isScrolling) {
-        isScrolling = true;
+
+      if (targetElement) {
         smoothScroll(targetElement);
         history.pushState(null, '', targetId);
-        
-        setTimeout(() => {
-          isScrolling = false;
-          // Rimuovi active dopo lo scroll
-          currentScheda.classList.remove('active');
-          activeScheda = null;
-        }, 3500);
       }
+    } else {
+      // Tap singolo
+      if (!currentScheda.classList.contains('active')) {
+        if (activeScheda) {
+          activeScheda.classList.remove('active');
+        }
+        currentScheda.classList.add('active');
+        activeScheda = currentScheda;
+      } else {
+        currentScheda.classList.remove('active');
+        activeScheda = null;
+      }
+    }
+
+    lastTap = currentTime;
+  };
+
+  const handleSwipe = (e) => {
+    if (activeScheda) {
+      const currentIndex = Array.from(schedaLinks).indexOf(activeScheda);
+      let newIndex = currentIndex;
+
+      if (e.direction === 'up') {
+        newIndex = (currentIndex + 1) % schedaLinks.length;
+      } else if (e.direction === 'down') {
+        newIndex = (currentIndex - 1 + schedaLinks.length) % schedaLinks.length;
+      }
+
+      activeScheda.classList.remove('active');
+      schedaLinks[newIndex].classList.add('active');
+      activeScheda = schedaLinks[newIndex];
     }
   };
 
@@ -228,14 +244,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.matchMedia('(hover: none)').matches) {
     // Dispositivi touch
     schedaLinks.forEach(link => {
-      link.addEventListener('touchstart', handleTouch);
+      link.addEventListener('touchend', handleTap);
     });
 
-    // Chiudi la scheda attiva quando si tocca fuori
+    const swipeThreshold = 50;
+    let touchStartY = 0;
+
     document.addEventListener('touchstart', (e) => {
-      if (activeScheda && !activeScheda.contains(e.target)) {
-        activeScheda.classList.remove('active');
-        activeScheda = null;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchDistance = touchEndY - touchStartY;
+
+      if (Math.abs(touchDistance) > swipeThreshold) {
+        const direction = touchDistance > 0 ? 'down' : 'up';
+        handleSwipe({ direction });
       }
     }, { passive: true });
   } else {
