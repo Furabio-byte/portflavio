@@ -98,6 +98,80 @@ body {
   transition: opacity 0.3s ease;
 }
 
+/* Container principale della pagina Text */
+.text-page-container {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Scheda Text principale */
+.scheda-text {
+  background-color: var(--colore-sfondo-scheda);
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  min-height: calc(100vh - 120px);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  margin: 60px auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenuto della scheda */
+.text-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+/* Titolo principale */
+.text-title {
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 900;
+  color: var(--colore-testo);
+  margin-bottom: 2rem;
+  line-height: 1;
+}
+
+/* Sottotitolo */
+.text-subtitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: var(--colore-testo);
+  margin-bottom: 1.5rem;
+}
+
+/* Descrizione */
+.text-description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--colore-testo);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Logo container specifico per la pagina Text */
+.text-page-container .logo-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.text-page-container .logo {
+  width: clamp(40px, 8vw, 60px);
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.text-page-container .logo:hover {
+  transform: scale(1.1);
+}
+
 /* Effetti hover */
 .scheda-link:hover {
   transform: scale(1.02);
@@ -117,15 +191,26 @@ body {
 
 /* Media queries */
 @media (max-width: 768px) {
-  .scheda-link {
-    min-width: 100%;
+  .scheda-text {
+    padding: 20px;
+    margin-top: 40px;
   }
   
-  .scheda .lettera {
-    font-size: clamp(6rem, 12vw, 8rem);
+  .text-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .text-title {
+    font-size: clamp(3rem, 6vw, 4rem);
   }
   
-  .scheda .parola {
+  .text-subtitle {
     font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  
+  .text-description {
+    font-size: 1rem;
   }
 }

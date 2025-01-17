@@ -4,25 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Page</title>
-  <link rel="stylesheet" href="../css/style.css"> <!-- Collega il file CSS -->
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@900&display=swap" rel="stylesheet">
+  
+  <!-- CSS personalizzato -->
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Logo posizionato in alto a sinistra con collegamento alla pagina principale -->
+  <!-- Logo container -->
   <div class="logo-container">
-    <a href="../index.html"> <!-- Collegamento alla pagina principale -->
+    <a href="../index.html">
       <img src="../images/logo.png" alt="Logo" class="logo">
     </a>
   </div>
 
-  <!-- Scheda larga che riempie lo schermo -->
-  <div class="scheda scheda-larga-fullscreen">
-    <span class="lettera">TEST</span>
-    <div>
-      <h2 class="parola">Testo Lungo</h2>
-      <p class="descrizione">
-        Qui puoi trovare informazioni aggiuntive sui miei contatti e su come raggiungermi.
-      </p>
+  <!-- Container principale -->
+  <div class="text-page-container">
+    <!-- Scheda principale -->
+    <div class="scheda-text">
+      <div class="text-content">
+        <h1 class="text-title">TEST</h1>
+        <div class="text-details">
+          <h2 class="text-subtitle">Testo Lungo</h2>
+          <p class="text-description">
+            Qui puoi trovare informazioni aggiuntive sui miei contatti e su come raggiungermi.
+          </p>
+        </div>
+      </div>
     </div>
-  </div>  
+  </div>
 </body>
 </html>
