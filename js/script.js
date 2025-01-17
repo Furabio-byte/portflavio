@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(step);
   };
 
-  // Classe per gestione incremento annuale dei numeri
+  // Gestione incremento annuale dei numeri
   class ContatoreSchede {
     constructor() {
       this.numeriElements = document.querySelectorAll('.scheda .numero');
@@ -196,53 +196,30 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const currentScheda = e.currentTarget;
     
-    // Verifica se è stato toccato un elemento specifico (es. parola)
-    const touchedWord = e.target.closest('.scheda-parola');
-    
-    // Se è stato toccato l'elemento parola
-    if (touchedWord) {
-      if (!currentScheda.classList.contains('active')) {
-        // Disattiva qualsiasi altra scheda attiva
-        schedaLinks.forEach(link => {
-          link.classList.remove('active');
-        });
-        
-        // Attiva la scheda corrente
-        currentScheda.classList.add('active');
-        activeScheda = currentScheda;
-      } else {
-        // Secondo tocco sulla parola: scorri alla sezione
-        const targetId = currentScheda.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement && !isScrolling) {
-          isScrolling = true;
-          smoothScroll(targetElement);
-          history.pushState(null, '', targetId);
-          
-          setTimeout(() => {
-            isScrolling = false;
-            // Rimuovi active dopo lo scroll
-            currentScheda.classList.remove('active');
-            activeScheda = null;
-          }, 3500);
-        }
+    // Se la scheda non è attiva, mostra solo la parola
+    if (!currentScheda.classList.contains('active')) {
+      // Disattiva qualsiasi altra scheda attiva
+      if (activeScheda) {
+        activeScheda.classList.remove('active');
       }
+      currentScheda.classList.add('active');
+      activeScheda = currentScheda;
     } else {
-      // Se la scheda è attiva, permetti lo scroll
-      if (currentScheda.classList.contains('active') && !isScrolling) {
-        const targetId = currentScheda.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
+      // Se la scheda è già attiva, esegui lo scroll
+      const targetId = currentScheda.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      
+      if (targetElement && !isScrolling) {
+        isScrolling = true;
+        smoothScroll(targetElement);
+        history.pushState(null, '', targetId);
         
-        if (targetElement) {
-          isScrolling = true;
-          smoothScroll(targetElement);
-          history.pushState(null, '', targetId);
-          
-          setTimeout(() => {
-            isScrolling = false;
-          }, 3500);
-        }
+        setTimeout(() => {
+          isScrolling = false;
+          // Rimuovi active dopo lo scroll
+          currentScheda.classList.remove('active');
+          activeScheda = null;
+        }, 3500);
       }
     }
   };
