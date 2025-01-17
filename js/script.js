@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Gestione smooth scroll
+  // Funzione di easing per scroll fluido
   const easeInOutSextuple = (t) => {
     return t < 0.5
       ? 32 * t * t * t * t * t * t
       : 1 - Math.pow(-2 * t + 2, 6) / 2;
   };
 
+  // Funzione di scroll smooth
   const smoothScroll = (targetElement) => {
     const startPosition = window.pageYOffset;
     const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(step);
   };
 
-  // Gestione incremento annuale dei numeri
+  // Classe per gestione incremento annuale dei numeri
   class ContatoreSchede {
     constructor() {
       this.numeriElements = document.querySelectorAll('.scheda .numero');
@@ -167,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Gestione scroll per desktop
   let isScrolling = false;
+  let activeScheda = null;
+  const schedaLinks = document.querySelectorAll('.scheda-link');
   
   // Handler per dispositivi con hover
   const handleClick = function(e) {
@@ -188,20 +191,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Gestione touch per mobile con sequenza
-  let activeScheda = null;
-  const schedaLinks = document.querySelectorAll('.scheda-link');
-
+  // Gestore touch per dispositivi mobili
   const handleTouch = (e) => {
     e.preventDefault();
     const currentScheda = e.currentTarget;
     
-    // Se la scheda non è attiva, mostra solo la parola
+    // Se la scheda non è attiva, prepara l'interazione
     if (!currentScheda.classList.contains('active')) {
-      // Disattiva qualsiasi altra scheda attiva
-      if (activeScheda) {
-        activeScheda.classList.remove('active');
-      }
+      // Disattiva qualsiasi altra scheda attiva precedentemente
+      schedaLinks.forEach(link => {
+        if (link !== currentScheda) {
+          link.classList.remove('active');
+        }
+      });
+      
+      // Attiva la scheda corrente
       currentScheda.classList.add('active');
       activeScheda = currentScheda;
     } else {
@@ -211,12 +215,16 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (targetElement && !isScrolling) {
         isScrolling = true;
+        
+        // Esegui lo scroll
         smoothScroll(targetElement);
+        
+        // Aggiorna URL
         history.pushState(null, '', targetId);
         
         setTimeout(() => {
+          // Reset dopo lo scroll
           isScrolling = false;
-          // Rimuovi active dopo lo scroll
           currentScheda.classList.remove('active');
           activeScheda = null;
         }, 3500);
