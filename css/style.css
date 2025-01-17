@@ -5,6 +5,15 @@
   --colore-testo: #000000;
 }
 
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --colore-sfondo-principale: #1a1a1a;
+    --colore-sfondo-scheda: #666600;
+    --colore-testo: #ffffff;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -40,6 +49,13 @@ body {
   transition: transform 0.3s ease;
 }
 
+/* Miglioramento accessibilità focus */
+.scheda-link:focus-visible {
+  outline: 3px solid var(--colore-testo);
+  outline-offset: 4px;
+  border-radius: 15px;
+}
+
 /* Scheda */
 .scheda {
   width: 100%;
@@ -52,6 +68,10 @@ body {
   align-items: center;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Ottimizzazioni performance */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Lettera */
@@ -64,6 +84,8 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1;
+  /* Ottimizzazione rendering testo */
+  text-rendering: optimizeLegibility;
 }
 
 /* Parola che appare all'hover */
@@ -74,6 +96,8 @@ body {
   opacity: 0;
   position: absolute;
   transition: opacity 0.3s ease;
+  /* Ottimizzazione rendering testo */
+  text-rendering: optimizeLegibility;
 }
 
 /* Numero */
@@ -120,6 +144,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Ottimizzazioni performance */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* Contenuto della scheda */
@@ -135,6 +162,7 @@ body {
   color: var(--colore-testo);
   margin-bottom: 2rem;
   line-height: 1;
+  text-rendering: optimizeLegibility;
 }
 
 /* Sottotitolo */
@@ -143,6 +171,7 @@ body {
   font-weight: 900;
   color: var(--colore-testo);
   margin-bottom: 1.5rem;
+  text-rendering: optimizeLegibility;
 }
 
 /* Descrizione */
@@ -168,25 +197,38 @@ body {
   transition: transform 0.3s ease;
 }
 
-.text-page-container .logo:hover {
-  transform: scale(1.1);
+/* Supporto per reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scheda-link,
+  .scheda .lettera,
+  .scheda .parola,
+  .frase-r,
+  .text-page-container .logo {
+    transition: none;
+  }
 }
 
 /* Effetti hover */
-.scheda-link:hover {
-  transform: scale(1.02);
-}
+@media (hover: hover) {
+  .scheda-link:hover {
+    transform: scale(1.02);
+  }
 
-.scheda:hover .lettera {
-  opacity: 0;
-}
+  .scheda:hover .lettera {
+    opacity: 0;
+  }
 
-.scheda:hover .parola {
-  opacity: 1;
-}
+  .scheda:hover .parola {
+    opacity: 1;
+  }
 
-.scheda:hover .frase-r {
-  opacity: 0;
+  .scheda:hover .frase-r {
+    opacity: 0;
+  }
+
+  .text-page-container .logo:hover {
+    transform: scale(1.1);
+  }
 }
 
 /* Media queries */

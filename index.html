@@ -3,56 +3,155 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portflavio</title>
+  <meta name="description" content="Portfolio personale di Flavio con progetti, altri lavori, percorso e testi">
+  <meta name="theme-color" content="#808000"> <!-- Aggiornato per corrispondere al colore delle schede -->
+  <meta name="color-scheme" content="light dark"> <!-- Supporto per modalità chiara/scura -->
+  
+  <!-- Sicurezza migliorata -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>Portflavio - Portfolio Personale</title>
+
+  <!-- Preload ottimizzato -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
-  <nav class="schede-container">
-    <!-- Project Card -->
-    <a href="pages/project.html" class="scheda-link">
-      <div class="scheda">
-        <span class="lettera">P</span>
-        <span class="parola">Project</span>
-        <span class="numero">2</span>
-      </div>
-    </a>
+  <!-- Skip link per accessibilità -->
+  <a href="#main-content" class="visually-hidden">Salta al contenuto principale</a>
 
-    <!-- Others Card -->
-    <a href="pages/others.html" class="scheda-link">
-      <div class="scheda">
-        <span class="lettera">O</span>
-        <span class="parola">Others</span>
-        <span class="numero">0</span>
-      </div>
-    </a>
+  <header>
+    <h1 class="visually-hidden">Portflavio - Portfolio Personale</h1>
+    
+    <nav class="schede-container" aria-label="Navigazione principale">
+      <!-- Project Card -->
+      <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">P</span>
+          <span class="parola">Project</span>
+          <span class="numero">2</span>
+        </article>
+      </a>
 
-    <!-- Road Card -->
-    <a href="pages/road.html" class="scheda-link">
-      <div class="scheda">
-        <span class="lettera">R</span>
-        <span class="parola">Road</span>
-        <p class="frase-r">
-          LOREM IPSUM DOLOR<br>
-          SIT AMET, CONSECTETUR<br>
-          ADIPISCING ELIT.
-        </p>
-        <span class="numero">2</span>
-      </div>
-    </a>
+      <!-- Others Card -->
+      <a href="#others" class="scheda-link" aria-label="Altri lavori">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">O</span>
+          <span class="parola">Others</span>
+          <span class="numero">0</span>
+        </article>
+      </a>
 
-    <!-- Text Card -->
-    <a href="pages/text.html" class="scheda-link">
-      <div class="scheda">
-        <span class="lettera">T</span>
-        <span class="parola">Text</span>
-        <span class="numero">5</span>
+      <!-- Road Card -->
+      <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">R</span>
+          <span class="parola">Road</span>
+          <p class="frase-r" lang="la">
+            LOREM IPSUM DOLOR
+            SIT AMET, CONSECTETUR
+            ADIPISCING ELIT.
+          </p>
+          <span class="numero">2</span>
+        </article>
+      </a>
+
+      <!-- Text Card -->
+      <a href="#text" class="scheda-link" aria-label="Testi - 5 testi disponibili">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">T</span>
+          <span class="parola">Text</span>
+          <span class="numero">5</span>
+        </article>
+      </a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Sezione Projects -->
+    <section id="project" class="text-page-container">
+      <div class="scheda-text">
+        <div class="text-content">
+          <h2 class="text-title">Projects</h2>
+          <div class="text-description">
+            <!-- Contenuto dei progetti -->
+          </div>
+        </div>
       </div>
-    </a>
-  </nav>
+    </section>
+
+    <!-- Sezione Others -->
+    <section id="others" class="text-page-container">
+      <div class="scheda-text">
+        <div class="text-content">
+          <h2 class="text-title">Others</h2>
+          <div class="text-description">
+            <!-- Contenuto altri lavori -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Road -->
+    <section id="road" class="text-page-container">
+      <div class="scheda-text">
+        <div class="text-content">
+          <h2 class="text-title">Road</h2>
+          <div class="text-description">
+            <!-- Contenuto percorso -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Text -->
+    <section id="text" class="text-page-container">
+      <div class="scheda-text">
+        <div class="text-content">
+          <h2 class="text-title">Text</h2>
+          <div class="text-description">
+            <!-- Contenuto testi -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Gestione smooth scroll migliorata
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // Verifica il supporto per scrollBehavior
+            if ('scrollBehavior' in document.documentElement.style) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              // Fallback per browser che non supportano scrollBehavior
+              targetElement.scrollIntoView();
+            }
+            
+            // Aggiorna l'URL senza causare un salto
+            history.pushState(null, '', targetId);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
