@@ -55,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
   class ContatoreSchede {
     constructor() {
       this.numeriElements = document.querySelectorAll('.scheda .numero');
+      this.STORAGE_PREFIX = 'portflavio_';
+      this.STORAGE_EXPIRY = 'portflavio_expiry';
+      this.CLEANUP_THRESHOLD = 5 * 1024 * 1024; // 5MB
+      this.EXPIRY_DAYS = 365; // 1 anno
       
       if (!this.numeriElements.length) {
         console.warn('Nessun elemento con classe .numero trovato nelle schede');
@@ -62,7 +66,53 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       this.numeri = {};
+      this.pulisciStorageSeNecessario();
       this.inizializzaContatori();
+    }
+
+    pulisciStorageSeNecessario() {
+      try {
+        // Controlla la dimensione totale
+        let totalSize = 0;
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          totalSize += key.length + value.length;
+        }
+
+        // Se superiamo la soglia o è passato troppo tempo, puliamo
+        if (totalSize > this.CLEANUP_THRESHOLD || this.isExpired()) {
+          this.pulisciStorage();
+        }
+      } catch (error) {
+        console.warn('Errore durante la pulizia del localStorage:', error);
+      }
+    }
+
+    isExpired() {
+      const expiryDate = localStorage.getItem(this.STORAGE_EXPIRY);
+      if (!expiryDate) {
+        this.setExpiryDate();
+        return false;
+      }
+      return new Date().getTime() > parseInt(expiryDate);
+    }
+
+    setExpiryDate() {
+      const expiry = new Date();
+      expiry.setDate(expiry.getDate() + this.EXPIRY_DAYS);
+      localStorage.setItem(this.STORAGE_EXPIRY, expiry.getTime().toString());
+    }
+
+    pulisciStorage() {
+      // Rimuovi solo le chiavi relative a questo componente
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key.startsWith(this.STORAGE_PREFIX)) {
+          localStorage.removeItem(key);
+        }
+      }
+      this.setExpiryDate();
     }
 
     getNumeroIniziale(element) {
@@ -81,13 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const numeroAttuale = this.getNumeroIniziale(element);
         const nuovoNumero = numeroAttuale + 1;
         element.textContent = nuovoNumero;
-        localStorage.setItem(`numero_scheda_${index}`, nuovoNumero);
+        
+        try {
+          localStorage.setItem(
+            `${this.STORAGE_PREFIX}numero_scheda_${index}`, 
+            nuovoNumero.toString()
+          );
+        } catch (error) {
+          console.warn('Errore durante il salvataggio nel localStorage:', error);
+          this.pulisciStorage(); // Tenta una pulizia in caso di errore
+        }
       });
     }
 
     inizializzaContatori() {
       this.numeriElements.forEach((element, index) => {
-        const valoreSalvato = localStorage.getItem(`numero_scheda_${index}`);
+        const valoreSalvato = localStorage.getItem(
+          `${this.STORAGE_PREFIX}numero_scheda_${index}`
+        );
         if (valoreSalvato !== null) {
           element.textContent = valoreSalvato;
         }
