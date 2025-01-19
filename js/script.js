@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Gestione smooth scroll
-  const easeInOutSextuple = (t) => {
-    return t < 0.5
-      ? 32 * t * t * t * t * t * t
-      : 1 - Math.pow(-2 * t + 2, 6) / 2;
-  };
+  /**
+   * Gestione Smooth Scroll
+   */
+  const easeInOutSextuple = (t) => 
+    t < 0.5 ? 32 * t ** 6 : 1 - (-2 * t + 2) ** 6 / 2;
 
   const smoothScroll = (targetElement) => {
     const startPosition = window.pageYOffset;
@@ -15,26 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const minDuration = 2000;
     const maxDuration = 3000;
     
-    let start = null;
-
     const adjustedDuration = Math.min(
       maxDuration,
-      Math.max(
-        minDuration,
-        Math.abs(distance) / 500 * baseDuration
-      )
+      Math.max(minDuration, (Math.abs(distance) / 500) * baseDuration)
     );
 
+    let start = null;
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const progress = timestamp - start;
       const percentage = Math.min(progress / adjustedDuration, 1);
       
-      const easing = easeInOutSextuple(percentage);
-      const currentPosition = startPosition + (distance * easing);
-      
       window.scrollTo({
-        top: currentPosition,
+        top: startPosition + (distance * easeInOutSextuple(percentage)),
         behavior: 'auto'
       });
 
@@ -51,225 +43,216 @@ document.addEventListener('DOMContentLoaded', () => {
     window.requestAnimationFrame(step);
   };
 
-  // Gestione incremento annuale dei numeri
+  /**
+   * Gestione Contatori
+   */
   class ContatoreSchede {
     constructor() {
-      this.numeriElements = document.querySelectorAll('.scheda .numero');
+      // Costanti e configurazione
       this.STORAGE_PREFIX = 'portflavio_';
-      this.STORAGE_EXPIRY = 'portflavio_expiry';
-      this.CLEANUP_THRESHOLD = 5 * 1024 * 1024; // 5MB
-      this.EXPIRY_DAYS = 365; // 1 anno
+      this.STORAGE_KEY_NUMBERS = `${this.STORAGE_PREFIX}numeri`;
+      this.STORAGE_KEY_YEAR = `${this.STORAGE_PREFIX}anno`;
+      
+      // Elementi DOM
+      this.numeriElements = document.querySelectorAll('.scheda .numero');
       
       if (!this.numeriElements.length) {
         console.warn('Nessun elemento con classe .numero trovato nelle schede');
         return;
       }
 
-      this.numeri = {};
-      this.pulisciStorageSeNecessario();
-      this.inizializzaContatori();
+      this.init();
     }
 
-    pulisciStorageSeNecessario() {
-      try {
-        // Controlla la dimensione totale
-        let totalSize = 0;
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const value = localStorage.getItem(key);
-          totalSize += key.length + value.length;
-        }
-
-        // Se superiamo la soglia o è passato troppo tempo, puliamo
-        if (totalSize > this.CLEANUP_THRESHOLD || this.isExpired()) {
-          this.pulisciStorage();
-        }
-      } catch (error) {
-        console.warn('Errore durante la pulizia del localStorage:', error);
-      }
-    }
-
-    isExpired() {
-      const expiryDate = localStorage.getItem(this.STORAGE_EXPIRY);
-      if (!expiryDate) {
-        this.setExpiryDate();
-        return false;
-      }
-      return new Date().getTime() > parseInt(expiryDate);
-    }
-
-    setExpiryDate() {
-      const expiry = new Date();
-      expiry.setDate(expiry.getDate() + this.EXPIRY_DAYS);
-      localStorage.setItem(this.STORAGE_EXPIRY, expiry.getTime().toString());
-    }
-
-    pulisciStorage() {
-      // Rimuovi solo le chiavi relative a questo componente
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
-        if (key.startsWith(this.STORAGE_PREFIX)) {
-          localStorage.removeItem(key);
-        }
-      }
-      this.setExpiryDate();
-    }
-
-    getNumeroIniziale(element) {
-      const numero = parseInt(element.textContent, 10);
-      return isNaN(numero) ? 0 : numero;
-    }
-
-    calcolaTempoAlProssimoAnno() {
-      const oggi = new Date();
-      const prossimoAnno = new Date(oggi.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
-      return prossimoAnno - oggi;
-    }
-
-    incrementaContatori() {
-      this.numeriElements.forEach((element, index) => {
-        const numeroAttuale = this.getNumeroIniziale(element);
-        const nuovoNumero = numeroAttuale + 1;
-        element.textContent = nuovoNumero;
+    init() {
+      const savedData = this.getSavedData();
+      const currentYear = new Date().getFullYear();
+      
+      if (!savedData) {
+        // Prima inizializzazione
+        const initialData = {
+          year: currentYear,
+          numbers: Array.from(this.numeriElements).map(el => ({
+            initial: parseInt(el.textContent, 10) || 0,
+            current: parseInt(el.textContent, 10) || 0
+          }))
+        };
         
-        try {
-          localStorage.setItem(
-            `${this.STORAGE_PREFIX}numero_scheda_${index}`, 
-            nuovoNumero.toString()
-          );
-        } catch (error) {
-          console.warn('Errore durante il salvataggio nel localStorage:', error);
-          this.pulisciStorage(); // Tenta una pulizia in caso di errore
+        this.saveData(initialData);
+        this.updateDOM(initialData.numbers);
+      } else {
+        // Gestione incremento annuale
+        if (currentYear > savedData.year) {
+          const updatedNumbers = savedData.numbers.map(num => ({
+            initial: num.initial,
+            current: num.current + 1
+          }));
+          
+          const updatedData = {
+            year: currentYear,
+            numbers: updatedNumbers
+          };
+          
+          this.saveData(updatedData);
+          this.updateDOM(updatedNumbers);
+        } else {
+          this.updateDOM(savedData.numbers);
+        }
+      }
+    }
+
+    getSavedData() {
+      try {
+        const savedNumbers = localStorage.getItem(this.STORAGE_KEY_NUMBERS);
+        const savedYear = localStorage.getItem(this.STORAGE_KEY_YEAR);
+        
+        if (savedNumbers && savedYear) {
+          return {
+            year: parseInt(savedYear, 10),
+            numbers: JSON.parse(savedNumbers)
+          };
+        }
+        return null;
+      } catch (error) {
+        console.error('Errore nel recupero dei dati:', error);
+        return null;
+      }
+    }
+
+    saveData(data) {
+      try {
+        localStorage.setItem(this.STORAGE_KEY_NUMBERS, JSON.stringify(data.numbers));
+        localStorage.setItem(this.STORAGE_KEY_YEAR, data.year.toString());
+      } catch (error) {
+        console.error('Errore nel salvataggio dei dati:', error);
+      }
+    }
+
+    updateDOM(numbers) {
+      this.numeriElements.forEach((element, index) => {
+        if (numbers[index]) {
+          element.textContent = numbers[index].current;
         }
       });
     }
 
-    inizializzaContatori() {
-      this.numeriElements.forEach((element, index) => {
-        const valoreSalvato = localStorage.getItem(
-          `${this.STORAGE_PREFIX}numero_scheda_${index}`
-        );
-        if (valoreSalvato !== null) {
-          element.textContent = valoreSalvato;
-        }
-      });
-
-      const tempoRimanente = this.calcolaTempoAlProssimoAnno();
-
-      setTimeout(() => {
-        this.incrementaContatori();
-        setInterval(() => {
-          this.incrementaContatori();
-        }, 365 * 24 * 60 * 60 * 1000);
-      }, tempoRimanente);
+    static reset() {
+      Object.keys(localStorage)
+        .filter(key => key.startsWith('portflavio_'))
+        .forEach(key => localStorage.removeItem(key));
     }
   }
 
-  // Gestione scroll per desktop
-  let isScrolling = false;
-
-  const handleClick = function(e) {
-    e.preventDefault();
-    
-    if (isScrolling) return;
-    
-    const targetId = this.getAttribute('href');
-    const targetElement = document.querySelector(targetId);
-    
-    if (targetElement) {
-      isScrolling = true;
-      smoothScroll(targetElement);
-      history.pushState(null, '', targetId);
+  /**
+   * Gestione Eventi UI
+   */
+  class UIHandler {
+    constructor() {
+      this.schedaLinks = document.querySelectorAll('.scheda-link');
+      this.isScrolling = false;
+      this.activeScheda = null;
+      this.lastTap = 0;
       
-      setTimeout(() => {
-        isScrolling = false;
-      }, 3500);
+      this.init();
     }
-  };
 
-  // Gestione delle gesture per dispositivi mobili
-  let activeScheda = null;
-  const schedaLinks = document.querySelectorAll('.scheda-link');
-  let lastTap = 0;
+    init() {
+      if (window.matchMedia('(hover: none)').matches) {
+        this.initializeTouchDevice();
+      } else {
+        this.initializeDesktopDevice();
+      }
+    }
 
-  const handleTap = (e) => {
-    e.preventDefault();
-    const currentScheda = e.currentTarget;
-    const currentTime = new Date().getTime();
-
-    if (currentTime - lastTap < 300) {
-      // Doppio tap
-      const targetId = currentScheda.getAttribute('href');
+    handleClick(e) {
+      e.preventDefault();
+      if (this.isScrolling) return;
+      
+      const targetId = e.currentTarget.getAttribute('href');
       const targetElement = document.querySelector(targetId);
-
+      
       if (targetElement) {
+        this.isScrolling = true;
         smoothScroll(targetElement);
         history.pushState(null, '', targetId);
+        
+        setTimeout(() => {
+          this.isScrolling = false;
+        }, 3500);
       }
-    } else {
-      // Tap singolo
-      if (!currentScheda.classList.contains('active')) {
-        if (activeScheda) {
-          activeScheda.classList.remove('active');
+    }
+
+    handleTap(e) {
+      e.preventDefault();
+      const currentScheda = e.currentTarget;
+      const currentTime = Date.now();
+
+      if (currentTime - this.lastTap < 300) {
+        const targetId = currentScheda.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          smoothScroll(targetElement);
+          history.pushState(null, '', targetId);
         }
-        currentScheda.classList.add('active');
-        activeScheda = currentScheda;
       } else {
-        currentScheda.classList.remove('active');
-        activeScheda = null;
+        if (this.activeScheda) {
+          this.activeScheda.classList.remove('active');
+        }
+        
+        if (this.activeScheda !== currentScheda) {
+          currentScheda.classList.add('active');
+          this.activeScheda = currentScheda;
+        } else {
+          this.activeScheda = null;
+        }
+      }
+
+      this.lastTap = currentTime;
+    }
+
+    handleSwipe(direction) {
+      if (this.activeScheda) {
+        const schedaArray = Array.from(this.schedaLinks);
+        const currentIndex = schedaArray.indexOf(this.activeScheda);
+        const newIndex = direction === 'up' 
+          ? (currentIndex + 1) % this.schedaLinks.length
+          : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
+
+        this.activeScheda.classList.remove('active');
+        this.schedaLinks[newIndex].classList.add('active');
+        this.activeScheda = this.schedaLinks[newIndex];
       }
     }
 
-    lastTap = currentTime;
-  };
+    initializeTouchDevice() {
+      const swipeThreshold = 50;
+      let touchStartY = 0;
 
-  const handleSwipe = (e) => {
-    if (activeScheda) {
-      const currentIndex = Array.from(schedaLinks).indexOf(activeScheda);
-      let newIndex = currentIndex;
+      this.schedaLinks.forEach(link => {
+        link.addEventListener('touchend', (e) => this.handleTap(e));
+      });
 
-      if (e.direction === 'up') {
-        newIndex = (currentIndex + 1) % schedaLinks.length;
-      } else if (e.direction === 'down') {
-        newIndex = (currentIndex - 1 + schedaLinks.length) % schedaLinks.length;
-      }
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
 
-      activeScheda.classList.remove('active');
-      schedaLinks[newIndex].classList.add('active');
-      activeScheda = schedaLinks[newIndex];
+      document.addEventListener('touchend', (e) => {
+        const touchDistance = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(touchDistance) > swipeThreshold) {
+          this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
+        }
+      }, { passive: true });
     }
-  };
 
-  // Applica i listener appropriati in base al dispositivo
-  if (window.matchMedia('(hover: none)').matches) {
-    // Dispositivi touch
-    schedaLinks.forEach(link => {
-      link.addEventListener('touchend', handleTap);
-    });
-
-    const swipeThreshold = 50;
-    let touchStartY = 0;
-
-    document.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    document.addEventListener('touchend', (e) => {
-      const touchEndY = e.changedTouches[0].clientY;
-      const touchDistance = touchEndY - touchStartY;
-
-      if (Math.abs(touchDistance) > swipeThreshold) {
-        const direction = touchDistance > 0 ? 'down' : 'up';
-        handleSwipe({ direction });
-      }
-    }, { passive: true });
-  } else {
-    // Dispositivi desktop
-    schedaLinks.forEach(link => {
-      link.addEventListener('click', handleClick);
-    });
+    initializeDesktopDevice() {
+      this.schedaLinks.forEach(link => {
+        link.addEventListener('click', (e) => this.handleClick(e));
+      });
+    }
   }
 
-  // Inizializza i contatori
+  // Inizializzazione
   new ContatoreSchede();
+  new UIHandler();
 });
