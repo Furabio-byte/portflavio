@@ -252,7 +252,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /**
+   * Gestione Text Section
+   */
+  class TextHandler {
+    constructor() {
+      this.textWords = document.querySelectorAll('.text-word');
+      this.isMobile = window.matchMedia('(hover: none)').matches;
+      this.init();
+    }
+
+    init() {
+      this.textWords.forEach(word => {
+        if (this.isMobile) {
+          word.addEventListener('click', (e) => this.handleMobileClick(e));
+        } else {
+          word.addEventListener('click', (e) => this.handleDesktopClick(e));
+        }
+      });
+    }
+
+    handleMobileClick(e) {
+      e.preventDefault();
+      const email = e.currentTarget.dataset.email;
+      window.location.href = `mailto:${email}`;
+    }
+
+    handleDesktopClick(e) {
+      e.preventDefault();
+      const email = e.currentTarget.dataset.email;
+      
+      // Tenta di aprire il client email predefinito
+      const mailtoAttempt = window.open(`mailto:${email}`);
+      
+      // Se il client email non si apre, mostra un messaggio
+      if (!mailtoAttempt || mailtoAttempt.closed || typeof mailtoAttempt.closed === 'undefined') {
+        alert(`Per favore, invia una email a: ${email}`);
+      }
+    }
+  }
+
   // Inizializzazione
   new ContatoreSchede();
   new UIHandler();
+  new TextHandler();
 });

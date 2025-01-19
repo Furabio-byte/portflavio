@@ -50,7 +50,7 @@ body {
   gap: 20px;
   justify-content: center;
   padding: 20px;
-  margin-top: 60px; /* Aggiunto margine superiore per il logo */
+  margin-top: 60px;
 }
 
 /* Link scheda */
@@ -83,7 +83,6 @@ body {
   align-items: center;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  /* Ottimizzazioni performance */
   will-change: transform;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
@@ -99,7 +98,6 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1;
-  /* Ottimizzazione rendering testo */
   text-rendering: optimizeLegibility;
 }
 
@@ -111,7 +109,6 @@ body {
   opacity: 0;
   position: absolute;
   transition: opacity 0.3s ease;
-  /* Ottimizzazione rendering testo */
   text-rendering: optimizeLegibility;
 }
 
@@ -159,7 +156,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Ottimizzazioni performance */
   will-change: transform;
   backface-visibility: hidden;
 }
@@ -198,13 +194,34 @@ body {
   margin: 0 auto;
 }
 
+/* Parole cliccabili nella sezione Text */
+.text-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.text-word {
+  color: var(--colore-testo);
+  text-decoration: none;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 900;
+  padding: 10px 20px;
+  border: 2px solid var(--colore-testo);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
 /* Supporto per reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .scheda-link,
   .scheda .lettera,
   .scheda .parola,
   .frase-r,
-  .logo {
+  .logo,
+  .text-word {
     transition: none;
   }
 }
@@ -229,6 +246,11 @@ body {
 
   .logo:hover {
     transform: scale(1.1);
+  }
+
+  .text-word:hover {
+    background-color: var(--colore-testo);
+    color: var(--colore-sfondo-scheda);
   }
 }
 
@@ -273,5 +295,10 @@ body {
 
   .scheda-link.active .frase-r {
     opacity: 0;
+  }
+
+  .text-word.active {
+    background-color: var(--colore-testo);
+    color: var(--colore-sfondo-scheda);
   }
 }
