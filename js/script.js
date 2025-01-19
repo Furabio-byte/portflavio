@@ -1,50 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Quando il DOM è completamente caricato, iniziare ad applicare le funzionalità
-
   /**
    * Gestione Smooth Scroll
    */
-
-  // Funzione di easing: accelera e decelera lo scorrimento per un effetto fluido
   const easeInOutSextuple = (t) => 
     t < 0.5 ? 32 * t ** 6 : 1 - (-2 * t + 2) ** 6 / 2;
 
-  // Funzione per gestire lo scorrimento fluido verso un elemento di destinazione
   const smoothScroll = (targetElement) => {
-    const startPosition = window.pageYOffset; // Posizione corrente dello scroll
-    const targetPosition = targetElement.getBoundingClientRect().top + startPosition; // Posizione finale dello scroll
-    const distance = targetPosition - startPosition; // Distanza da percorrere
+    const startPosition = window.pageYOffset;
+    const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
+    const distance = targetPosition - startPosition;
     
-    // Definizione delle durate di base per l'animazione
     const baseDuration = 2500;
     const minDuration = 2000;
     const maxDuration = 3000;
     
-    // Calcola la durata in base alla distanza
     const adjustedDuration = Math.min(
       maxDuration,
       Math.max(minDuration, (Math.abs(distance) / 500) * baseDuration)
     );
 
-    let start = null; // Timestamp di inizio dell'animazione
-
-    // Funzione di aggiornamento del frame per l'animazione dello scorrimento
+    let start = null;
     const step = (timestamp) => {
-      if (!start) start = timestamp; // Inizializza il tempo di inizio
-      const progress = timestamp - start; // Calcola il progresso corrente
-      const percentage = Math.min(progress / adjustedDuration, 1); // Normalizza il progresso
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      const percentage = Math.min(progress / adjustedDuration, 1);
       
-      // Calcola la posizione attuale usando la funzione di easing
       window.scrollTo({
         top: startPosition + (distance * easeInOutSextuple(percentage)),
         behavior: 'auto'
       });
 
-      // Continua l'animazione fino al completamento
       if (progress < adjustedDuration) {
         window.requestAnimationFrame(step);
       } else {
-        // Assicura che l'elemento arrivi alla posizione finale
         window.scrollTo({
           top: targetPosition,
           behavior: 'auto'
@@ -52,55 +40,49 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    // Avvia l'animazione
     window.requestAnimationFrame(step);
   };
 
   /**
    * Gestione Contatori
    */
-
   class ContatoreSchede {
     constructor() {
-      // Prefissi e chiavi usate per il localStorage
+      // Costanti e configurazione
       this.STORAGE_PREFIX = 'portflavio_';
       this.STORAGE_KEY_NUMBERS = `${this.STORAGE_PREFIX}numeri`;
       this.STORAGE_KEY_YEAR = `${this.STORAGE_PREFIX}anno`;
       
-      // Seleziona gli elementi con la classe .numero dentro le schede
+      // Elementi DOM
       this.numeriElements = document.querySelectorAll('.scheda .numero');
       
-      // Se non ci sono elementi .numero, mostra un avviso e interrompi
       if (!this.numeriElements.length) {
         console.warn('Nessun elemento con classe .numero trovato nelle schede');
         return;
       }
 
-      // Inizializza i contatori
       this.init();
     }
 
-    // Funzione per inizializzare i dati
     init() {
-      const savedData = this.getSavedData(); // Recupera i dati salvati
-      const currentYear = new Date().getFullYear(); // Anno corrente
+      const savedData = this.getSavedData();
+      const currentYear = new Date().getFullYear();
       
       if (!savedData) {
-        // Prima inizializzazione se non ci sono dati salvati
+        // Prima inizializzazione
         const initialData = {
           year: currentYear,
           numbers: Array.from(this.numeriElements).map(el => ({
-            initial: parseInt(el.textContent, 10) || 0, // Numero iniziale dal DOM
-            current: parseInt(el.textContent, 10) || 0  // Numero attuale, inizialmente uguale a quello iniziale
+            initial: parseInt(el.textContent, 10) || 0,
+            current: parseInt(el.textContent, 10) || 0
           }))
         };
         
-        this.saveData(initialData); // Salva i dati iniziali
-        this.updateDOM(initialData.numbers); // Aggiorna il DOM con i numeri iniziali
+        this.saveData(initialData);
+        this.updateDOM(initialData.numbers);
       } else {
-        // Incremento annuale dei contatori
+        // Gestione incremento annuale
         if (currentYear > savedData.year) {
-          // Se l'anno è cambiato, incrementa i numeri
           const updatedNumbers = savedData.numbers.map(num => ({
             initial: num.initial,
             current: num.current + 1
@@ -111,16 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
             numbers: updatedNumbers
           };
           
-          this.saveData(updatedData); // Salva i dati aggiornati
-          this.updateDOM(updatedNumbers); // Aggiorna il DOM con i nuovi valori
+          this.saveData(updatedData);
+          this.updateDOM(updatedNumbers);
         } else {
-          // Altrimenti, mostra semplicemente i dati salvati
           this.updateDOM(savedData.numbers);
         }
       }
     }
 
-    // Recupera i dati salvati da localStorage
     getSavedData() {
       try {
         const savedNumbers = localStorage.getItem(this.STORAGE_KEY_NUMBERS);
@@ -132,14 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
             numbers: JSON.parse(savedNumbers)
           };
         }
-        return null; // Nessun dato salvato
+        return null;
       } catch (error) {
         console.error('Errore nel recupero dei dati:', error);
         return null;
       }
     }
 
-    // Salva i dati nel localStorage
     saveData(data) {
       try {
         localStorage.setItem(this.STORAGE_KEY_NUMBERS, JSON.stringify(data.numbers));
@@ -149,16 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Aggiorna i numeri visibili nel DOM
     updateDOM(numbers) {
       this.numeriElements.forEach((element, index) => {
         if (numbers[index]) {
-          element.textContent = numbers[index].current; // Aggiorna il contenuto del numero
+          element.textContent = numbers[index].current;
         }
       });
     }
 
-    // Resetta tutti i dati relativi ai contatori
     static reset() {
       Object.keys(localStorage)
         .filter(key => key.startsWith('portflavio_'))
@@ -167,52 +144,156 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Gestione degli Eventi UI
+   * Gestione Eventi UI
    */
-
   class UIHandler {
     constructor() {
-      this.schedaLinks = document.querySelectorAll('.scheda-link'); // Seleziona i link alle schede
-      this.isScrolling = false; // Flag per evitare scorrimenti multipli
-      this.activeScheda = null; // Scheda attiva
-      this.lastTap = 0; // Tempo dell'ultimo tap
+      this.schedaLinks = document.querySelectorAll('.scheda-link');
+      this.isScrolling = false;
+      this.activeScheda = null;
+      this.lastTap = 0;
       
-      this.init(); // Inizializza i listener
+      this.init();
     }
 
     init() {
       if (window.matchMedia('(hover: none)').matches) {
-        // Dispositivi touch
         this.initializeTouchDevice();
       } else {
-        // Dispositivi desktop
         this.initializeDesktopDevice();
       }
     }
 
-    // Gestisce il click sui dispositivi desktop
     handleClick(e) {
-      e.preventDefault(); // Previene il comportamento predefinito del link
-      if (this.isScrolling) return; // Evita di avviare uno scroll mentre è in corso
+      e.preventDefault();
+      if (this.isScrolling) return;
       
-      const targetId = e.currentTarget.getAttribute('href'); // ID della destinazione
-      const targetElement = document.querySelector(targetId); // Elemento di destinazione
+      const targetId = e.currentTarget.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
       
       if (targetElement) {
-        this.isScrolling = true; // Imposta il flag di scorrimento attivo
-        smoothScroll(targetElement); // Avvia lo scroll fluido
-        history.pushState(null, '', targetId); // Aggiorna l'URL senza ricaricare la pagina
+        this.isScrolling = true;
+        smoothScroll(targetElement);
+        history.pushState(null, '', targetId);
         
         setTimeout(() => {
-          this.isScrolling = false; // Reset del flag dopo il completamento
+          this.isScrolling = false;
         }, 3500);
       }
     }
 
-    // Altre funzioni non incluse per brevità...
+    handleTap(e) {
+      e.preventDefault();
+      const currentScheda = e.currentTarget;
+      const currentTime = Date.now();
+
+      if (currentTime - this.lastTap < 300) {
+        const targetId = currentScheda.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          smoothScroll(targetElement);
+          history.pushState(null, '', targetId);
+        }
+      } else {
+        if (this.activeScheda) {
+          this.activeScheda.classList.remove('active');
+        }
+        
+        if (this.activeScheda !== currentScheda) {
+          currentScheda.classList.add('active');
+          this.activeScheda = currentScheda;
+        } else {
+          this.activeScheda = null;
+        }
+      }
+
+      this.lastTap = currentTime;
+    }
+
+    handleSwipe(direction) {
+      if (this.activeScheda) {
+        const schedaArray = Array.from(this.schedaLinks);
+        const currentIndex = schedaArray.indexOf(this.activeScheda);
+        const newIndex = direction === 'up' 
+          ? (currentIndex + 1) % this.schedaLinks.length
+          : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
+
+        this.activeScheda.classList.remove('active');
+        this.schedaLinks[newIndex].classList.add('active');
+        this.activeScheda = this.schedaLinks[newIndex];
+      }
+    }
+
+    initializeTouchDevice() {
+      const swipeThreshold = 50;
+      let touchStartY = 0;
+
+      this.schedaLinks.forEach(link => {
+        link.addEventListener('touchend', (e) => this.handleTap(e));
+      });
+
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      document.addEventListener('touchend', (e) => {
+        const touchDistance = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(touchDistance) > swipeThreshold) {
+          this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
+        }
+      }, { passive: true });
+    }
+
+    initializeDesktopDevice() {
+      this.schedaLinks.forEach(link => {
+        link.addEventListener('click', (e) => this.handleClick(e));
+      });
+    }
   }
 
-  // Inizializzazione delle classi
-  new ContatoreSchede(); // Inizializza il gestore dei contatori
-  new UIHandler(); // Inizializza il gestore UI
+  /**
+   * Gestione Text Section
+   */
+  class TextHandler {
+    constructor() {
+      this.textWords = document.querySelectorAll('.text-word');
+      this.isMobile = window.matchMedia('(hover: none)').matches;
+      this.init();
+    }
+
+    init() {
+      this.textWords.forEach(word => {
+        if (this.isMobile) {
+          word.addEventListener('click', (e) => this.handleMobileClick(e));
+        } else {
+          word.addEventListener('click', (e) => this.handleDesktopClick(e));
+        }
+      });
+    }
+
+    handleMobileClick(e) {
+      e.preventDefault();
+      const email = e.currentTarget.dataset.email;
+      window.location.href = `mailto:${email}`;
+    }
+
+    handleDesktopClick(e) {
+      e.preventDefault();
+      const email = e.currentTarget.dataset.email;
+      
+      // Tenta di aprire il client email predefinito
+      const mailtoAttempt = window.open(`mailto:${email}`);
+      
+      // Se il client email non si apre, mostra un messaggio
+      if (!mailtoAttempt || mailtoAttempt.closed || typeof mailtoAttempt.closed === 'undefined') {
+        alert(`Per favore, invia una email a: ${email}`);
+      }
+    }
+  }
+
+  // Inizializzazione
+  new ContatoreSchede();
+  new UIHandler();
+  new TextHandler();
 });
