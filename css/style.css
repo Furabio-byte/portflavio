@@ -1,6 +1,6 @@
-/* Impostazioni di base */
+/* Base e variabili */
 :root {
-  --colore-sfondo-principale: #f5f5f5;
+  --colore-sfondo-principale: #ecdbdb;
   --colore-sfondo-scheda: #808000;
   --colore-testo: #000000;
 }
@@ -29,7 +29,7 @@ body {
   padding: 20px;
 }
 
-/* Contenitore del logo */
+/* Logo */
 .logo-container {
   position: absolute;
   top: 20px;
@@ -43,7 +43,7 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* Contenitore delle schede */
+/* Schede principali */
 .schede-container {
   display: flex;
   flex-wrap: wrap;
@@ -53,7 +53,6 @@ body {
   margin-top: 60px;
 }
 
-/* Link scheda */
 .scheda-link {
   text-decoration: none;
   color: inherit;
@@ -70,7 +69,6 @@ body {
   border-radius: 15px;
 }
 
-/* Scheda */
 .scheda {
   width: 100%;
   height: 100%;
@@ -87,7 +85,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Lettera */
 .scheda .lettera {
   font-size: clamp(8rem, 15vw, 12rem);
   font-weight: 900;
@@ -100,7 +97,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Parola che appare all'hover */
 .scheda .parola {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
@@ -111,7 +107,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Numero */
 .scheda .numero {
   position: absolute;
   bottom: 20px;
@@ -121,7 +116,6 @@ body {
   color: var(--colore-testo);
 }
 
-/* Frase sotto la R */
 .frase-r {
   position: absolute;
   bottom: 50px;
@@ -133,7 +127,7 @@ body {
   transition: opacity 0.3s ease;
 }
 
-/* Container principale della pagina Text */
+/* Container e schede principali */
 .text-page-container {
   min-height: 100vh;
   padding: 20px;
@@ -142,7 +136,6 @@ body {
   align-items: flex-start;
 }
 
-/* Scheda Text principale */
 .scheda-text {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
@@ -156,15 +149,81 @@ body {
   display: flex;
 }
 
-/* Contenuto della scheda */
 .text-content {
   position: relative;
   width: 100%;
 }
 
-/* Titolo */
+/* Sistema di scroll e sotto-schede */
+.scroll-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  margin-top: 60px;
+}
+
+.sub-schede-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 0;
+}
+
+.sub-schede-container::-webkit-scrollbar {
+  display: none;
+}
+
+.sub-scheda {
+  flex: 0 0 300px;
+  height: 300px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.sub-scheda-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bottoni di scroll */
+.scroll-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.scroll-btn {
+  background: var(--colore-sfondo-scheda);
+  color: var(--colore-testo);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.scroll-btn:hover {
+  opacity: 1;
+}
+
+/* Titoli e testi */
 .text-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: var(--colore-testo);
   position: absolute;
@@ -175,14 +234,13 @@ body {
   text-align: left;
 }
 
-/* Parole cliccabili nella sezione Text */
 .text-words {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
   padding: 20px;
-  margin-top: 120px;  /* Spazio per il titolo sopra */
+  margin-top: 120px;
 }
 
 .text-word {
@@ -218,6 +276,10 @@ body {
     transform: scale(1.1);
   }
 
+  .sub-scheda:hover {
+    transform: scale(1.02);
+  }
+
   .text-word:hover {
     background-color: var(--colore-testo);
     color: var(--colore-sfondo-scheda);
@@ -234,6 +296,17 @@ body {
   .text-content {
     padding: 20px;
   }
+
+  .sub-scheda {
+    flex: 0 0 250px;
+    height: 250px;
+  }
+  
+  .scroll-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -246,21 +319,17 @@ body {
   }
 }
 
-/* Supporto per reduced motion */
+/* Accessibilità */
 @media (prefers-reduced-motion: reduce) {
-  .scheda-link,
-  .scheda .lettera,
-  .scheda .parola,
-  .frase-r,
-  .logo,
-  .text-word {
-    transition: none;
+  * {
+    transition: none !important;
   }
 }
 
-/* Supporto per dispositivi touch */
+/* Supporto touch */
 @media (hover: none) {
-  .scheda-link.active {
+  .scheda-link.active,
+  .sub-scheda.active {
     transform: scale(1.02);
   }
 

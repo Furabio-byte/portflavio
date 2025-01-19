@@ -1,134 +1,208 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"> <!-- Specifica la codifica dei caratteri come UTF-8 per supportare caratteri speciali -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Rende la pagina responsive sui dispositivi mobili -->
-  <meta name="description" content="Portfolio personale di Flavio con progetti, altri lavori, percorso e testi"> <!-- Descrizione per i motori di ricerca -->
-  <meta name="theme-color" content="#808000"> <!-- Colore della barra degli strumenti nei browser mobili -->
-  <meta name="color-scheme" content="light dark"> <!-- Indica il supporto sia per la modalità chiara che scura -->
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="description" content="Portfolio personale di Flavio con progetti, altri lavori, percorso e testi">
+ <meta name="theme-color" content="#808000">
+ <meta name="color-scheme" content="light dark">
 
-  <!-- Impostazioni di sicurezza -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff"> <!-- Previene l'interpretazione di MIME types errati -->
-  <meta http-equiv="X-Frame-Options" content="DENY"> <!-- Impedisce il caricamento della pagina in un iframe -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';"> <!-- Definisce una politica di sicurezza per il caricamento delle risorse -->
+ <!-- Impostazioni di sicurezza -->
+ <meta http-equiv="X-Content-Type-Options" content="nosniff">
+ <meta http-equiv="X-Frame-Options" content="DENY">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
 
-  <title>Portflavio - Portfolio Personale</title> <!-- Titolo che appare nella scheda del browser -->
+ <title>Portflavio - Portfolio Personale</title>
 
-  <!-- Collegamento ai font di Google -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin> <!-- Ottimizza la connessione per il caricamento dei font -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet"> <!-- Font "Playfair Display SC" -->
+ <!-- Collegamento ai font di Google -->
+ <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet">
 
-  <!-- Collegamento al file CSS -->
-  <link rel="stylesheet" href="css/style.css"> <!-- Foglio di stile principale -->
+ <!-- Collegamento al file CSS -->
+ <link rel="stylesheet" href="css/style.css">
 
-  <!-- Icone del sito -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg"> <!-- Icona SVG per browser moderni -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"> <!-- Icona PNG -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png"> <!-- Icona per dispositivi Apple -->
+ <!-- Icone del sito -->
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+ <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
-  <header>
-    <div class="logo-container"> <!-- Contenitore del logo -->
-      <img src="path/to/your/logo.svg" alt="Logo" class="logo"> <!-- Immagine del logo -->
-    </div>
-    <nav class="schede-container" aria-label="Navigazione principale"> <!-- Contenitore per i link di navigazione -->
-      <!-- Progetto 1 -->
-      <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili"> <!-- Link alla sezione Project -->
-        <article class="scheda"> <!-- Scheda per "Progetti" -->
-          <span class="lettera" aria-hidden="true">P</span> <!-- Lettera rappresentativa -->
-          <span class="parola">Project</span> <!-- Testo "Project" -->
-          <span class="numero">2</span> <!-- Numero di elementi -->
-        </article>
-      </a>
+ <header>
+   <div class="logo-container">
+     <img src="path/to/your/logo.svg" alt="Logo" class="logo">
+   </div>
+   <nav class="schede-container" aria-label="Navigazione principale">
+     <!-- Progetto -->
+     <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
+       <article class="scheda">
+         <span class="lettera" aria-hidden="true">P</span>
+         <span class="parola">Project</span>
+         <span class="numero">2</span>
+       </article>
+     </a>
 
-      <!-- Sezione Others -->
-      <a href="#others" class="scheda-link" aria-label="Altri lavori"> <!-- Link alla sezione Others -->
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">O</span> <!-- Lettera "O" -->
-          <span class="parola">Others</span> <!-- Testo "Others" -->
-          <span class="numero">0</span> <!-- Numero di elementi -->
-        </article>
-      </a>
+     <!-- Others -->
+     <a href="#others" class="scheda-link" aria-label="Altri lavori">
+       <article class="scheda">
+         <span class="lettera" aria-hidden="true">O</span>
+         <span class="parola">Others</span>
+         <span class="numero">0</span>
+       </article>
+     </a>
 
-      <!-- Sezione Road -->
-      <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi"> <!-- Link alla sezione Road -->
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">R</span> <!-- Lettera "R" -->
-          <span class="parola">Road</span> <!-- Testo "Road" -->
-          <p class="frase-r" lang="la"> <!-- Frase in latino -->
-            PERCORSO DIFFICILE PLASMA L'ANIMA,
-            RAGGIUNGI LA TUA META.
-          </p>
-          <span class="numero">2</span> <!-- Numero di elementi -->
-        </article>
-      </a>
+     <!-- Road -->
+     <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi">
+       <article class="scheda">
+         <span class="lettera" aria-hidden="true">R</span>
+         <span class="parola">Road</span>
+         <p class="frase-r" lang="la">
+           PERCORSO DIFFICILE PLASMA L'ANIMA,
+           RAGGIUNGI LA TUA META.
+         </p>
+         <span class="numero">2</span>
+       </article>
+     </a>
 
-      <!-- Sezione Text -->
-      <a href="#text" class="scheda-link" aria-label="Testi - 5 testi disponibili"> <!-- Link alla sezione Text -->
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">T</span> <!-- Lettera "T" -->
-          <span class="parola">Text</span> <!-- Testo "Text" -->
-          <span class="numero">5</span> <!-- Numero di elementi -->
-        </article>
-      </a>
-    </nav>
-  </header>
+     <!-- Text -->
+     <a href="#text" class="scheda-link" aria-label="Testi - 5 testi disponibili">
+       <article class="scheda">
+         <span class="lettera" aria-hidden="true">T</span>
+         <span class="parola">Text</span>
+         <span class="numero">5</span>
+       </article>
+     </a>
+   </nav>
+ </header>
 
-  <main id="main-content"> <!-- Contenuto principale della pagina -->
-    <!-- Sezione Project -->
-    <section id="project" class="text-page-container">
-      <div class="scheda-text">
-        <div class="text-content">
-          <h2 class="text-title">Projects</h2> <!-- Titolo della sezione -->
-          <div class="text-description">
-            <!-- Contenuto descrittivo dei progetti -->
-          </div>
-        </div>
-      </div>
-    </section>
+ <main id="main-content">
+   <!-- Sezione Project -->
+   <section id="project" class="text-page-container">
+     <div class="scheda-text">
+       <div class="text-content">
+         <h2 class="text-title">Projects</h2>
+         <div class="text-description">
+           <div class="scroll-container">
+             <div class="sub-schede-container">
+               <div class="sub-scheda">
+                 <img src="path/to/project1.jpg" alt="Progetto 1" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/project2.jpg" alt="Progetto 2" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/project3.jpg" alt="Progetto 3" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/project4.jpg" alt="Progetto 4" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/project5.jpg" alt="Progetto 5" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/project6.jpg" alt="Progetto 6" class="sub-scheda-img">
+               </div>
+             </div>
+             <div class="scroll-buttons">
+               <button class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+               <button class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
 
-    <!-- Sezione Others -->
-    <section id="others" class="text-page-container">
-      <div class="scheda-text">
-        <div class="text-content">
-          <h2 class="text-title">Others</h2> <!-- Titolo della sezione -->
-          <div class="text-description">
-            <!-- Contenuto descrittivo -->
-          </div>
-        </div>
-      </div>
-    </section>
+   <!-- Sezione Others -->
+   <section id="others" class="text-page-container">
+     <div class="scheda-text">
+       <div class="text-content">
+         <h2 class="text-title">Others</h2>
+         <div class="text-description">
+           <div class="scroll-container">
+             <div class="sub-schede-container">
+               <div class="sub-scheda">
+                 <img src="path/to/others1.jpg" alt="Altri 1" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/others2.jpg" alt="Altri 2" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/others3.jpg" alt="Altri 3" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/others4.jpg" alt="Altri 4" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/others5.jpg" alt="Altri 5" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/others6.jpg" alt="Altri 6" class="sub-scheda-img">
+               </div>
+             </div>
+             <div class="scroll-buttons">
+               <button class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+               <button class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
 
-    <!-- Sezione Road -->
-    <section id="road" class="text-page-container">
-      <div class="scheda-text">
-        <div class="text-content">
-          <h2 class="text-title">Road</h2> <!-- Titolo della sezione -->
-          <div class="text-description">
-            <!-- Contenuto descrittivo -->
-          </div>
-        </div>
-      </div>
-    </section>
+   <!-- Sezione Road -->
+   <section id="road" class="text-page-container">
+     <div class="scheda-text">
+       <div class="text-content">
+         <h2 class="text-title">Road</h2>
+         <div class="text-description">
+           <div class="scroll-container">
+             <div class="sub-schede-container">
+               <div class="sub-scheda">
+                 <img src="path/to/road1.jpg" alt="Percorso 1" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/road2.jpg" alt="Percorso 2" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/road3.jpg" alt="Percorso 3" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/road4.jpg" alt="Percorso 4" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/road5.jpg" alt="Percorso 5" class="sub-scheda-img">
+               </div>
+               <div class="sub-scheda">
+                 <img src="path/to/road6.jpg" alt="Percorso 6" class="sub-scheda-img">
+               </div>
+             </div>
+             <div class="scroll-buttons">
+               <button class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+               <button class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
 
-    <!-- Sezione Text -->
-    <section id="text" class="text-page-container">
-      <div class="scheda-text">
-        <div class="text-content">
-          <h2 class="text-title">Text</h2> <!-- Titolo della sezione -->
-          <div class="text-description">
-            <div class="text-words">
-              <!-- Parole cliccabili per invio email -->
-              <a href="mailto:info@portflavio.it" class="text-word" data-email="info@portflavio.it">Contattami</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+   <!-- Sezione Text -->
+   <section id="text" class="text-page-container">
+     <div class="scheda-text">
+       <div class="text-content">
+         <h2 class="text-title">Text</h2>
+         <div class="text-description">
+           <div class="text-words">
+             <a href="mailto:info@portflavio.it" class="text-word" data-email="info@portflavio.it">Contattami</a>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
+ </main>
 
-  <!-- Collegamento al file JavaScript -->
-  <script src="js/script.js"></script>
+ <!-- Collegamento al file JavaScript -->
+ <script src="js/script.js"></script>
 </body>
 </html>
