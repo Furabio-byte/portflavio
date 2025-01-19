@@ -1,217 +1,217 @@
 /* Impostazioni di base */
 :root {
-  --colore-sfondo-principale: #f5f5f5;
-  --colore-sfondo-scheda: #808000;
-  --colore-testo: #000000;
+  --colore-sfondo-principale: #f5f5f5; /* Colore di sfondo principale in modalità chiara */
+  --colore-sfondo-scheda: #808000; /* Colore di sfondo delle schede */
+  --colore-testo: #000000; /* Colore predefinito del testo */
 }
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --colore-sfondo-principale: #1a1a1a;
-    --colore-sfondo-scheda: #666600;
-    --colore-testo: #ffffff;
+    --colore-sfondo-principale: #1a1a1a; /* Sfondo principale per modalità scura */
+    --colore-sfondo-scheda: #666600; /* Sfondo delle schede in modalità scura */
+    --colore-testo: #ffffff; /* Colore del testo in modalità scura */
   }
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0; /* Rimuove margini predefiniti */
+  padding: 0; /* Rimuove padding predefinito */
+  box-sizing: border-box; /* Includi bordi e padding nelle dimensioni totali degli elementi */
 }
 
 body {
-  min-height: 100vh;
-  background-color: var(--colore-sfondo-principale);
-  font-family: 'Playfair Display SC', serif;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  min-height: 100vh; /* Altezza minima uguale alla finestra */
+  background-color: var(--colore-sfondo-principale); /* Sfondo del corpo */
+  font-family: 'Playfair Display SC', serif; /* Font principale */
+  display: flex; /* Layout flessibile */
+  flex-direction: column; /* Colonne per il layout */
+  padding: 20px; /* Spaziatura interna del corpo */
 }
 
 /* Contenitore del logo */
 .logo-container {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
+  position: absolute; /* Posizionamento assoluto rispetto al corpo */
+  top: 20px; /* Distanza dal bordo superiore */
+  left: 20px; /* Distanza dal bordo sinistro */
+  z-index: 1000; /* Porta il logo in primo piano */
 }
 
 .logo {
-  width: clamp(40px, 8vw, 60px);
-  height: auto;
-  transition: transform 0.3s ease;
+  width: clamp(40px, 8vw, 60px); /* Dimensioni del logo con valori responsivi */
+  height: auto; /* Mantiene proporzioni */
+  transition: transform 0.3s ease; /* Transizione per hover */
 }
 
 /* Contenitore delle schede */
 .schede-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 20px;
-  margin-top: 60px;
+  display: flex; /* Layout flessibile */
+  flex-wrap: wrap; /* Le schede vanno a capo se necessario */
+  gap: 20px; /* Spaziatura tra le schede */
+  justify-content: center; /* Centra le schede */
+  padding: 20px; /* Spaziatura interna */
+  margin-top: 60px; /* Spaziatura sopra le schede */
 }
 
 /* Link scheda */
 .scheda-link {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-  min-width: 280px;
-  max-width: 400px;
-  aspect-ratio: 2/3;
-  transition: transform 0.3s ease;
+  text-decoration: none; /* Rimuove sottolineatura dai link */
+  color: inherit; /* Usa il colore corrente */
+  flex: 1; /* Le schede si espandono in modo uniforme */
+  min-width: 280px; /* Larghezza minima delle schede */
+  max-width: 400px; /* Larghezza massima delle schede */
+  aspect-ratio: 2/3; /* Mantiene proporzioni */
+  transition: transform 0.3s ease; /* Effetto di transizione */
 }
 
 /* Miglioramento accessibilità focus */
 .scheda-link:focus-visible {
-  outline: 3px solid var(--colore-testo);
-  outline-offset: 4px;
-  border-radius: 15px;
+  outline: 3px solid var(--colore-testo); /* Contorno visibile per focus */
+  outline-offset: 4px; /* Distanza tra contorno e elemento */
+  border-radius: 15px; /* Angoli arrotondati */
 }
 
 /* Scheda */
 .scheda {
-  width: 100%;
-  height: 100%;
-  background-color: var(--colore-sfondo-scheda);
-  border-radius: 15px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-font-smoothing: antialiased;
+  width: 100%; /* Occupa tutta la larghezza del contenitore */
+  height: 100%; /* Occupa tutta l'altezza del contenitore */
+  background-color: var(--colore-sfondo-scheda); /* Colore di sfondo */
+  border-radius: 15px; /* Angoli arrotondati */
+  position: relative; /* Posizionamento per i figli assoluti */
+  display: flex; /* Layout flessibile */
+  justify-content: center; /* Centra contenuto orizzontalmente */
+  align-items: center; /* Centra contenuto verticalmente */
+  overflow: hidden; /* Nasconde il contenuto in eccesso */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra intorno alla scheda */
+  will-change: transform; /* Ottimizzazione delle prestazioni */
+  backface-visibility: hidden; /* Migliora il rendering */
+  -webkit-font-smoothing: antialiased; /* Migliora il rendering del testo */
 }
 
 /* Lettera */
 .scheda .lettera {
-  font-size: clamp(8rem, 15vw, 12rem);
-  font-weight: 900;
-  color: var(--colore-testo);
-  transition: opacity 0.3s ease;
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  line-height: 1;
-  text-rendering: optimizeLegibility;
+  font-size: clamp(8rem, 15vw, 12rem); /* Dimensione responsiva */
+  font-weight: 900; /* Testo molto spesso */
+  color: var(--colore-testo); /* Usa il colore definito */
+  transition: opacity 0.3s ease; /* Transizione per opacità */
+  position: absolute; /* Posizionamento assoluto */
+  margin: 0; /* Rimuove margini */
+  padding: 0; /* Rimuove padding */
+  line-height: 1; /* Altezza linea pari al testo */
+  text-rendering: optimizeLegibility; /* Migliora la leggibilità */
 }
 
 /* Parola che appare all'hover */
 .scheda .parola {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  color: var(--colore-testo);
-  opacity: 0;
-  position: absolute;
-  transition: opacity 0.3s ease;
-  text-rendering: optimizeLegibility;
+  font-size: clamp(2rem, 4vw, 3rem); /* Dimensione responsiva */
+  font-weight: 900; /* Testo spesso */
+  color: var(--colore-testo); /* Colore del testo */
+  opacity: 0; /* Inizia invisibile */
+  position: absolute; /* Posizionamento assoluto */
+  transition: opacity 0.3s ease; /* Transizione per opacità */
+  text-rendering: optimizeLegibility; /* Migliora leggibilità */
 }
 
 /* Numero */
 .scheda .numero {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--colore-testo);
+  position: absolute; /* Posizionamento assoluto */
+  bottom: 20px; /* Distanza dal bordo inferiore */
+  left: 20px; /* Distanza dal bordo sinistro */
+  font-size: 1rem; /* Dimensione del testo */
+  font-weight: bold; /* Testo in grassetto */
+  color: var(--colore-testo); /* Colore del testo */
 }
 
 /* Frase sotto la R */
 .frase-r {
-  position: absolute;
-  bottom: 50px;
-  left: 20px;
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--colore-testo);
-  max-width: 80%;
-  transition: opacity 0.3s ease;
+  position: absolute; /* Posizionamento assoluto */
+  bottom: 50px; /* Distanza dal bordo inferiore */
+  left: 20px; /* Distanza dal bordo sinistro */
+  font-size: 1rem; /* Dimensione del testo */
+  font-style: italic; /* Testo in corsivo */
+  color: var(--colore-testo); /* Colore del testo */
+  max-width: 80%; /* Massima larghezza */
+  transition: opacity 0.3s ease; /* Transizione per opacità */
 }
 
 /* Container principale della pagina Text */
 .text-page-container {
-  min-height: 100vh;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh; /* Altezza minima pari alla finestra */
+  padding: 20px; /* Spaziatura interna */
+  display: flex; /* Layout flessibile */
+  justify-content: center; /* Centra contenuto orizzontalmente */
+  align-items: center; /* Centra contenuto verticalmente */
 }
 
 /* Scheda Text principale */
 .scheda-text {
-  background-color: var(--colore-sfondo-scheda);
-  width: calc(100% - 40px);
-  max-width: 1200px;
-  min-height: calc(100vh - 120px);
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 40px;
-  margin: 60px auto 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  will-change: transform;
-  backface-visibility: hidden;
+  background-color: var(--colore-sfondo-scheda); /* Colore sfondo scheda */
+  width: calc(100% - 40px); /* Larghezza con margini */
+  max-width: 1200px; /* Larghezza massima */
+  min-height: calc(100vh - 120px); /* Altezza minima con margini */
+  border-radius: 15px; /* Angoli arrotondati */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra intorno alla scheda */
+  padding: 40px; /* Spaziatura interna */
+  margin: 60px auto 20px; /* Margini esterni */
+  display: flex; /* Layout flessibile */
+  justify-content: center; /* Centra contenuto orizzontalmente */
+  align-items: center; /* Centra contenuto verticalmente */
+  will-change: transform; /* Ottimizzazione prestazioni */
+  backface-visibility: hidden; /* Migliora rendering */
 }
 
 /* Contenuto della scheda */
 .text-content {
-  text-align: center;
-  max-width: 800px;
+  text-align: center; /* Centra il testo */
+  max-width: 800px; /* Larghezza massima */
 }
 
 /* Titolo principale */
 .text-title {
-  font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 900;
-  color: var(--colore-testo);
-  margin-bottom: 2rem;
-  line-height: 1;
-  text-rendering: optimizeLegibility;
+  font-size: clamp(4rem, 8vw, 8rem); /* Dimensione responsiva */
+  font-weight: 900; /* Testo spesso */
+  color: var(--colore-testo); /* Colore del testo */
+  margin-bottom: 2rem; /* Margine sotto il titolo */
+  line-height: 1; /* Altezza linea pari al testo */
+  text-rendering: optimizeLegibility; /* Migliora leggibilità */
 }
 
 /* Sottotitolo */
 .text-subtitle {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  color: var(--colore-testo);
-  margin-bottom: 1.5rem;
-  text-rendering: optimizeLegibility;
+  font-size: clamp(2rem, 4vw, 3rem); /* Dimensione responsiva */
+  font-weight: 900; /* Testo spesso */
+  color: var(--colore-testo); /* Colore del testo */
+  margin-bottom: 1.5rem; /* Margine sotto il sottotitolo */
+  text-rendering: optimizeLegibility; /* Migliora leggibilità */
 }
 
 /* Descrizione */
 .text-description {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--colore-testo);
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
+  font-size: clamp(1rem, 2vw, 1.25rem); /* Dimensione responsiva */
+  color: var(--colore-testo); /* Colore del testo */
+  line-height: 1.6; /* Altezza delle linee */
+  max-width: 600px; /* Larghezza massima */
+  margin: 0 auto; /* Centra la descrizione */
 }
 
 /* Parole cliccabili nella sezione Text */
 .text-words {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 20px;
+  display: flex; /* Layout flessibile */
+  flex-wrap: wrap; /* Le parole vanno a capo se necessario */
+  gap: 20px; /* Spaziatura tra le parole */
+  justify-content: center; /* Centra le parole */
+  padding: 20px; /* Spaziatura interna */
 }
 
 .text-word {
-  color: var(--colore-testo);
-  text-decoration: none;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 900;
-  padding: 10px 20px;
-  border: 2px solid var(--colore-testo);
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  color: var(--colore-testo); /* Colore del testo */
+  text-decoration: none; /* Rimuove sottolineatura */
+  font-size: clamp(1.5rem, 3vw, 2.5rem); /* Dimensione responsiva */
+  font-weight: 900; /* Testo spesso */
+  padding: 10px 20px; /* Spaziatura interna */
+  border: 2px solid var(--colore-testo); /* Bordo intorno al testo */
+  border-radius: 8px; /* Angoli arrotondati */
+  transition: all 0.3s ease; /* Transizione per hover */
 }
 
 /* Supporto per reduced motion */
@@ -222,34 +222,34 @@ body {
   .frase-r,
   .logo,
   .text-word {
-    transition: none;
+    transition: none; /* Disattiva transizioni per accessibilità */
   }
 }
 
 /* Effetti hover */
 @media (hover: hover) {
   .scheda-link:hover {
-    transform: scale(1.02);
+    transform: scale(1.02); /* Ingrossa leggermente la scheda */
   }
 
   .scheda:hover .lettera {
-    opacity: 0;
+    opacity: 0; /* Nasconde la lettera */
   }
 
   .scheda:hover .parola {
-    opacity: 1;
+    opacity: 1; /* Mostra la parola */
   }
 
   .scheda:hover .frase-r {
-    opacity: 0;
+    opacity: 0; /* Nasconde la frase */
   }
 
   .logo:hover {
-    transform: scale(1.1);
+    transform: scale(1.1); /* Ingrossa leggermente il logo */
   }
 
   .text-word:hover {
-    background-color: var(--colore-testo);
+    background-color: var(--colore-testo); /* Inverte i colori */
     color: var(--colore-sfondo-scheda);
   }
 }
@@ -257,48 +257,48 @@ body {
 /* Media queries */
 @media (max-width: 768px) {
   .scheda-text {
-    padding: 20px;
-    margin-top: 40px;
+    padding: 20px; /* Riduce la spaziatura */
+    margin-top: 40px; /* Riduce il margine superiore */
   }
   
   .text-content {
-    padding: 20px;
+    padding: 20px; /* Spaziatura interna ridotta */
   }
 }
 
 @media (max-width: 480px) {
   .text-title {
-    font-size: clamp(3rem, 6vw, 4rem);
+    font-size: clamp(3rem, 6vw, 4rem); /* Ridimensiona il titolo */
   }
   
   .text-subtitle {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.5rem, 3vw, 2rem); /* Ridimensiona il sottotitolo */
   }
   
   .text-description {
-    font-size: 1rem;
+    font-size: 1rem; /* Ridimensiona la descrizione */
   }
 }
 
 @media (hover: none) {
   .scheda-link.active {
-    transform: scale(1.02);
+    transform: scale(1.02); /* Effetto scala per schede attive */
   }
 
   .scheda-link.active .lettera {
-    opacity: 0;
+    opacity: 0; /* Nasconde la lettera */
   }
 
   .scheda-link.active .parola {
-    opacity: 1;
+    opacity: 1; /* Mostra la parola */
   }
 
   .scheda-link.active .frase-r {
-    opacity: 0;
+    opacity: 0; /* Nasconde la frase */
   }
 
   .text-word.active {
-    background-color: var(--colore-testo);
+    background-color: var(--colore-testo); /* Inverte i colori */
     color: var(--colore-sfondo-scheda);
   }
 }
