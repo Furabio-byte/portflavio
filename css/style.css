@@ -168,8 +168,8 @@ body {
   font-weight: 900;
   color: var(--colore-testo);
   position: absolute;
-  top: 40px;
-  left: 40px;
+  top: 10px;
+  left: 10px;
   margin: 0;
   line-height: 1;
   text-align: left;
