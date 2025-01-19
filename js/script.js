@@ -48,12 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   class ContatoreSchede {
     constructor() {
-      // Costanti e configurazione
       this.STORAGE_PREFIX = 'portflavio_';
       this.STORAGE_KEY_NUMBERS = `${this.STORAGE_PREFIX}numeri`;
       this.STORAGE_KEY_YEAR = `${this.STORAGE_PREFIX}anno`;
       
-      // Elementi DOM
       this.numeriElements = document.querySelectorAll('.scheda .numero');
       
       if (!this.numeriElements.length) {
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentYear = new Date().getFullYear();
       
       if (!savedData) {
-        // Prima inizializzazione
         const initialData = {
           year: currentYear,
           numbers: Array.from(this.numeriElements).map(el => ({
@@ -81,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         this.saveData(initialData);
         this.updateDOM(initialData.numbers);
       } else {
-        // Gestione incremento annuale
         if (currentYear > savedData.year) {
           const updatedNumbers = savedData.numbers.map(num => ({
             initial: num.initial,
@@ -140,6 +136,44 @@ document.addEventListener('DOMContentLoaded', () => {
       Object.keys(localStorage)
         .filter(key => key.startsWith('portflavio_'))
         .forEach(key => localStorage.removeItem(key));
+    }
+  }
+
+  /**
+   * Gestione Scroll Orizzontale
+   */
+  class ScrollHandler {
+    constructor() {
+      this.initializeScrollButtons();
+    }
+
+    initializeScrollButtons() {
+      const containers = document.querySelectorAll('.scroll-container');
+      
+      containers.forEach(container => {
+        const subSchedeContainer = container.querySelector('.sub-schede-container');
+        const scrollButtons = container.querySelector('.scroll-buttons');
+        const leftBtn = scrollButtons.querySelector('.scroll-btn.scroll-left');
+        const rightBtn = scrollButtons.querySelector('.scroll-btn.scroll-right');
+
+        if (leftBtn && rightBtn && subSchedeContainer) {
+          leftBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'left'));
+          rightBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'right'));
+        }
+      });
+    }
+
+    scroll(container, direction) {
+      const scrollAmount = 320; // Larghezza scheda + gap
+      const scrollLeft = container.scrollLeft;
+      const newScrollLeft = direction === 'left' 
+        ? scrollLeft - scrollAmount 
+        : scrollLeft + scrollAmount;
+
+      container.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
     }
   }
 
@@ -282,10 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const email = e.currentTarget.dataset.email;
       
-      // Tenta di aprire il client email predefinito
       const mailtoAttempt = window.open(`mailto:${email}`);
       
-      // Se il client email non si apre, mostra un messaggio
       if (!mailtoAttempt || mailtoAttempt.closed || typeof mailtoAttempt.closed === 'undefined') {
         alert(`Per favore, invia una email a: ${email}`);
       }
@@ -296,4 +328,5 @@ document.addEventListener('DOMContentLoaded', () => {
   new ContatoreSchede();
   new UIHandler();
   new TextHandler();
+  new ScrollHandler();
 });
