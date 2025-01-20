@@ -297,6 +297,14 @@ body {
     padding: 15px;
   }
 
+  .logo-container {
+    margin-bottom: 20px;
+  }
+
+  .schede-container {
+    margin-top: 40px;
+  }
+
   .scheda-link.active .lettera {
     opacity: 0;
   }
@@ -311,13 +319,15 @@ body {
 
   .scheda-text {
     width: calc(100% - 30px);
-    height: 580px;
+    aspect-ratio: 2/3;
+    height: auto;
     padding: 40px;
     margin: 10px auto;
   }
 
   .sub-schede-container {
-    height: 500px;
+    aspect-ratio: 2/3;
+    height: auto;
     padding: 5px;
     width: 100%;
     gap: 15px;
@@ -341,18 +351,17 @@ body {
     margin-top: 0;
   }
 
-  /* Correzione bottoni di scroll */
   .scroll-buttons {
     position: relative;
     margin-top: -40px;
     gap: 10px;
     z-index: 10;
-    background-color: var(--colore-sfondo-scheda); /* Stesso colore delle schede verdi */
+    background-color: var(--colore-sfondo-scheda);
     padding: 10px 0;
-    border-radius: 0 0 15px 15px; /* Arrotondamento solo in basso */
+    border-radius: 0 0 15px 15px;
     display: flex;
     justify-content: center;
-    width: 85%; /* Stessa larghezza delle sub-schede */
+    width: 85%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -368,6 +377,10 @@ body {
 @media (max-width: 480px) {
   body {
     padding: 10px;
+  }
+
+  .schede-container {
+    margin-top: 35px;
   }
 
   .scheda-text {
@@ -395,9 +408,8 @@ body {
     flex: 0 0 80%;
   }
 
-  /* Aggiornamento bottoni per schermi più piccoli */
   .scroll-buttons {
-    width: 80%; /* Stessa larghezza delle sub-schede */
+    width: 80%;
   }
 }
 
