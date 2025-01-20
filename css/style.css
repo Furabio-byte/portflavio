@@ -296,27 +296,27 @@ body {
   body {
     padding: 15px;
   }
-
+ 
   .logo-container {
     margin-bottom: 20px;
   }
-
+ 
   .schede-container {
     margin-top: 40px;
   }
-
+ 
   .scheda-link.active .lettera {
     opacity: 0;
   }
-
+ 
   .scheda-link.active .parola {
     opacity: 1;
   }
-
+ 
   .scheda-link.active .frase-r {
     opacity: 0;
   }
-
+ 
   .scheda-text {
     width: calc(100% - 30px);
     aspect-ratio: 2/3;
@@ -324,36 +324,42 @@ body {
     padding: 40px;
     margin: 10px auto;
   }
-
+ 
+  .text-page-container {
+    min-height: auto;
+    padding: 10px;
+    gap: 10px;
+  }
+ 
+  .scroll-container {
+    position: relative;
+    gap: 20px;
+    padding: 10px;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+ 
   .sub-schede-container {
     aspect-ratio: 2/3;
     height: auto;
     padding: 5px;
     width: 100%;
     gap: 15px;
+    position: relative;
   }
-
-  .text-page-container {
-    min-height: auto;
-    padding: 10px;
-    gap: 10px;
-  }
-
+ 
   .sub-scheda {
     width: 85%;
     flex: 0 0 85%;
     margin: 0 auto;
   }
-
-  .scroll-container {
-    gap: 20px;
-    padding: 10px;
-    margin-top: 0;
-  }
-
+ 
   .scroll-buttons {
-    position: relative;
-    margin-top: -40px;
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
     gap: 10px;
     z-index: 10;
     background-color: var(--colore-sfondo-scheda);
@@ -362,69 +368,67 @@ body {
     display: flex;
     justify-content: center;
     width: 85%;
-    margin-left: auto;
-    margin-right: auto;
   }
-
+ 
   .scroll-btn {
     width: 25px;
     height: 25px;
     font-size: 1rem;
     opacity: 1;
   }
-}
-
-@media (max-width: 480px) {
+ }
+ 
+ @media (max-width: 480px) {
   body {
     padding: 10px;
   }
-
+ 
   .schede-container {
     margin-top: 35px;
   }
-
+ 
   .scheda-text {
     width: calc(100% - 20px);
     margin: 8px auto;
   }
-
+ 
   .sub-schede-container {
     gap: 12px;
   }
-
+ 
   .text-page-container {
     padding: 5px;
     gap: 5px;
   }
-
+ 
   .scroll-container {
     gap: 15px;
     margin-top: 0;
     width: 100%;
   }
-
+ 
   .sub-scheda {
     width: 80%;
     flex: 0 0 80%;
   }
-
+ 
   .scroll-buttons {
     width: 80%;
   }
-}
-
-/* Orientamento orizzontale su mobile */
-@media (max-height: 480px) and (orientation: landscape) {
+ }
+ 
+ /* Orientamento orizzontale su mobile */
+ @media (max-height: 480px) and (orientation: landscape) {
   .scheda-text {
     height: 280px;
     margin: 8px auto;
   }
-
+ 
   .sub-schede-container {
     height: 200px;
   }
-
+ 
   .text-title {
     font-size: 1.2rem;
   }
-}
+ }
