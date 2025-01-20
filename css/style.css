@@ -238,6 +238,17 @@ body {
   text-align: left;
 }
 
+/* Link CONTATTAMI */
+.text-link {
+  color: var(--colore-testo);
+  text-decoration: underline;
+  font-size: 1rem;
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  transition: opacity 0.3s ease;
+}
+
 /* EFFETTI HOVER */
 @media (hover: hover) {
   .scheda-link:hover {
@@ -300,6 +311,10 @@ body {
   .logo {
     width: clamp(35px, 7vw, 50px);
   }
+
+  .text-link {
+    top: 25px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -326,6 +341,11 @@ body {
   .text-title {
     font-size: 1.3rem;
     top: -5px;
+  }
+
+  .text-link {
+    font-size: 0.9rem;
+    top: 20px;
   }
 
   .logo {
