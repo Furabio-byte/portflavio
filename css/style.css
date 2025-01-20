@@ -250,6 +250,11 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease;
+  padding: 20px 40px;
+  border: 2px solid var(--colore-testo);
+  border-radius: 15px;
+  background: transparent;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* EFFETTI HOVER */
@@ -278,9 +283,11 @@ body {
     transform: scale(1.02);
   }
 
-  .text-word:hover {
+  .text-link:hover {
+    transform: translate(-50%, -50%) scale(1.1);
     background-color: var(--colore-testo);
     color: var(--colore-sfondo-scheda);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -316,7 +323,8 @@ body {
   }
 
   .text-link {
-    top: 25px;
+    font-size: 2rem;
+    padding: 15px 30px;
   }
 }
 
@@ -347,8 +355,8 @@ body {
   }
 
   .text-link {
-    font-size: 0.9rem;
-    top: 20px;
+    font-size: 1.8rem;
+    padding: 12px 25px;
   }
 
   .logo {
