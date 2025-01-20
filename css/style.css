@@ -309,47 +309,52 @@ body {
     opacity: 0;
   }
 
-  /* Scheda di testo principale */
   .scheda-text {
     width: calc(100% - 30px);
     height: 580px;
     padding: 40px;
-    margin: 10px auto; /* Ridotto qui */
+    margin: 10px auto;
   }
 
-  /* Container delle sotto-schede */
   .sub-schede-container {
     height: 500px;
     padding: 5px;
     width: 100%;
-    gap: 20px;
+    gap: 15px;
   }
 
   .text-page-container {
-    min-height: auto; /* Modificato qui */
-    padding: 10px;    /* Ridotto qui */
-    gap: 10px;        /* Aggiunto gap ridotto qui */
+    min-height: auto;
+    padding: 10px;
+    gap: 10px;
   }
 
-  /* Sotto-schede */
   .sub-scheda {
-    width: 90%;
-    flex: 0 0 auto;
+    width: 85%;
+    flex: 0 0 85%;
     margin: 0 auto;
   }
 
-  /* Container dello scroll */
   .scroll-container {
     gap: 20px;
-    padding: 10px; /* Ridotto padding */
+    padding: 10px;
     margin-top: 0;
   }
 
-  /* Bottoni di scroll */
+  /* Correzione bottoni di scroll */
   .scroll-buttons {
     position: relative;
-    margin-top: 10px;
+    margin-top: -40px;
     gap: 10px;
+    z-index: 10;
+    background-color: var(--colore-sfondo-scheda); /* Stesso colore delle schede verdi */
+    padding: 10px 0;
+    border-radius: 0 0 15px 15px; /* Arrotondamento solo in basso */
+    display: flex;
+    justify-content: center;
+    width: 85%; /* Stessa larghezza delle sub-schede */
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .scroll-btn {
@@ -371,7 +376,7 @@ body {
   }
 
   .sub-schede-container {
-    gap: 0;
+    gap: 12px;
   }
 
   .text-page-container {
@@ -383,6 +388,16 @@ body {
     gap: 15px;
     margin-top: 0;
     width: 100%;
+  }
+
+  .sub-scheda {
+    width: 80%;
+    flex: 0 0 80%;
+  }
+
+  /* Aggiornamento bottoni per schermi più piccoli */
+  .scroll-buttons {
+    width: 80%; /* Stessa larghezza delle sub-schede */
   }
 }
 
