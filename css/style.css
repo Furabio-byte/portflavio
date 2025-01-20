@@ -241,12 +241,15 @@ body {
 /* Link CONTATTAMI */
 .text-link {
   color: var(--colore-testo);
-  text-decoration: underline;
-  font-size: 1rem;
+  text-decoration: none;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'Playfair Display SC', serif;
   position: absolute;
-  top: 30px;
-  left: 10px;
-  transition: opacity 0.3s ease;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
 }
 
 /* EFFETTI HOVER */
