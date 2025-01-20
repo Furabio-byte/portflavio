@@ -52,7 +52,7 @@ body {
   gap: 20px;        /* Coerente con le altre spaziature */
   justify-content: center;
   padding: 20px;    /* Stesso padding di body per coerenza */
-  margin-top: 60px; /* Margine verticale maggiore per distanziare dal logo */
+  margin-top: 30px; /* Margine verticale maggiore per distanziare dal logo */
 }
 
 /* LINK SCHEDA PRINCIPALE */
@@ -144,13 +144,13 @@ body {
 .scheda-text {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
-  width: calc(100% - 40px);   /* Si adegua al padding di .text-page-container */
-  max-width: 1200px;
-  min-height: calc(100vh - 120px);
+  width: 100%;          
+  max-width: 1800px;     
+  height: 580px;        /* Altezza fissa invece di min-height */
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 40px;             /* Spazio comodo per il contenuto */
-  margin: 60px auto 20px;    /* Margine alto coerente, in basso rimane 20px */
+  padding: 40px;
+  margin: 60px auto 20px;
   display: flex;
 }
 
@@ -162,15 +162,12 @@ body {
 /* SCROLL CONTAINER E SOTTO-SCHEDE */
 .scroll-container {
   position: relative;
-  width: calc(100% + 40px);
-  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 20px;
   padding: 20px;
-  box-sizing: border-box;
-  margin-top: 40px; /* Uniformato (prima era 20px) */
+  margin-top: -10px;   /* Ridotto da 40px */
 }
 
 .sub-schede-container {
@@ -239,7 +236,7 @@ body {
   font-weight: 900;
   color: var(--colore-testo);
   position: absolute;
-  top: 10px;
+  top: -10px;
   left: 10px;
   margin: 0;
   line-height: 1;
