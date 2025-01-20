@@ -3,60 +3,60 @@
   --colore-sfondo-principale: #ecdbdb;
   --colore-sfondo-scheda: #808000;
   --colore-testo: #000000;
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
+ }
+ 
+ /* Dark mode */
+ @media (prefers-color-scheme: dark) {
   :root {
     --colore-sfondo-principale: #1a1a1a;
     --colore-sfondo-scheda: #666600;
     --colore-testo: #ffffff;
   }
-}
-
-/* Reset di base */
-* {
+ }
+ 
+ /* Reset di base */
+ * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* BODY */
-body {
+ }
+ 
+ /* BODY */
+ body {
   min-height: 100vh;
   background-color: var(--colore-sfondo-principale);
   font-family: 'Playfair Display SC', serif;
   display: flex;
   flex-direction: column;
   padding: 20px;
-}
-
-/* LOGO */
-.logo-container {
+ }
+ 
+ /* LOGO */
+ .logo-container {
   position: absolute;
   top: 20px;
   left: 20px;
   z-index: 1000;
-}
-
-.logo {
+ }
+ 
+ .logo {
   width: clamp(40px, 8vw, 60px);
   height: auto;
   transition: transform 0.3s ease;
-}
-
-/* CONTENITORE SCHEDE PRINCIPALI */
-.schede-container {
+ }
+ 
+ /* CONTENITORE SCHEDE PRINCIPALI */
+ .schede-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
   padding: 20px;
   margin-top: 30px;
-}
-
-/* LINK SCHEDA PRINCIPALE */
-.scheda-link {
+ }
+ 
+ /* LINK SCHEDA PRINCIPALE */
+ .scheda-link {
   text-decoration: none;
   color: inherit;
   flex: 1;
@@ -64,16 +64,16 @@ body {
   max-width: 400px;
   aspect-ratio: 2/3;
   transition: transform 0.3s ease;
-}
-
-.scheda-link:focus-visible {
+ }
+ 
+ .scheda-link:focus-visible {
   outline: 3px solid var(--colore-testo);
   outline-offset: 4px;
   border-radius: 15px;
-}
-
-/* SCHEDA PRINCIPALE */
-.scheda {
+ }
+ 
+ /* SCHEDA PRINCIPALE */
+ .scheda {
   width: 100%;
   height: 100%;
   background-color: var(--colore-sfondo-scheda);
@@ -87,9 +87,9 @@ body {
   will-change: transform;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-.scheda .lettera {
+ }
+ 
+ .scheda .lettera {
   font-size: clamp(8rem, 15vw, 12rem);
   font-weight: 900;
   color: var(--colore-testo);
@@ -99,9 +99,9 @@ body {
   padding: 0;
   line-height: 1;
   text-rendering: optimizeLegibility;
-}
-
-.scheda .parola {
+ }
+ 
+ .scheda .parola {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
   color: var(--colore-testo);
@@ -109,18 +109,18 @@ body {
   position: absolute;
   transition: opacity 0.3s ease;
   text-rendering: optimizeLegibility;
-}
-
-.scheda .numero {
+ }
+ 
+ .scheda .numero {
   position: absolute;
   bottom: 20px;
   left: 20px;
   font-size: 1rem;
   font-weight: bold;
   color: var(--colore-testo);
-}
-
-.frase-r {
+ }
+ 
+ .frase-r {
   position: absolute;
   bottom: 50px;
   left: 20px;
@@ -129,19 +129,19 @@ body {
   color: var(--colore-testo);
   max-width: 80%;
   transition: opacity 0.3s ease;
-}
-
-/* CONTAINER TESTO PRINCIPALE */
-.text-page-container {
+ }
+ 
+ /* CONTAINER TESTO PRINCIPALE */
+ .text-page-container {
   min-height: 100vh;
   padding: 20px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-}
-
-/* SCHEDA TESTO */
-.scheda-text {
+ }
+ 
+ /* SCHEDA TESTO */
+ .scheda-text {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
   width: 100%;          
@@ -152,15 +152,20 @@ body {
   padding: 40px;
   margin: 60px auto 20px;
   display: flex;
-}
-
-.text-content {
+ }
+ 
+ /* Stile specifico per la scheda TEXT finale - Desktop */
+ #text .scheda-text {
+  height: 400px;
+ }
+ 
+ .text-content {
   position: relative;
   width: 100%;
-}
-
-/* SCROLL CONTAINER E SOTTO-SCHEDE */
-.scroll-container {
+ }
+ 
+ /* SCROLL CONTAINER E SOTTO-SCHEDE */
+ .scroll-container {
   position: relative;
   width: 100%;
   display: flex;
@@ -168,9 +173,9 @@ body {
   gap: 20px;
   padding: 20px;
   margin-top: -10px;
-}
-
-.sub-schede-container {
+ }
+ 
+ .sub-schede-container {
   display: flex;
   gap: 20px;
   overflow-x: auto;
@@ -180,13 +185,13 @@ body {
   width: 100%;
   height: 500px;
   align-items: center;
-}
-
-.sub-schede-container::-webkit-scrollbar {
+ }
+ 
+ .sub-schede-container::-webkit-scrollbar {
   display: none;
-}
-
-.sub-scheda {
+ }
+ 
+ .sub-scheda {
   flex: 1;
   min-width: 280px;
   max-width: 400px;
@@ -196,23 +201,23 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
   cursor: pointer;
-}
-
-.sub-scheda-img {
+ }
+ 
+ .sub-scheda-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* BOTTONI DI SCROLL */
-.scroll-buttons {
+ }
+ 
+ /* BOTTONI DI SCROLL */
+ .scroll-buttons {
   display: flex;
   gap: 20px;
   justify-content: center;
   margin-top: -40px;
-}
-
-.scroll-btn {
+ }
+ 
+ .scroll-btn {
   background: var(--colore-sfondo-scheda);
   color: var(--colore-testo);
   border: none;
@@ -223,10 +228,10 @@ body {
   opacity: 0.8;
   transition: opacity 0.3s ease;
   font-size: 1.2rem;
-}
-
-/* TITOLI E TESTI */
-.text-title {
+ }
+ 
+ /* TITOLI E TESTI */
+ .text-title {
   font-size: 1.5rem;
   font-weight: 900;
   color: var(--colore-testo);
@@ -236,10 +241,10 @@ body {
   margin: 0;
   line-height: 1;
   text-align: left;
-}
-
-/* Link CONTATTAMI */
-.text-link {
+ }
+ 
+ /* Link CONTATTAMI */
+ .text-link {
   color: var(--colore-testo);
   text-decoration: none;
   font-size: 2.5rem;
@@ -255,44 +260,44 @@ body {
   border-radius: 15px;
   background: transparent;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* EFFETTI HOVER */
-@media (hover: hover) {
+ }
+ 
+ /* EFFETTI HOVER */
+ @media (hover: hover) {
   .scheda-link:hover {
     transform: scale(1.02);
   }
-
+ 
   .scheda:hover .lettera {
     opacity: 0;
   }
-
+ 
   .scheda:hover .parola {
     opacity: 1;
   }
-
+ 
   .scheda:hover .frase-r {
     opacity: 0;
   }
-
+ 
   .logo:hover {
     transform: scale(1.1);
   }
-
+ 
   .sub-scheda:hover {
     transform: scale(1.02);
   }
-
+ 
   .text-link:hover {
     transform: translate(-50%, -50%) scale(1.1);
     background-color: var(--colore-testo);
     color: var(--colore-sfondo-scheda);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
-}
-
-/* MEDIA QUERIES PER MOBILE */
-@media (max-width: 768px) {
+ }
+ 
+ /* MEDIA QUERIES PER MOBILE */
+ @media (max-width: 768px) {
   body {
     padding: 15px;
   }
@@ -323,6 +328,11 @@ body {
     height: auto;
     padding: 40px;
     margin: 10px auto;
+  }
+ 
+  #text .scheda-text {
+    height: 400px;
+    aspect-ratio: unset;
   }
  
   .text-page-container {
