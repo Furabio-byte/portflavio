@@ -297,6 +297,18 @@ body {
     padding: 15px;
   }
 
+  .scheda-link.active .lettera {
+    opacity: 0;
+  }
+
+  .scheda-link.active .parola {
+    opacity: 1;
+  }
+
+  .scheda-link.active .frase-r {
+    opacity: 0;
+  }
+
   .scheda-text {
     width: calc(100% - 30px);
     aspect-ratio: 2/3;
@@ -307,23 +319,20 @@ body {
 
   .sub-schede-container {
     height: auto;
-    justify-content: center;
-    scroll-snap-type: x mandatory;
     padding: 0;
     width: 100%;
   }
 
   .sub-scheda {
-    width: 90%;  /* Ridotta leggermente per i margini */
+    width: 90%;
     aspect-ratio: 2/3;
     flex: 0 0 auto;
-    scroll-snap-align: center;
     margin: 0 auto;
   }
 
   .scroll-buttons {
     position: relative;
-    margin-top: 20px; /* Spostato più in basso */
+    margin-top: 20px;
     gap: 10px;
   }
 
@@ -346,8 +355,15 @@ body {
     margin: 30px auto;
   }
 
+  /* Manteniamo la struttura per schermi più piccoli */
   .sub-schede-container {
     gap: 0;
+  }
+
+  .sub-scheda {
+    width: 85%; /* Leggermente più piccolo per schermi molto stretti */
+    flex: 0 0 85%;
+    margin: 0 7.5%;
   }
 
   .scroll-container {
