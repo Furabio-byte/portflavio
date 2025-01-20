@@ -297,7 +297,6 @@ body {
     padding: 15px;
   }
 
-  /* Supporto per la classe active nelle schede */
   .scheda-link.active .lettera {
     opacity: 0;
   }
@@ -315,7 +314,7 @@ body {
     width: calc(100% - 30px);
     height: 580px;
     padding: 40px;
-    margin: 20px auto; /* Ridotto da 60px a 20px */
+    margin: 10px auto; /* Ridotto qui */
   }
 
   /* Container delle sotto-schede */
@@ -324,6 +323,12 @@ body {
     padding: 5px;
     width: 100%;
     gap: 20px;
+  }
+
+  .text-page-container {
+    min-height: auto; /* Modificato qui */
+    padding: 10px;    /* Ridotto qui */
+    gap: 10px;        /* Aggiunto gap ridotto qui */
   }
 
   /* Sotto-schede */
@@ -336,14 +341,14 @@ body {
   /* Container dello scroll */
   .scroll-container {
     gap: 20px;
-    padding: 20px;
-    margin-top: 0; /* Modificato da -10px a 0 */
+    padding: 10px; /* Ridotto padding */
+    margin-top: 0;
   }
 
   /* Bottoni di scroll */
   .scroll-buttons {
     position: relative;
-    margin-top: 10px; /* Ridotto da 20px a 10px */
+    margin-top: 10px;
     gap: 10px;
   }
 
@@ -362,11 +367,16 @@ body {
 
   .scheda-text {
     width: calc(100% - 20px);
-    margin: 15px auto; /* Ridotto ulteriormente per schermi più piccoli */
+    margin: 8px auto;
   }
 
   .sub-schede-container {
     gap: 0;
+  }
+
+  .text-page-container {
+    padding: 5px;
+    gap: 5px;
   }
 
   .scroll-container {
@@ -380,7 +390,7 @@ body {
 @media (max-height: 480px) and (orientation: landscape) {
   .scheda-text {
     height: 280px;
-    margin: 10px auto; /* Ridotto ulteriormente per l'orientamento orizzontale */
+    margin: 8px auto;
   }
 
   .sub-schede-container {
