@@ -5,7 +5,7 @@
   --colore-testo: #000000;
 }
 
-/* Dark mode (invariato) */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --colore-sfondo-principale: #1a1a1a;
@@ -28,10 +28,10 @@ body {
   font-family: 'Playfair Display SC', serif;
   display: flex;
   flex-direction: column;
-  padding: 20px; /* Spaziatura base del body */
+  padding: 20px;
 }
 
-/* LOGO (invariato) */
+/* LOGO */
 .logo-container {
   position: absolute;
   top: 20px;
@@ -49,10 +49,10 @@ body {
 .schede-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;        /* Coerente con le altre spaziature */
+  gap: 20px;
   justify-content: center;
-  padding: 20px;    /* Stesso padding di body per coerenza */
-  margin-top: 30px; /* Margine verticale maggiore per distanziare dal logo */
+  padding: 20px;
+  margin-top: 30px;
 }
 
 /* LINK SCHEDA PRINCIPALE */
@@ -134,7 +134,7 @@ body {
 /* CONTAINER TESTO PRINCIPALE */
 .text-page-container {
   min-height: 100vh;
-  padding: 20px; /* Uniformato a 20px per coerenza */
+  padding: 20px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -146,7 +146,7 @@ body {
   background-color: var(--colore-sfondo-scheda);
   width: 100%;          
   max-width: 1800px;     
-  height: 580px;        /* Altezza fissa invece di min-height */
+  height: 580px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 40px;
@@ -167,7 +167,7 @@ body {
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-  margin-top: -10px;   /* Ridotto da 40px */
+  margin-top: -10px;
 }
 
 .sub-schede-container {
@@ -176,11 +176,10 @@ body {
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  -ms-overflow-style: none;
   padding: 5px;
   width: 100%;
-  height: 500px;     /* Altezza specifica per le sub-schede */
-  align-items: center; 
+  height: 500px;
+  align-items: center;
 }
 
 .sub-schede-container::-webkit-scrollbar {
@@ -210,7 +209,7 @@ body {
   display: flex;
   gap: 20px;
   justify-content: center;
-  margin-top: -40px; /* Rimane invariato per posizionare i bottoni sopra */
+  margin-top: -40px;
 }
 
 .scroll-btn {
@@ -226,10 +225,6 @@ body {
   font-size: 1.2rem;
 }
 
-.scroll-btn:hover {
-  opacity: 1;
-}
-
 /* TITOLI E TESTI */
 .text-title {
   font-size: 1.5rem;
@@ -243,27 +238,7 @@ body {
   text-align: left;
 }
 
-.text-words {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 20px;
-  margin-top: 80px;
-}
-
-.text-word {
-  color: var(--colore-testo);
-  text-decoration: none;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 900;
-  padding: 10px 20px;
-  border: 2px solid var(--colore-testo);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-/* EFFETTI HOVER (solo se hover è supportato) */
+/* EFFETTI HOVER */
 @media (hover: hover) {
   .scheda-link:hover {
     transform: scale(1.02);
@@ -295,73 +270,93 @@ body {
   }
 }
 
-/* MEDIA QUERIES */
+/* MEDIA QUERIES PER MOBILE */
 @media (max-width: 768px) {
-  .scheda-text {
-    padding: 20px;      /* Riduciamo il padding su schermi più piccoli */
-    margin-top: 40px;   /* Riduciamo per gestire meglio lo spazio */
+  body {
+    padding: 15px;
   }
-  
-  .text-content {
-    padding: 10px;
+
+  .scheda-text {
+    height: 400px;
+    padding: 20px;
+    margin-top: 40px;
+  }
+
+  .sub-schede-container {
+    height: 300px;
   }
 
   .sub-scheda {
-    flex: 0 0 250px;
-    height: 250px;
+    min-width: 220px;
+    max-width: 320px;
   }
-  
+
   .scroll-btn {
     width: 30px;
     height: 30px;
     font-size: 1rem;
   }
 
-  .scroll-container {
-    width: calc(100% + 20px);
-    margin-left: -10px;
-    margin-right: -10px;
+  .logo {
+    width: clamp(35px, 7vw, 50px);
   }
 }
 
 @media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .scheda-text {
+    height: 350px;
+    padding: 15px;
+    margin-top: 30px;
+  }
+
+  .sub-schede-container {
+    height: 250px;
+    gap: 15px;
+  }
+
+  .sub-scheda {
+    min-width: 180px;
+    max-width: 280px;
+  }
+
   .text-title {
-    font-size: 2rem;  /* Mantiene evidenza del titolo */
+    font-size: 1.3rem;
+    top: -5px;
   }
-  
-  .text-word {
-    font-size: 1rem;  /* Ridimensioniamo il testo */
+
+  .logo {
+    width: clamp(30px, 6vw, 40px);
+  }
+
+  .scheda .lettera {
+    font-size: clamp(6rem, 12vw, 8rem);
+  }
+
+  .scheda .parola {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .scroll-container {
+    gap: 15px;
+    margin-top: -5px;
   }
 }
 
-/* PREFERENZA RIDUZIONE MOTION (accessibilità) */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-  }
-}
-
-/* SUPPORTO TOUCH: simula hover al tocco */
-@media (hover: none) {
-  .scheda-link.active,
-  .sub-scheda.active {
-    transform: scale(1.02);
+/* Orientamento orizzontale su mobile */
+@media (max-height: 480px) and (orientation: landscape) {
+  .scheda-text {
+    height: 280px;
   }
 
-  .scheda-link.active .lettera {
-    opacity: 0;
+  .sub-schede-container {
+    height: 200px;
   }
 
-  .scheda-link.active .parola {
-    opacity: 1;
-  }
-
-  .scheda-link.active .frase-r {
-    opacity: 0;
-  }
-
-  .text-word.active {
-    background-color: var(--colore-testo);
-    color: var(--colore-sfondo-scheda);
+  .text-title {
+    font-size: 1.2rem;
   }
 }
