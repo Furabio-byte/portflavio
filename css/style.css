@@ -297,6 +297,9 @@ body {
     height: auto;
     padding: 40px;
     margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
 
   .text-page-container {
@@ -308,8 +311,8 @@ body {
   .scroll-container {
     position: relative;
     gap: 20px;
-    padding: 30px 20px 20px 20px;
-    margin-top: 0;
+    padding: 20px;
+    margin-top: auto;
     display: flex;
     flex-direction: column;
   }
@@ -321,6 +324,7 @@ body {
     width: 100%;
     gap: 25px;
     position: relative;
+    margin-bottom: 40px;
     user-select: none;
     -webkit-user-select: none;
   }
@@ -333,13 +337,13 @@ body {
  
   .scroll-buttons {
     position: absolute;
-    bottom: -30px;    /* Cambiato da -45px a -30px */
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
     gap: 10px;
     z-index: 10;
     background-color: var(--colore-sfondo-scheda);
-    padding: 10px 0;
+    padding: 8px 0;
     border-radius: 0 0 15px 15px;
     display: flex;
     justify-content: center;
