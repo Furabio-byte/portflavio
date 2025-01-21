@@ -182,7 +182,10 @@
   width: 100%;
   height: 500px;
   align-items: center;
- }
+  touch-action: none;      /* Aggiunta questa riga */
+  user-select: none;       /* Aggiunta questa riga */
+  -webkit-user-select: none; /* Per Safari */
+}
  
  .sub-schede-container::-webkit-scrollbar {
   display: none;
@@ -318,6 +321,9 @@
     width: 100%;
     gap: 15px;
     position: relative;
+    touch-action: none;      /* Ripetuta qui per sicurezza */
+    user-select: none;       /* Ripetuta qui per sicurezza */
+    -webkit-user-select: none;
   }
  
   .sub-scheda {
