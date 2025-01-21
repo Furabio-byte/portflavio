@@ -140,8 +140,40 @@ body {
   align-items: flex-start;
 }
  
-/* SCHEDA TESTO */
-.scheda-text {
+/* SCHEDA PROJECT */
+.scheda-project {
+  position: relative;
+  background-color: var(--colore-sfondo-scheda);
+  width: 100%;          
+  max-width: 1800px;     
+  min-height: 580px;     
+  height: 60vh;          
+  max-height: 900px;     
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 60px auto 20px;
+  display: flex;
+}
+
+/* SCHEDA OTHERS */
+.scheda-others {
+  position: relative;
+  background-color: var(--colore-sfondo-scheda);
+  width: 100%;          
+  max-width: 1800px;     
+  min-height: 580px;     
+  height: 60vh;          
+  max-height: 900px;     
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 60px auto 20px;
+  display: flex;
+}
+
+/* SCHEDA ROAD */
+.scheda-road {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
   width: 100%;          
@@ -285,11 +317,25 @@ body {
     max-width: 400px;
   }
  
-  .scheda-text {
+  .scheda-project {
     width: 100%;
     height: 60vh;
     padding: 20px;
     margin: -17px auto 0;
+  }
+
+  .scheda-others {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -250px auto 0;
+  }
+
+  .scheda-road {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -480px auto 0;
   }
 
   .text-page-container {
