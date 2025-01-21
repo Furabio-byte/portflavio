@@ -169,7 +169,7 @@ body {
   flex-direction: column;
   gap: 20px;
   padding: 40px;
-  margin-top: -10px;
+  margin-top: -20px;
 }
  
 .sub-schede-container {
@@ -213,7 +213,7 @@ body {
   display: flex;
   gap: 20px;
   justify-content: center;
-  margin-top: -40px;
+  margin-top: -20px;
 }
  
 .scroll-btn {
@@ -333,7 +333,7 @@ body {
  
   .scroll-buttons {
     position: absolute;
-    bottom: -45px;
+    bottom: -30px;    /* Cambiato da -45px a -30px */
     left: 50%;
     transform: translateX(-50%);
     gap: 10px;
