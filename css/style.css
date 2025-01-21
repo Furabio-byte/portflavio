@@ -146,13 +146,15 @@
   background-color: var(--colore-sfondo-scheda);
   width: 100%;          
   max-width: 1800px;     
-  height: 580px;
+  min-height: 580px;     /* Altezza minima per schermi piccoli */
+  height: 60vh;          /* Altezza proporzionale alla viewport */
+  max-height: 900px;     /* Altezza massima per schermi molto grandi */
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 40px;
+  padding: 20px;
   margin: 60px auto 20px;
   display: flex;
- }
+}
  
  /* Stile specifico per la scheda TEXT finale - Desktop */
  #text .scheda-text {
