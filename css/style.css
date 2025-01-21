@@ -310,8 +310,8 @@ body {
  
   .scroll-container {
     position: relative;
-    gap: 20px;
-    padding: 20px;
+    gap: 5px;
+    padding: 5px;
     margin-top: auto;
     display: flex;
     flex-direction: column;
