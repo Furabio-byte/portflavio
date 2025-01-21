@@ -270,202 +270,144 @@ body {
 }
 
 /* MEDIA QUERIES PER MOBILE */
-
-/* Tablet e smartphone fino a 768px */
 @media (max-width: 768px) {
-  /* Manteniamo lo stesso padding base del desktop per coerenza */
   body {
-    padding: 20px;
+    padding: 15px;
   }
-
-  /* Stesso margine-top e gap del desktop, ma puoi ridurli se vuoi più compattezza */
+  
   .schede-container {
-    margin-top: 30px;
-    gap: 20px;
-    padding: 20px; /* se vuoi evitare doppio padding corpo/container, puoi ridurlo */
+    margin-top: 80px;
   }
-
-  /* Selezione attiva: manteniamo la stessa logica del desktop hover */
+ 
   .scheda-link.active .lettera {
     opacity: 0;
   }
+ 
   .scheda-link.active .parola {
     opacity: 1;
   }
+ 
   .scheda-link.active .frase-r {
     opacity: 0;
   }
-
-  /* Scheda di testo: rendiamo le dimensioni più simili al desktop,
-     ma abbastanza flessibili per i tablet: */
+ 
   .scheda-text {
-    position: relative;
-    background-color: var(--colore-sfondo-scheda);
-    width: 100%;
-    /* Rispetto al desktop (max-width: 1800px), qui la riduciamo */
-    max-width: 1200px;
-    /* Riduciamo un po’ l’altezza minima rispetto ai 580px del desktop */
-    min-height: 400px;
-    /* height: auto o 60vh in base ai tuoi gusti: qui lo rendiamo flessibile */
+    width: calc(100% - 30px);
+    aspect-ratio: 2/3;
     height: auto;
-    max-height: none;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* Margine simile al desktop, ma leggermente ridotto per i tablet */
-    margin: 40px auto 20px;
-    display: flex;
-    flex-direction: column; /* in desktop è “row” se vuoi affiancare contenuti */
-    padding: 20px;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  /* Contenitore principale del testo: se vuoi mantenere una
-     struttura simile al desktop, tieni un min-height alto;
-     altrimenti qui lo riduciamo */
-  .text-page-container {
-    min-height: auto; /* al posto di 100vh */
-    padding: 20px;
+    padding: 40px;
+    margin: 10px auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: flex-end;
   }
 
-  /* Scroll-container: coerente con la versione desktop,
-     ma riduciamo leggermente gap/padding */
+  .text-page-container {
+    min-height: auto;
+    padding: 10px;
+    gap: 10px;
+  }
+ 
   .scroll-container {
     position: relative;
-    width: 100%;
+    gap: 5px;
+    padding: 5px;
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* un po’ più stretto del desktop (20px) */
-    padding: 20px; /* ridotto rispetto ai 40px del desktop */
-    margin-top: 0; /* in desktop era -20px per un effetto particolare, qui semplifichiamo */
   }
-
-  /* Sub-schede container: in desktop era 500px di altezza, la riduciamo
-     ma manteniamo l’overflow-x e la logica a “carosello” */
+ 
   .sub-schede-container {
-    display: flex;
-    gap: 20px; /* ridotto rispetto ai 40px desktop */
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    padding: 15px; /* un po’ meno di 20px del desktop */
+    aspect-ratio: 2/3;
+    height: auto;
+    padding: 15px;
     width: 100%;
-    height: 400px; /* più basso dei 500px desktop */
-    align-items: center;
+    gap: 25px;
+    position: relative;
+    margin-bottom: 40px;
     user-select: none;
     -webkit-user-select: none;
-    margin-bottom: 20px; /* eventualmente riduci se non ti serve */
   }
-  .sub-schede-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Le sub-schede mantengono min e max width come in desktop,
-     così da non stravolgere il layout */
+ 
   .sub-scheda {
-    flex: 1;
-    min-width: 280px;
-    max-width: 400px;
-    aspect-ratio: 2/3;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-    cursor: pointer;
-    margin: 0 auto; /* se preferisci centrarle verticalmente */
+    width: 85%;
+    flex: 0 0 85%;
+    margin: 0 auto;
   }
-
-  /* Bottoni di scroll: li manteniamo simili al desktop,
-     ma se vuoi puoi ridurre dimensione e margini */
+ 
   .scroll-buttons {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 10px;
+    z-index: 10;
+    background-color: var(--colore-sfondo-scheda);
+    padding: 8px 0;
+    border-radius: 0 0 15px 15px;
     display: flex;
-    gap: 15px;
     justify-content: center;
-    margin-top: -10px; /* per un effetto simile al desktop o rimuovi se non serve */
+    width: 85%;
   }
+ 
   .scroll-btn {
-    background: var(--colore-sfondo-scheda);
-    color: var(--colore-testo);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-    font-size: 1.2rem;
-  }
-}
-
-/* Smartphone fino a 480px */
-@media (max-width: 480px) {
-  /* Possiamo ridurre ulteriormente i padding */
-  body {
-    padding: 15px;
-  }
-
-  /* Meno spazio in alto */
-  .schede-container {
-    margin-top: 20px;
-    gap: 20px;
-    padding: 15px;
-  }
-
-  /* Scheda testo: ulteriore riduzione dimensioni */
-  .scheda-text {
-    max-width: 100%;
-    min-height: 300px;
-    margin: 20px auto;
-    padding: 15px;
-  }
-
-  /* Contenitore del testo */
-  .text-page-container {
-    padding: 15px;
-    gap: 15px;
-  }
-
-  .scroll-container {
-    gap: 10px;
-    padding: 15px;
-    margin-top: 0;
-  }
-
-  .sub-schede-container {
-    gap: 15px;
-    padding: 10px;
-    height: 350px; /* un po’ meno di 400px */
-  }
-
-  .sub-scheda {
-    min-width: 240px; /* se vogliamo stringere ancor di più su schermi piccolissimi */
-  }
-
-  .scroll-buttons {
-    gap: 10px;
-    margin-top: -5px;
-  }
-  .scroll-btn {
-    width: 35px;
-    height: 35px;
+    width: 25px;
+    height: 25px;
     font-size: 1rem;
+    opacity: 1;
   }
 }
-
-/* Orientamento orizzontale su mobile (max-height: 480px) */
+ 
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+ 
+  .schede-container {
+    margin-top: 35px;
+  }
+ 
+  .scheda-text {
+    width: calc(100% - 20px);
+    margin: 8px auto;
+  }
+ 
+  .sub-schede-container {
+    gap: 20px;
+  }
+ 
+  .text-page-container {
+    padding: 5px;
+    gap: 5px;
+  }
+ 
+  .scroll-container {
+    gap: 15px;
+    margin-top: 0;
+    width: 100%;
+  }
+ 
+  .sub-scheda {
+    width: 80%;
+    flex: 0 0 80%;
+  }
+ 
+  .scroll-buttons {
+    width: 80%;
+  }
+}
+ 
+/* Orientamento orizzontale su mobile */
 @media (max-height: 480px) and (orientation: landscape) {
-  /* Manteniamo la logica del tuo codice originale, adattando
-     l’altezza della .scheda-text e della sub-schede-container */
   .scheda-text {
     height: 280px;
     margin: 8px auto;
   }
+ 
   .sub-schede-container {
     height: 200px;
   }
+ 
   .text-title {
     font-size: 1.2rem;
   }
