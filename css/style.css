@@ -155,12 +155,7 @@
   margin: 60px auto 20px;
   display: flex;
 }
- 
- /* Stile specifico per la scheda TEXT finale - Desktop */
- #text .scheda-text {
-  height: 400px;
- }
- 
+
  .text-content {
   position: relative;
   width: 100%;
@@ -331,12 +326,7 @@
     padding: 40px;
     margin: 10px auto;
   }
- 
-  #text .scheda-text {
-    height: 400px;
-    aspect-ratio: unset;
-  }
- 
+
   .text-page-container {
     min-height: auto;
     padding: 10px;
