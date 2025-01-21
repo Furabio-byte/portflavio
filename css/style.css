@@ -1,6 +1,6 @@
 /* Variabili principali */
 :root {
-  --colore-sfondo-principale: #ecdbdb;
+  --colore-sfondo-principale: #ffffff;
   --colore-sfondo-scheda: #808000;
   --colore-testo: #000000;
  }
@@ -240,25 +240,6 @@
   text-align: left;
  }
  
- /* Link CONTATTAMI */
- .text-link {
-  color: var(--colore-testo);
-  text-decoration: none;
-  font-size: 2.5rem;
-  font-weight: 900;
-  font-family: 'Playfair Display SC', serif;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s ease;
-  padding: 20px 40px;
-  border: 2px solid var(--colore-testo);
-  border-radius: 15px;
-  background: transparent;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- }
- 
  /* EFFETTI HOVER */
  @media (hover: hover) {
   .scheda-link:hover {
@@ -284,27 +265,15 @@
   .sub-scheda:hover {
     transform: scale(1.02);
   }
- 
-  .text-link:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-    background-color: var(--colore-testo);
-    color: var(--colore-sfondo-scheda);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
  }
- 
  /* MEDIA QUERIES PER MOBILE */
  @media (max-width: 768px) {
   body {
     padding: 15px;
   }
- 
-  .logo-container {
-    margin-bottom: 20px;
-  }
- 
+  
   .schede-container {
-    margin-top: 40px;
+    margin-top: 80px;
   }
  
   .scheda-link.active .lettera {

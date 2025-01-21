@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
   class ContatoreSchede {
     constructor() {
       this.STORAGE_PREFIX = 'portflavio_';
-      this.STORAGE_KEY_NUMBERS = `${this.STORAGE_PREFIX}numeri`;
       this.STORAGE_KEY_YEAR = `${this.STORAGE_PREFIX}anno`;
       
-      this.numeriElements = document.querySelectorAll('.scheda .numero');
+      // Prende solo l'elemento numero dell'ultima scheda (Text)
+      this.yearElement = document.querySelector('.scheda-link:last-child .numero');
       
-      if (!this.numeriElements.length) {
-        console.warn('Nessun elemento con classe .numero trovato nelle schede');
+      if (!this.yearElement) {
+        console.warn('Elemento anno non trovato');
         return;
       }
 
@@ -63,73 +63,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     init() {
-      const savedData = this.getSavedData();
-      const currentYear = new Date().getFullYear();
+      // Ottiene l'anno corrente
+      const currentYear = new Date().getFullYear(); // Es: 2025
+      const lastTwoDigits = currentYear % 100; // Prende le ultime due cifre (25 per 2025, 30 per 2030)
       
-      if (!savedData) {
-        const initialData = {
-          year: currentYear,
-          numbers: Array.from(this.numeriElements).map(el => ({
-            initial: parseInt(el.textContent, 10) || 0,
-            current: parseInt(el.textContent, 10) || 0
-          }))
-        };
+      // Ottiene l'anno salvato dal localStorage
+      const savedYear = this.getSavedYear();
+      
+      // Se non c'è un anno salvato o se l'anno corrente è diverso da quello salvato
+      if (!savedYear || currentYear !== savedYear) {
+        // Aggiorna il numero visualizzato con l'ultima o le ultime due cifre dell'anno
+        this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits : lastTwoDigits % 10;
         
-        this.saveData(initialData);
-        this.updateDOM(initialData.numbers);
-      } else {
-        if (currentYear > savedData.year) {
-          const updatedNumbers = savedData.numbers.map(num => ({
-            initial: num.initial,
-            current: num.current + 1
-          }));
-          
-          const updatedData = {
-            year: currentYear,
-            numbers: updatedNumbers
-          };
-          
-          this.saveData(updatedData);
-          this.updateDOM(updatedNumbers);
-        } else {
-          this.updateDOM(savedData.numbers);
-        }
+        // Salva il nuovo anno
+        this.saveYear(currentYear);
       }
     }
 
-    getSavedData() {
+    getSavedYear() {
       try {
-        const savedNumbers = localStorage.getItem(this.STORAGE_KEY_NUMBERS);
         const savedYear = localStorage.getItem(this.STORAGE_KEY_YEAR);
-        
-        if (savedNumbers && savedYear) {
-          return {
-            year: parseInt(savedYear, 10),
-            numbers: JSON.parse(savedNumbers)
-          };
-        }
-        return null;
+        return savedYear ? parseInt(savedYear, 10) : null;
       } catch (error) {
-        console.error('Errore nel recupero dei dati:', error);
+        console.error('Errore nel recupero dell\'anno:', error);
         return null;
       }
     }
 
-    saveData(data) {
+    saveYear(year) {
       try {
-        localStorage.setItem(this.STORAGE_KEY_NUMBERS, JSON.stringify(data.numbers));
-        localStorage.setItem(this.STORAGE_KEY_YEAR, data.year.toString());
+        localStorage.setItem(this.STORAGE_KEY_YEAR, year.toString());
       } catch (error) {
-        console.error('Errore nel salvataggio dei dati:', error);
+        console.error('Errore nel salvataggio dell\'anno:', error);
       }
-    }
-
-    updateDOM(numbers) {
-      this.numeriElements.forEach((element, index) => {
-        if (numbers[index]) {
-          element.textContent = numbers[index].current;
-        }
-      });
     }
 
     static reset() {
@@ -137,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .filter(key => key.startsWith('portflavio_'))
         .forEach(key => localStorage.removeItem(key));
     }
-  }
+}
 
   /**
    * Gestione Scroll Orizzontale
@@ -199,10 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     handleClick(e) {
+      const targetId = e.currentTarget.getAttribute('href');
+      
+      // Se il link è mailto:, lasciamo che funzioni normalmente
+      if (targetId.startsWith('mailto:')) {
+        return true;
+      }
+      
       e.preventDefault();
       if (this.isScrolling) return;
       
-      const targetId = e.currentTarget.getAttribute('href');
       const targetElement = document.querySelector(targetId);
       
       if (targetElement) {
@@ -217,12 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     handleTap(e) {
-      e.preventDefault();
       const currentScheda = e.currentTarget;
+      const targetId = currentScheda.getAttribute('href');
+      
+      // Se il link è mailto:, lasciamo che funzioni normalmente
+      if (targetId.startsWith('mailto:')) {
+        return true;
+      }
+      
+      e.preventDefault();
       const currentTime = Date.now();
 
       if (currentTime - this.lastTap < 300) {
-        const targetId = currentScheda.getAttribute('href');
         const targetElement = document.querySelector(targetId);
 
         if (targetElement) {
@@ -253,9 +231,15 @@ document.addEventListener('DOMContentLoaded', () => {
           ? (currentIndex + 1) % this.schedaLinks.length
           : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
 
-        this.activeScheda.classList.remove('active');
-        this.schedaLinks[newIndex].classList.add('active');
-        this.activeScheda = this.schedaLinks[newIndex];
+        const newScheda = this.schedaLinks[newIndex];
+        const targetId = newScheda.getAttribute('href');
+
+        // Non applica l'effetto active se è un link mailto
+        if (!targetId.startsWith('mailto:')) {
+          this.activeScheda.classList.remove('active');
+          newScheda.classList.add('active');
+          this.activeScheda = newScheda;
+        }
       }
     }
 
@@ -286,47 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /**
-   * Gestione Text Section
-   */
-  class TextHandler {
-    constructor() {
-      this.textWords = document.querySelectorAll('.text-word');
-      this.isMobile = window.matchMedia('(hover: none)').matches;
-      this.init();
-    }
-
-    init() {
-      this.textWords.forEach(word => {
-        if (this.isMobile) {
-          word.addEventListener('click', (e) => this.handleMobileClick(e));
-        } else {
-          word.addEventListener('click', (e) => this.handleDesktopClick(e));
-        }
-      });
-    }
-
-    handleMobileClick(e) {
-      e.preventDefault();
-      const email = e.currentTarget.dataset.email;
-      window.location.href = `mailto:${email}`;
-    }
-
-    handleDesktopClick(e) {
-      e.preventDefault();
-      const email = e.currentTarget.dataset.email;
-      
-      const mailtoAttempt = window.open(`mailto:${email}`);
-      
-      if (!mailtoAttempt || mailtoAttempt.closed || typeof mailtoAttempt.closed === 'undefined') {
-        alert(`Per favore, invia una email a: ${email}`);
-      }
-    }
-  }
-
   // Inizializzazione
   new ContatoreSchede();
   new UIHandler();
-  new TextHandler();
   new ScrollHandler();
 });
