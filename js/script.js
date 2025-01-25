@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Funzione di smooth scroll con easing
   const easeInOutSextuple = (t) => 
     t < 0.5 ? 32 * t ** 6 : 1 - (-2 * t + 2) ** 6 / 2;
  
@@ -51,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('Elemento anno non trovato');
         return;
       }
- 
       this.init();
     }
  
@@ -169,20 +167,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentScheda = e.currentTarget;
       const targetId = currentScheda.getAttribute('href');
       
-      if (targetId.startsWith('mailto:')) return true;
       e.preventDefault();
- 
       const currentTime = Date.now();
       const isDoubleTap = this.lastTap && (currentTime - this.lastTap) <= 300;
  
-      if (isDoubleTap) {
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          smoothScroll(targetElement);
-          history.pushState(null, '', targetId);
+      if (targetId.startsWith('mailto:')) {
+        if (isDoubleTap) {
+          window.location.href = targetId;
+        } else {
+          this.toggleScheda(currentScheda);
         }
       } else {
-        this.toggleScheda(currentScheda);
+        if (isDoubleTap) {
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            smoothScroll(targetElement);
+            history.pushState(null, '', targetId);
+          }
+        } else {
+          this.toggleScheda(currentScheda);
+        }
       }
  
       this.lastTap = currentTime;
