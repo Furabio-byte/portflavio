@@ -171,18 +171,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (!this.lastTap || (currentTime - this.lastTap) > 300) {
       // Primo tap - toggle lettera/parola
-      if (this.activeScheda === currentScheda) {
-        // Disattiva la scheda se è già attiva
-        currentScheda.classList.remove('active');
-        this.activeScheda = null;
-      } else {
-        // Attiva la nuova scheda
-        if (this.activeScheda) {
-          this.activeScheda.classList.remove('active');
-        }
-        currentScheda.classList.add('active');
-        this.activeScheda = currentScheda;
+      const lettera = currentScheda.querySelector('.lettera');
+      const parola = currentScheda.querySelector('.parola');
+      
+      if (this.activeScheda) {
+        // Reset scheda precedente
+        this.activeScheda.querySelector('.lettera').style.opacity = '1';
+        this.activeScheda.querySelector('.parola').style.opacity = '0';
+        this.activeScheda.classList.remove('active');
       }
+      
+      // Attiva nuova scheda
+      lettera.style.opacity = '0';
+      parola.style.opacity = '1';
+      currentScheda.classList.add('active');
+      this.activeScheda = currentScheda;
     } else {
       // Doppio tap - scroll
       const targetElement = document.querySelector(targetId);
