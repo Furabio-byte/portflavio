@@ -393,9 +393,11 @@ body {
   .footer {
     padding: 0.8rem;
     margin-top: -10px;
+    font-family: 'Playfair Display SC', serif;
   }
-  
+
   .copyright {
     font-size: 0.8rem;
+    color: var(--colore-testo); /* Usa la variabile del colore del testo */
   }
 }
