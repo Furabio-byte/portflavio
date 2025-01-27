@@ -164,43 +164,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
  
     handleTap(e) {
-      e.preventDefault();
-    
       const currentScheda = e.currentTarget;
-      // Se l'attributo 'href' non esiste, usiamo una stringa vuota per evitare errori
-      const targetId = currentScheda.getAttribute('href') || '';
+      const targetId = currentScheda.getAttribute('href');
       
-      // Determina se si tratta di un doppio tap entro 300ms
+      e.preventDefault();
       const currentTime = Date.now();
       const isDoubleTap = this.lastTap && (currentTime - this.lastTap) <= 300;
-      
-      // Aggiorna l'ultimo tap per poter rilevare il doppio tap la volta successiva
-      this.lastTap = currentTime;
-      
-      // Verifica se è un link 'mailto:'
-      const isMailto = targetId.startsWith('mailto:');
-      
-      if (!isDoubleTap) {
-        // Se non è un doppio tap (quindi è singolo), toggla la scheda
-        this.toggleScheda(currentScheda);
-        return;
-      }
-    
-      // Se è un doppio tap:
-      if (isMailto) {
-        // Apre il client di posta elettronica
-        window.location.href = targetId;
+ 
+      if (targetId.startsWith('mailto:')) {
+        if (isDoubleTap) {
+          window.location.href = targetId;
+        } else {
+          this.toggleScheda(currentScheda);
+        }
       } else {
-        // Scorre in modo fluido fino all'elemento, se esiste
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          smoothScroll(targetElement);
-          // Aggiorna l'URL senza ricaricare la pagina
-          history.pushState(null, '', targetId);
+        if (isDoubleTap) {
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            smoothScroll(targetElement);
+            history.pushState(null, '', targetId);
+          }
+        } else {
+          this.toggleScheda(currentScheda);
         }
       }
+ 
+      this.lastTap = currentTime;
     }
-    
  
     handleClick(e) {
       const targetId = e.currentTarget.getAttribute('href');
