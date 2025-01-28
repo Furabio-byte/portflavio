@@ -358,8 +358,8 @@ body {
     gap: 20px;
     padding-top: 40px;    /* padding superiore */
     padding-bottom: 40px; /* padding inferiore */
-    padding-left: 5px;   /* padding sinistro */
-    padding-right: 5px;  /* padding destro */
+    padding-left: 0px;   /* padding sinistro */
+    padding-right: 0px;  /* padding destro */
     margin-top: -20px;
   }
  
