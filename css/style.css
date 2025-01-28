@@ -356,7 +356,10 @@ body {
  
   .scroll-container {
     gap: 20px;
-    padding: 40px;
+    padding-top: 40px;    /* padding superiore */
+    padding-bottom: 40px; /* padding inferiore */
+    padding-left: 5px;   /* padding sinistro */
+    padding-right: 5px;  /* padding destro */
     margin-top: -20px;
   }
  
