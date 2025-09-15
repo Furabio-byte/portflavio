@@ -8,9 +8,9 @@
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --colore-sfondo-principale: #1a1a1a;
-    --colore-sfondo-scheda: #666600;
-    --colore-testo: #ffffff;
+    --colore-sfondo-principale: #ded9d2;
+    --colore-sfondo-scheda: #b29a88;
+    --colore-testo: #000000;
   }
 }
  
