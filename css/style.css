@@ -152,7 +152,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 0;                 /* <-- Opzione B: nessun margine fisso */
+  margin: 60px auto 20px;
   display: flex;
 }
 
@@ -168,7 +168,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 0;                 /* <-- Opzione B: nessun margine fisso */
+  margin: 60px auto 20px;
   display: flex;
 }
 
@@ -184,15 +184,8 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 0;                 /* <-- Opzione B: nessun margine fisso */
+  margin: 60px auto 20px;
   display: flex;
-}
-
-/* Spazio SOLO tra schede adiacenti (Opzione B) */
-.scheda-project + .scheda-others,
-.scheda-others + .scheda-road,
-.scheda-project + .scheda-road {
-  margin-top: 20px;          /* regola qui l'avvicinamento */
 }
 
 .text-content {
@@ -365,8 +358,8 @@ body {
     gap: 20px;
     padding-top: 40px;    /* padding superiore */
     padding-bottom: 40px; /* padding inferiore */
-    padding-left: 0px;    /* padding sinistro */
-    padding-right: 0px;   /* padding destro */
+    padding-left: 0px;   /* padding sinistro */
+    padding-right: 0px;  /* padding destro */
     margin-top: -20px;
   }
  
