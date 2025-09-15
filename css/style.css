@@ -3,8 +3,6 @@
   --colore-sfondo-principale: #ded9d2;
   --colore-sfondo-scheda: #b29a88;
   --colore-testo: #000000;
-  --spazio-da-homepage: 40px;
-  --spazio-tra-schede: -325px;
 }
  
 /* Dark mode */
@@ -138,13 +136,11 @@ body {
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: var(--spazio-da-homepage);
 }
  
-/* PRIMA SCHEDA CON SPAZIO FISSO DALLA HOMEPAGE */
+/* SCHEDA PROJECT */
 .scheda-project {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
@@ -156,11 +152,11 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 0 auto 0;
+  margin: 60px auto 20px;
   display: flex;
 }
 
-/* SCHEDE SUCCESSIVE CHE SI AVVICINANO TRA LORO */
+/* SCHEDA OTHERS */
 .scheda-others {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
@@ -172,10 +168,11 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: var(--spazio-tra-schede) auto 0;
+  margin: 60px auto 20px;
   display: flex;
 }
 
+/* SCHEDA ROAD */
 .scheda-road {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
@@ -187,7 +184,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: -650px auto 0;
+  margin: 60px auto 20px;
   display: flex;
 }
 
@@ -312,5 +309,98 @@ body {
  
   .sub-scheda:hover {
     transform: scale(1.02);
+  }
+}
+
+/* MEDIA QUERIES PER MOBILE */
+@media (max-width: 768px) {
+  /* Mantieni gli stili del desktop */
+  body {
+    padding: 20px;
+  }
+  
+  .schede-container {
+    margin-top: 30px;
+  }
+ 
+  .scheda-link {
+    min-width: 280px;
+    max-width: 400px;
+  }
+ 
+  .scheda-project {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -17px auto 0;
+  }
+
+  .scheda-others {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -17px auto 0;
+  }
+
+  .scheda-road {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -17px auto 0;
+  }
+
+  .text-page-container {
+    min-height: 65vh;
+    padding: 20px;
+  }
+ 
+  .scroll-container {
+    gap: 20px;
+    padding-top: 40px;    /* padding superiore */
+    padding-bottom: 40px; /* padding inferiore */
+    padding-left: 0px;   /* padding sinistro */
+    padding-right: 0px;  /* padding destro */
+    margin-top: -20px;
+  }
+ 
+  .sub-schede-container {
+    height: 500px;
+    padding: 20px;
+    gap: 40px;
+    margin-bottom: 0;
+  }
+ 
+  .sub-scheda {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+  }
+ 
+  .scroll-buttons {
+    position: static;
+    margin-top: -20px;
+    gap: 20px;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    width: auto;
+  }
+ 
+  .scroll-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+
+  .footer {
+    padding: 0.8rem;
+    margin-top: -10px;
+    font-family: 'Playfair Display SC', serif;
+  }
+
+  .copyright {
+    font-size: 0.8rem;
+    color: var(--colore-testo); /* Usa la variabile del colore del testo */
   }
 }
