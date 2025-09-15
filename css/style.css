@@ -3,6 +3,8 @@
   --colore-sfondo-principale: #ded9d2;
   --colore-sfondo-scheda: #b29a88;
   --colore-testo: #000000;
+  --margin-top-schede: 8px;
+  --margin-bottom-schede: 8px;
 }
  
 /* Dark mode */
@@ -140,39 +142,9 @@ body {
   align-items: flex-start;
 }
  
-/* SCHEDA PROJECT */
-.scheda-project {
-  position: relative;
-  background-color: var(--colore-sfondo-scheda);
-  width: 100%;          
-  max-width: 1800px;     
-  min-height: 580px;     
-  height: 60vh;          
-  max-height: 900px;     
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  margin: 60px auto 20px;
-  display: flex;
-}
-
-/* SCHEDA OTHERS */
-.scheda-others {
-  position: relative;
-  background-color: var(--colore-sfondo-scheda);
-  width: 100%;          
-  max-width: 1800px;     
-  min-height: 580px;     
-  height: 60vh;          
-  max-height: 900px;     
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  margin: 60px auto 20px;
-  display: flex;
-}
-
-/* SCHEDA ROAD */
+/* SCHEDE SECONDARIE CON VARIABILI PER MARGINI */
+.scheda-project,
+.scheda-others,
 .scheda-road {
   position: relative;
   background-color: var(--colore-sfondo-scheda);
@@ -184,7 +156,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 60px auto 20px;
+  margin: var(--margin-top-schede) auto var(--margin-bottom-schede);
   display: flex;
 }
 
