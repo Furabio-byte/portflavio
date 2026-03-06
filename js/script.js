@@ -273,6 +273,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  class ThemeHandler {
+    constructor() {
+      this.STORAGE_KEY = 'portflavio_theme';
+      this.themeToggleBtn = document.getElementById('theme-toggle');
+      if (!this.themeToggleBtn) return;
+      
+      this.initTheme();
+      this.bindEvents();
+    }
+
+    initTheme() {
+      // 1. Controlla localStorage
+      const savedTheme = localStorage.getItem(this.STORAGE_KEY);
+      
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+      } else if (savedTheme === 'light') {
+        document.body.classList.remove('dark-theme');
+      } else {
+        // 2. Se non c'è salvataggio, usa preferenza di sistema
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.body.classList.add('dark-theme');
+        }
+      }
+    }
+
+    bindEvents() {
+      this.themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        
+        // Salva la scelta
+        const isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem(this.STORAGE_KEY, isDark ? 'dark' : 'light');
+
+        // Haptic feedback se supportato
+        if (window.navigator && window.navigator.vibrate) {
+           window.navigator.vibrate(50);
+        }
+      });
+    }
+  }
+
+  new ThemeHandler();
   new ContatoreSchede();
   new UIHandler();
   new ScrollHandler();
