@@ -345,8 +345,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  class CustomCursorHandler {
+    constructor() {
+      // Si attiva solo se il device possiede un mouse (non touch)
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      this.cursor = document.querySelector('.custom-cursor');
+      if (!this.cursor) return;
+
+      this.initCursor();
+    }
+
+    initCursor() {
+      // Movimento Cursore
+      document.addEventListener('mousemove', (e) => {
+        this.cursor.style.left = `${e.clientX}px`;
+        this.cursor.style.top = `${e.clientY}px`;
+      });
+
+      // Effetto espansione passando sopra link o pulsanti
+      const interactables = document.querySelectorAll('a, button');
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          this.cursor.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          this.cursor.classList.remove('hover');
+        });
+      });
+    }
+  }
+
   new ThemeHandler();
   new RevealHandler();
+  new CustomCursorHandler();
   new ContatoreSchede();
   new UIHandler();
   new ScrollHandler();
