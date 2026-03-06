@@ -292,11 +292,11 @@ body {
 @media (max-width: 768px) {
   /* ALLINEAMENTO MATEMATICO DELLE SCHEDE E DELLE SEZIONI SOTTOSTANTI */
   .text-page-container {
-    padding: 20px 0;
+    padding: 15px 0; /* Ridotto il padding verticale per simulare uno spazio uniforme di 30px continui */
   }
   
   .sezione-contenuto {
-    margin: 30px auto 10px;
+    margin: 15px auto; /* 15+15 fa esattamente 30px di distanza tra una sezione mastodontica e l'altra */
     height: 70vh;
   }
 
@@ -304,6 +304,7 @@ body {
   .schede-container {
     flex-direction: column;
     align-items: center;
+    gap: 30px; /* Esplicitiamo la distanza esatta di 30px tra le schede P O R T in verticale */
   }
 
   /* Le imposto con la stessa identica grandezza limite delle sotto-schede */
@@ -311,7 +312,12 @@ body {
     width: 100%;
     min-width: 280px;
     max-width: 400px;
-    /* L'aspect-ratio 2/3 del desktop le manterrà perfettamente proporzionate */
+  }
+
+  /* ADATTAMENTO SPAZIATURA SUB-SCHEDE ("Tra una scheda e l'altra") */
+  /* Imposto il gap a 30px per pareggiare lo spazio delle schede P-O-R-T */
+  .sub-schede-container {
+    gap: 30px;
   }
 }
 
