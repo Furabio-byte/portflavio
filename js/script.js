@@ -315,7 +315,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  class RevealHandler {
+    constructor() {
+      this.reveals = document.querySelectorAll('.reveal');
+      if (this.reveals.length === 0) return;
+      this.initObserver();
+    }
+
+    initObserver() {
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 // Si attiva quando il 15% della sezione diventa visibile
+      };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            // Una volta apparsa, potremmo voler smettere di osservarla (fade-in una sola volta)
+            // obs.unobserve(entry.target); 
+          }
+        });
+      }, observerOptions);
+
+      this.reveals.forEach(reveal => {
+        observer.observe(reveal);
+      });
+    }
+  }
+
   new ThemeHandler();
+  new RevealHandler();
   new ContatoreSchede();
   new UIHandler();
   new ScrollHandler();

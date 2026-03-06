@@ -191,6 +191,21 @@ body.dark-theme .theme-icon-light {
   transition: var(--transition-theme);
 }
 
+/* CLASSI PER ANIMAZIONE SCROLL REVEAL (Intersection Observer) */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  visibility: hidden;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, visibility 0.8s;
+  will-change: opacity, transform, visibility;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
 .text-content {
   position: relative;
   width: 100%;
