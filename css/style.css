@@ -296,7 +296,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 30px; /* Esplicitiamo la distanza esatta di 30px tra le schede P O R T in verticale */
-    margin-bottom: 0; /* Rimuove lo spazio extra sotto l'ultima scheda (T) in modo che rimangano solo 30px dalla sezione successiva */
+    margin-bottom: 30px; /* Imposta esattamente 30px di distanza tra la scheda "T" e il blocco testuale successivo ("Projects") */
   }
 
   /* Le imposto con la stessa identica grandezza limite delle sotto-schede */
