@@ -126,54 +126,52 @@ document.addEventListener('DOMContentLoaded', () => {
       this.schedaLinks = document.querySelectorAll('.scheda-link');
       this.activeScheda = null;
       this.lastTap = null;
-      this.init();
+      this.bindEvents(); // Esegue il binding dei listener una sola volta
+      this.initARIA();
     }
 
-    init() {
-      // Inizializza l'attributo ARIA base
+    initARIA() {
       this.schedaLinks.forEach(link => {
         link.setAttribute('aria-expanded', 'false');
       });
+    }
 
-      if (window.matchMedia('(hover: none)').matches) {
-        this.initializeTouchDevice();
-      } else {
-        this.initializeDesktopDevice();
+    bindEvents() {
+      const isTouch = window.matchMedia('(hover: none)').matches;
+      
+      this.schedaLinks.forEach(link => {
+        if (isTouch) {
+          link.addEventListener('touchend', (e) => this.handleTap(e));
+        } else {
+          link.addEventListener('click', (e) => this.handleClick(e));
+        }
+      });
+
+      if (isTouch) {
+        const swipeThreshold = 50;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+          const touchDistance = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(touchDistance) > swipeThreshold) {
+            this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
+          }
+        }, { passive: true });
       }
 
-      // Aggiunge un resizer (debounce) per la rotazione del dispositivo mobile (portrait -> landscape)
+      // Handler unico per il resize (debounce logico senza duplicare eventi)
       let resizeTimeout;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-          this.init(); // Reinizializza la logica UI
+          // Nota: il browser ricalcola da solo i CSS. 
+          // Reinizializzare i listener o ARIA qui è inutile o dannoso (memory leak e dupe bug)
+          // Manteniamo il debounce solo nel caso serva un futuro ricalcolo JS
         }, 250);
-      });
-    }
-
-    initializeTouchDevice() {
-      const swipeThreshold = 50;
-      let touchStartY = 0;
-
-      this.schedaLinks.forEach(link => {
-        link.addEventListener('touchend', (e) => this.handleTap(e));
-      });
-
-      document.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-
-      document.addEventListener('touchend', (e) => {
-        const touchDistance = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(touchDistance) > swipeThreshold) {
-          this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
-        }
-      }, { passive: true });
-    }
-
-    initializeDesktopDevice() {
-      this.schedaLinks.forEach(link => {
-        link.addEventListener('click', (e) => this.handleClick(e));
       });
     }
 
