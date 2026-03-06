@@ -183,16 +183,18 @@ document.addEventListener('DOMContentLoaded', () => {
       
       e.preventDefault();
       const currentTime = Date.now();
-      const isSameScheda = this.activeScheda === currentScheda;
-      const isDoubleTap = this.lastTap && isSameScheda && ((currentTime - this.lastTap) <= 300);
+      const timeSinceLastTap = currentTime - (this.lastTap || 0);
+      const isQuickTap = timeSinceLastTap <= 300;
+      const isAlreadyActive = currentScheda.classList.contains('active');
 
       // Haptic Feedback (se supportato)
       if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(isDoubleTap ? 100 : 50);
+        window.navigator.vibrate(isQuickTap && isAlreadyActive ? 100 : 50);
       }
- 
-      if (isDoubleTap) {
-        // AZIONE: Naviga o Invia Mail (Secondo tocco)
+
+      // Logica Navigazione vs Apertura
+      if (isQuickTap && isAlreadyActive) {
+        // AZIONE: Doppio tocco sulla stessa scheda già aperta -> Naviga
         if (targetId.startsWith('mailto:')) {
           window.location.href = targetId;
         } else {
@@ -203,10 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       } else {
-        // AZIONE: Mostra Parola Nascondendo Lettera (Primo tocco, o tocco su scheda diversa)
+        // AZIONE: Singolo tocco, o tocco lento, o tocco su scheda nuova -> Apri la scheda
         this.toggleScheda(currentScheda);
       }
- 
+
       this.lastTap = currentTime;
     }
 
