@@ -183,29 +183,28 @@ document.addEventListener('DOMContentLoaded', () => {
       
       e.preventDefault();
       const currentTime = Date.now();
-      const isDoubleTap = this.lastTap && (currentTime - this.lastTap) <= 300;
+      const isSameScheda = this.activeScheda === currentScheda;
+      const isDoubleTap = this.lastTap && isSameScheda && ((currentTime - this.lastTap) <= 300);
 
-      // Haptic Feedback (se supportato dal dispositivo mobile) per confermare il tocco
+      // Haptic Feedback (se supportato)
       if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(isDoubleTap ? 100 : 50); // Vibrazione più lunga per lo scroll, corta per l'apertura
+        window.navigator.vibrate(isDoubleTap ? 100 : 50);
       }
  
-      if (targetId.startsWith('mailto:')) {
-        if (isDoubleTap) {
+      if (isDoubleTap) {
+        // AZIONE: Naviga o Invia Mail (Secondo tocco)
+        if (targetId.startsWith('mailto:')) {
           window.location.href = targetId;
         } else {
-          this.toggleScheda(currentScheda);
-        }
-      } else {
-        if (isDoubleTap) {
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
             smoothScroll(targetElement);
             history.pushState(null, '', targetId);
           }
-        } else {
-          this.toggleScheda(currentScheda);
         }
+      } else {
+        // AZIONE: Mostra Parola Nascondendo Lettera (Primo tocco, o tocco su scheda diversa)
+        this.toggleScheda(currentScheda);
       }
  
       this.lastTap = currentTime;
