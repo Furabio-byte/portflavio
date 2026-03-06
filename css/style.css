@@ -283,11 +283,11 @@ body {
 @media (max-width: 768px) {
   /* ALLINEAMENTO MATEMATICO DELLE SCHEDE E DELLE SEZIONI SOTTOSTANTI */
   .text-page-container {
-    padding: 15px 0; /* Ridotto il padding verticale per simulare uno spazio uniforme di 30px continui */
+    padding: 0; /* Rimuoviamo il padding orizzontale/verticale e gestiamo tutto con i margin della sezione */
   }
   
   .sezione-contenuto {
-    margin: 15px auto; /* 15+15 fa esattamente 30px di distanza tra una sezione mastodontica e l'altra */
+    margin: 0 auto 30px; /* Zero margin top, 30px margin bottom esatti. Nessun margine che collassa! */
     height: 70vh;
   }
 
