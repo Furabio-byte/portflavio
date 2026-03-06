@@ -247,16 +247,7 @@ body {
   text-align: left;
 }
 
-.footer {
-  margin-top: auto;
-  padding: 1rem;
-  text-align: center;
-}
 
-.copyright {
-  font-size: 0.9rem;
-  color: var(--colore-testo);
-}
  
 /* EFFETTI HOVER */
 @media (hover: hover) {
@@ -326,9 +317,6 @@ body {
     padding: 15px; /* Riduco leggermente il padding globale per fare spazio ai 15px del margin della sezione superiore */
   }
 
-  .footer {
-    margin-top: 15px; /* Assicura che l'ultima sezione disti 30px dal footer (15px section + 15px footer) */
-    padding-bottom: 30px;
-  }
+
 }
 
