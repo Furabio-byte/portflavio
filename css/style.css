@@ -1,0 +1,369 @@
+/* Variabili principali */
+:root {
+  --colore-sfondo-principale: #ded9d2;
+  --colore-sfondo-scheda: #b29a88;
+  --colore-testo: #000000;
+}
+ 
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --colore-sfondo-principale: #ded9d2;
+    --colore-sfondo-scheda: #b29a88;
+    --colore-testo: #000000;
+  }
+}
+ 
+/* Reset di base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+/* BODY */
+body {
+  min-height: 100vh;
+  background-color: var(--colore-sfondo-principale);
+  font-family: 'Playfair Display SC', serif;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+ 
+/* LOGO */
+.logo-container {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  z-index: 1000;
+}
+ 
+.logo {
+  width: clamp(40px, 8vw, 60px);
+  height: auto;
+  transition: transform 0.3s ease;
+}
+ 
+/* CONTENITORE SCHEDE PRINCIPALI */
+.schede-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between; /* Spalma le schede orizzontalmente in modo uniforme */
+  width: 100%;
+  max-width: 1800px;
+  margin: 30px auto; /* Centra il contenitore e mantiene il margine superiore */
+}
+ 
+/* LINK SCHEDA PRINCIPALE */
+.scheda-link {
+  text-decoration: none;
+  color: inherit;
+  flex: 1 1 calc(25% - 30px); /* Prende 1/4 dello spazio meno il gap */
+  min-width: 250px;
+  max-width: none; /* Rimuove il vecchio limite ristretto di 400px per consentire espansione */
+  aspect-ratio: 2/3;
+  transition: transform 0.3s ease;
+}
+ 
+.scheda-link:focus-visible {
+  outline: 3px solid var(--colore-testo);
+  outline-offset: 4px;
+  border-radius: 15px;
+}
+ 
+/* SCHEDA PRINCIPALE */
+.scheda {
+  width: 100%;
+  height: 100%;
+  background-color: var(--colore-sfondo-scheda);
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+ 
+.scheda .lettera {
+  font-size: clamp(8rem, 15vw, 12rem);
+  font-weight: 900;
+  color: var(--colore-testo);
+  transition: opacity 0.3s ease;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  text-rendering: optimizeLegibility;
+}
+ 
+.scheda .parola {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: var(--colore-testo);
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.3s ease;
+  text-rendering: optimizeLegibility;
+}
+ 
+.scheda .numero {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--colore-testo);
+}
+ 
+.frase-r {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--colore-testo);
+  max-width: 80%;
+  transition: opacity 0.3s ease;
+}
+ 
+/* CONTAINER TESTO PRINCIPALE */
+.text-page-container {
+  /*min-height: 100vh;*/
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+ 
+/* SCHEDA CONTENUTO (Project, Others, Road) */
+.sezione-contenuto {
+  position: relative;
+  background-color: var(--colore-sfondo-scheda);
+  width: 100%;          
+  max-width: 1800px;     
+  min-height: 580px;     
+  height: 60vh;          
+  max-height: 900px;     
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 60px auto 20px;
+  display: flex;
+}
+
+.text-content {
+  position: relative;
+  width: 100%;
+}
+ 
+/* SCROLL CONTAINER E SOTTO-SCHEDE */
+.scroll-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 40px;
+  margin-top: -20px;
+}
+ 
+.sub-schede-container {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: 20px;
+  width: 100%;
+  height: 500px;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+ 
+.sub-schede-container::-webkit-scrollbar {
+  display: none;
+}
+ 
+.sub-scheda {
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  aspect-ratio: 2/3;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+ 
+.sub-scheda-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+ 
+/* BOTTONI DI SCROLL */
+.scroll-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: -20px;
+}
+ 
+.scroll-btn {
+  background: var(--colore-sfondo-scheda);
+  color: var(--colore-testo);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  font-size: 1.2rem;
+}
+
+.scroll-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+ 
+/* TITOLI E TESTI */
+.text-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--colore-testo);
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  margin: 0;
+  line-height: 1;
+  text-align: left;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.copyright {
+  font-size: 0.9rem;
+  color: var(--colore-testo);
+}
+ 
+/* EFFETTI HOVER */
+@media (hover: hover) {
+  .scheda-link:hover {
+    transform: scale(1.02);
+  }
+ 
+  .scheda.is-active .lettera,
+  .scheda:hover .lettera {
+    opacity: 0;
+  }
+ 
+  .scheda.is-active .parola,
+  .scheda:hover .parola {
+    opacity: 1;
+  }
+ 
+  .scheda.is-active .frase-r,
+  .scheda:hover .frase-r {
+    opacity: 0;
+  }
+ 
+  .logo:hover {
+    transform: scale(1.1);
+  }
+ 
+  .sub-scheda:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* MEDIA QUERIES PER MOBILE */
+@media (max-width: 768px) {
+  /* Mantieni gli stili del desktop */
+  body {
+    padding: 20px;
+  }
+  
+  .schede-container {
+    margin-top: 30px;
+  }
+ 
+  .scheda-link {
+    min-width: 280px;
+    max-width: 400px;
+  }
+ 
+  .sezione-contenuto {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    margin: -17px auto 0;
+  }
+
+  .text-page-container {
+    min-height: 65vh;
+    padding: 20px;
+  }
+ 
+  .scroll-container {
+    gap: 20px;
+    padding-top: 40px;    /* padding superiore */
+    padding-bottom: 40px; /* padding inferiore */
+    padding-left: 0px;   /* padding sinistro */
+    padding-right: 0px;  /* padding destro */
+    margin-top: -20px;
+  }
+ 
+  .sub-schede-container {
+    height: 500px;
+    padding: 20px;
+    gap: 40px;
+    margin-bottom: 0;
+  }
+ 
+  .sub-scheda {
+    width: 100%;
+    flex: 1;
+    margin: 0;
+  }
+ 
+  .scroll-buttons {
+    position: static;
+    margin-top: -20px;
+    gap: 20px;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    width: auto;
+  }
+ 
+  .scroll-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+
+  .footer {
+    padding: 0.8rem;
+    margin-top: -10px;
+    font-family: 'Playfair Display SC', serif;
+  }
+
+  .copyright {
+    font-size: 0.8rem;
+    color: var(--colore-testo); /* Usa la variabile del colore del testo */
+  }
+}
