@@ -1,18 +1,8 @@
-/* Variabili principali (Tema Chiaro di default) */
+/* Variabili principali */
 :root {
   --colore-sfondo-principale: #ded9d2;
   --colore-sfondo-scheda: #b29a88;
   --colore-testo: #000000;
-  
-  /* Transizioni fluide per i colori del tema */
-  --transition-theme: background-color 0.4s ease, color 0.4s ease;
-}
- 
-/* Variabili Tema Scuro (Dark Mode) */
-body.dark-theme {
-  --colore-sfondo-principale: #1a1a1a;
-  --colore-sfondo-scheda: #2d2d2d;
-  --colore-testo: #e0e0e0;
 }
 
 /* Reset di base */
@@ -30,7 +20,6 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  transition: var(--transition-theme);
 }
  
 /* LOGO */
@@ -57,37 +46,6 @@ body {
   margin: 30px auto; /* Centra il contenitore e mantiene il margine superiore */
 }
  
-/* INTESTAZIONE BOTTONE THEME */
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  background: transparent;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.3s ease;
-  user-select: none;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.1);
-}
-
-.theme-icon-light {
-  display: none;
-}
-
-body.dark-theme .theme-icon-dark {
-  display: none;
-}
-
-body.dark-theme .theme-icon-light {
-  display: inline;
-}
-
 /* LINK SCHEDA PRINCIPALE */
 .scheda-link {
   text-decoration: none;
@@ -120,7 +78,7 @@ body.dark-theme .theme-icon-light {
   will-change: transform;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
-  transition: transform 0.3s ease, var(--transition-theme);
+  transition: transform 0.3s ease;
 }
  
 .scheda .lettera {
@@ -188,7 +146,6 @@ body.dark-theme .theme-icon-light {
   padding: 20px;
   margin: 60px auto 20px;
   display: flex;
-  transition: var(--transition-theme);
 }
 
 /* CLASSI PER ANIMAZIONE SCROLL REVEAL (Intersection Observer) */
