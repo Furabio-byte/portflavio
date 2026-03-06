@@ -287,4 +287,26 @@ body {
     transform: scale(1.02);
   }
 }
+
+/* OTTIMIZZAZIONI PER MOBILE (Schermi < 768px) */
+@media (max-width: 768px) {
+  /* ALLINEAMENTO MATEMATICO DELLE SCHEDE E DELLE SEZIONI SOTTOSTANTI */
+  /* Sui dispositivi mobili, rimuoviamo il padding laterale in modo che 
+     le sezioni inferiori abbiano esattamente la stessa larghezza del blocco "P O R T" superiore. */
+  .text-page-container {
+    padding: 20px 0;
+  }
+  
+  .sezione-contenuto {
+    margin: 30px auto 10px;
+    height: 70vh; /* Leggermente più alto per accogliere comodamente i contenuti su piccoli schermi */
+  }
+
+  /* GRIGLIA 2x2 PER LE SCHEDE PRINCIPALI */
+  /* Impostiamo una larghezza minima più bassa per permettere di averne due affiancate su smartphone (es. iPhone) */
+  .scheda-link {
+    flex: 1 1 calc(50% - 15px); /* Prende metà spazio meno metà del gap */
+    min-width: 150px; /* Abbassato da 250px per entrare negli schermi stretti (es. 375px) */
+  }
+}
 
