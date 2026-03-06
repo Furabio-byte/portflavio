@@ -249,23 +249,33 @@ body {
 
 
  
-/* EFFETTI HOVER */
+/* CLASSI DI ATTIVAZIONE (TOUCH E JS) */
+.scheda.is-active .lettera {
+  opacity: 0;
+}
+
+.scheda.is-active .parola {
+  opacity: 1;
+}
+
+.scheda.is-active .frase-r {
+  opacity: 0;
+}
+
+/* EFFETTI HOVER (SOLO MOUSE/DESKTOP) */
 @media (hover: hover) {
   .scheda-link:hover {
     transform: scale(1.02);
   }
  
-  .scheda.is-active .lettera,
   .scheda:hover .lettera {
     opacity: 0;
   }
  
-  .scheda.is-active .parola,
   .scheda:hover .parola {
     opacity: 1;
   }
  
-  .scheda.is-active .frase-r,
   .scheda:hover .frase-r {
     opacity: 0;
   }
