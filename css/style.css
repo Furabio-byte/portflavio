@@ -49,8 +49,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  justify-content: center; /* Centra le schede quando vanno a capo su mobile */
-  align-items: center;
+  justify-content: space-between; /* Spalma le schede orizzontalmente in modo uniforme */
   width: 100%;
   max-width: 1800px;
   margin: 30px auto; /* Centra il contenitore e mantiene il margine superiore */
@@ -62,7 +61,7 @@ body {
   color: inherit;
   flex: 1 1 calc(25% - 30px); /* Prende 1/4 dello spazio meno il gap */
   min-width: 250px;
-  max-width: 400px; /* Aggiunto max-width per evitare che le schede si allarghino troppo su mobile/tablet */
+  max-width: none; /* Rimuove il vecchio limite ristretto per consentire espansione fluida */
   aspect-ratio: 2/3;
   transition: transform 0.3s ease;
 }
