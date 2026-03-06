@@ -141,12 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
         this.initializeDesktopDevice();
       }
 
-      // Aggiunge un resizer decurtato (debounce) per la rotazione del dispositivo mobile (portrait -> landscape)
+      // Aggiunge un resizer (debounce) per la rotazione del dispositivo mobile (portrait -> landscape)
       let resizeTimeout;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-          this.init(); // Reinizializza la logica UI in base al nuovo media (es. passaggio mouse/touch)
+          this.init(); // Reinizializza la logica UI
         }, 250);
       });
     }
@@ -178,14 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     handleTap(e) {
-      const currentScheda = e.currentTarget;
-      const targetId = currentScheda.getAttribute('href');
+      const currentSchedaLink = e.currentTarget;
+      const currentSchedaInner = currentSchedaLink.querySelector('.scheda');
+      const targetId = currentSchedaLink.getAttribute('href');
       
       e.preventDefault();
       const currentTime = Date.now();
       const timeSinceLastTap = currentTime - (this.lastTap || 0);
       const isQuickTap = timeSinceLastTap <= 300;
-      const isAlreadyActive = currentScheda.classList.contains('active');
+      const isAlreadyActive = currentSchedaInner && currentSchedaInner.classList.contains('active');
 
       // Haptic Feedback (se supportato)
       if (window.navigator && window.navigator.vibrate) {
@@ -206,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } else {
         // AZIONE: Singolo tocco, o tocco lento, o tocco su scheda nuova -> Apri la scheda
-        this.toggleScheda(currentScheda);
+        this.toggleScheda(currentSchedaLink);
       }
 
       this.lastTap = currentTime;
@@ -243,26 +244,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    toggleScheda(scheda) {
-      const isActive = scheda === this.activeScheda;
+    toggleScheda(schedaLink) {
+      const isSameLink = schedaLink === this.activeScheda;
+      const innerScheda = schedaLink.querySelector('.scheda');
 
-      if (isActive) {
-        scheda.classList.remove('active');
-        scheda.classList.remove('is-active');
+      if (isSameLink) {
+        if (innerScheda) {
+          innerScheda.classList.remove('active', 'is-active');
+        }
+        schedaLink.setAttribute('aria-expanded', 'false');
         this.activeScheda = null;
       } else {
         if (this.activeScheda) {
           this.resetScheda(this.activeScheda);
         }
-        scheda.classList.add('active');
-        scheda.classList.add('is-active');
-        this.activeScheda = scheda;
+        if (innerScheda) {
+          innerScheda.classList.add('active', 'is-active');
+        }
+        schedaLink.setAttribute('aria-expanded', 'true');
+        this.activeScheda = schedaLink;
       }
     }
 
-    resetScheda(scheda) {
-      scheda.classList.remove('active');
-      scheda.classList.remove('is-active');
+    resetScheda(schedaLink) {
+      const innerScheda = schedaLink.querySelector('.scheda');
+      if (innerScheda) {
+        innerScheda.classList.remove('active', 'is-active');
+      }
+      schedaLink.setAttribute('aria-expanded', 'false');
     }
   }
 
