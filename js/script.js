@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     t < 0.5 ? 32 * t ** 6 : 1 - (-2 * t + 2) ** 6 / 2;
 
   const smoothScroll = (targetElement) => {
-    const startPosition = window.pageYOffset;
+    const startPosition = window.scrollY;
     const targetPosition = targetElement.getBoundingClientRect().top + startPosition;
     const distance = targetPosition - startPosition;
 
@@ -137,45 +137,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     bindEvents() {
-      const isTouch = window.matchMedia('(hover: none)').matches;
-      
+      // Usiamo solo 'click' che gestisce nativamente sia mouse che touch
       this.schedaLinks.forEach(link => {
-        if (isTouch) {
-          link.addEventListener('touchend', (e) => this.handleTap(e));
-        } else {
-          link.addEventListener('click', (e) => this.handleClick(e));
+        link.addEventListener('click', (e) => this.handleInteraction(e));
+      });
+
+      // Swipe per scorrere tra le schede rimarrà basato sul touch
+      const swipeThreshold = 50;
+      let touchStartY = 0;
+
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      document.addEventListener('touchend', (e) => {
+        const touchDistance = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(touchDistance) > swipeThreshold) {
+          this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
         }
-      });
-
-      if (isTouch) {
-        const swipeThreshold = 50;
-        let touchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-          touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-          const touchDistance = e.changedTouches[0].clientY - touchStartY;
-          if (Math.abs(touchDistance) > swipeThreshold) {
-            this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
-          }
-        }, { passive: true });
-      }
-
-      // Handler unico per il resize (debounce logico senza duplicare eventi)
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          // Nota: il browser ricalcola da solo i CSS. 
-          // Reinizializzare i listener o ARIA qui è inutile o dannoso (memory leak e dupe bug)
-          // Manteniamo il debounce solo nel caso serva un futuro ricalcolo JS
-        }, 250);
-      });
+      }, { passive: true });
     }
 
-    handleTap(e) {
+    handleInteraction(e) {
       const currentSchedaLink = e.currentTarget;
       const currentSchedaInner = currentSchedaLink.querySelector('.scheda');
       const targetId = currentSchedaLink.getAttribute('href');
@@ -183,17 +166,17 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const currentTime = Date.now();
       const timeSinceLastTap = currentTime - (this.lastTap || 0);
-      const isQuickTap = timeSinceLastTap <= 300;
+      const isQuickTap = timeSinceLastTap <= 400; // Leggermente aumentato per una migliore ux sul doppio tocco effettivo
       const isAlreadyActive = currentSchedaInner && currentSchedaInner.classList.contains('active');
 
-      // Haptic Feedback (se supportato)
+      // Haptic Feedback (se supportato e abilitato dall'utente sul device)
       if (window.navigator && window.navigator.vibrate) {
         window.navigator.vibrate(isQuickTap && isAlreadyActive ? 100 : 50);
       }
 
-      // Logica Navigazione vs Apertura
+      // Logica Navigazione vs Apertura (1 Tocco apre, 2 Tocchi scrolla)
       if (isQuickTap && isAlreadyActive) {
-        // AZIONE: Doppio tocco sulla stessa scheda già aperta -> Naviga
+        // AZIONE: Doppio tocco / click sulla stessa scheda già aperta -> Naviga
         if (targetId.startsWith('mailto:')) {
           window.location.href = targetId;
         } else {
@@ -204,23 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       } else {
-        // AZIONE: Singolo tocco, o tocco lento, o tocco su scheda nuova -> Apri la scheda
+        // AZIONE: Singolo tocco / click su nuova scheda -> Apri la scheda (Espandi)
         this.toggleScheda(currentSchedaLink);
       }
 
       this.lastTap = currentTime;
-    }
-
-    handleClick(e) {
-      const targetId = e.currentTarget.getAttribute('href');
-      if (targetId.startsWith('mailto:')) return true;
-      e.preventDefault();
-
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        smoothScroll(targetElement);
-        history.pushState(null, '', targetId);
-      }
     }
 
     handleSwipe(direction) {
