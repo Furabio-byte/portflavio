@@ -57,9 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentYear = new Date().getFullYear();
       const lastTwoDigits = currentYear % 100;
       const savedYear = this.getSavedYear();
+      
+      // Calcola e assegna sempre il numero corretto all'elemento visuale, forzando l'aggiornamento sull'HTML hardcoded ("5")
+      this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits : lastTwoDigits % 10;
 
+      // Aggiorna il localStorage in disparte solo se è cambiato l'anno
       if (!savedYear || currentYear !== savedYear) {
-        this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits : lastTwoDigits % 10;
         this.saveYear(currentYear);
       }
     }
