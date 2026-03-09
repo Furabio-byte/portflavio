@@ -163,7 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Aspetta che il DOM sia pronto per calcolare le dimensioni reali
       setTimeout(() => {
-        const totalPages = Math.ceil(scroller.scrollWidth / scroller.clientWidth);
+        const cards = scroller.querySelectorAll('.sub-scheda');
+        const pagesByScroll = Math.ceil(scroller.scrollWidth / scroller.clientWidth);
+        // Non mostrare MAI più dots delle card reali (i padding extra possono gonfiare scrollWidth)
+        const totalPages = Math.min(pagesByScroll, cards.length);
 
         for (let i = 0; i < totalPages; i++) {
           const dot = document.createElement('span');
