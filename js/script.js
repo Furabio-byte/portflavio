@@ -160,42 +160,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buildDots(dotIndicator, scroller) {
       dotIndicator.innerHTML = '';
+      const cards = scroller.querySelectorAll('.sub-scheda');
+      if (cards.length === 0) return;
 
-      // Aspetta che il DOM sia pronto per calcolare le dimensioni reali
-      setTimeout(() => {
-        const cards = scroller.querySelectorAll('.sub-scheda');
-        const pagesByScroll = Math.ceil(scroller.scrollWidth / scroller.clientWidth);
-        // Non mostrare MAI più dots delle card reali (i padding extra possono gonfiare scrollWidth)
-        const totalPages = Math.min(pagesByScroll, cards.length);
+      cards.forEach((card, i) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
 
-        for (let i = 0; i < totalPages; i++) {
-          const dot = document.createElement('span');
-          dot.classList.add('dot');
-          if (i === 0) dot.classList.add('active');
-
-          // Click su dot: salta alla pagina corrispondente
-          dot.addEventListener('click', () => {
-            scroller.scrollTo({
-              left: i * scroller.clientWidth,
-              behavior: 'smooth'
-            });
+        dot.addEventListener('click', () => {
+          scroller.scrollTo({
+            left: card.offsetLeft - scroller.offsetLeft,
+            behavior: 'smooth'
           });
+        });
 
-          dotIndicator.appendChild(dot);
-        }
-      }, 100);
+        dotIndicator.appendChild(dot);
+      });
     }
 
     updateActiveDot(scroller, dotIndicator) {
       const dots = dotIndicator.querySelectorAll('.dot');
+      const cards = scroller.querySelectorAll('.sub-scheda');
       if (dots.length === 0) return;
 
-      // Calcola la pagina attuale in base alla posizione di scroll
-      const currentPage = Math.round(scroller.scrollLeft / scroller.clientWidth);
+      const viewportCenter = scroller.scrollLeft + scroller.clientWidth / 2;
+      let closestIndex = 0;
+      let closestDist = Infinity;
 
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentPage);
+      cards.forEach((card, i) => {
+        const cardCenter = card.offsetLeft - scroller.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(viewportCenter - cardCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closestIndex = i;
+        }
       });
+
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
     }
   }
 
