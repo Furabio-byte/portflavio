@@ -466,6 +466,17 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
     scroll-snap-align: start;
   }
 
+  /* Su mobile: niente animazione width (crea forme quadrate brutte a metà transizione).
+     Il dot attivo è semplicemente più largo e opaco, senza intermediari. */
+  .dot {
+    transition: opacity 0.1s ease;
+  }
+
+  .dot.active {
+    width: 24px;
+    transition: opacity 0.1s ease;
+  }
+
   /* OTTIMIZZAZIONE SPAZI ESTERNI (INIZIO E FINE PAGINA) */
   body {
     padding: 15px; /* Riduco leggermente il padding globale per fare spazio ai 15px del margin della sezione superiore */
