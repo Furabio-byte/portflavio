@@ -436,6 +436,7 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   .sezione-contenuto {
     margin: 0 auto 30px; /* Zero margin top, 30px margin bottom esatti. Nessun margine che collassa! */
     height: 70vh;
+    padding: 20px 10px; /* Bordo laterale ridotto del 50% (10px invece degli standard 20px) per mostrare più scheda sul lato destro */
   }
 
   /* SCHEDE PRINCIPALI IN COLONNA UNA SOTTO L'ALTRA */
