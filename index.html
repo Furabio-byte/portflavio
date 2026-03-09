@@ -1,200 +1,453 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta name="description" content="Portfolio personale di Flavio">
- <meta name="theme-color" content="#808000">
- <meta name="color-scheme" content="light dark">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio personale di Flavio">
+  <meta name="theme-color" content="#808000">
+  <meta name="color-scheme" content="light dark">
 
- <!-- Impostazioni di sicurezza -->
- <meta http-equiv="X-Content-Type-Options" content="nosniff">
- <meta http-equiv="X-Frame-Options" content="DENY">
- <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com mailto:; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
+  <!-- Impostazioni di sicurezza -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com mailto:; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
 
- <!-- Open Graph Meta Tags -->
- <meta property="og:title" content="Portflavio - Portfolio Personale">
- <meta property="og:description" content="Portfolio personale di Flavio, scopri i miei progetti e il mio percorso.">
- <meta property="og:type" content="website">
- <meta property="og:url" content="https://www.portflavio.it">
- <meta property="og:image" content="https://www.portflavio.it/images/og-image.jpg">
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Portflavio - Portfolio Personale">
+  <meta property="og:description" content="Portfolio personale di Flavio, scopri i miei progetti e il mio percorso.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.portflavio.it">
+  <meta property="og:image" content="https://www.portflavio.it/images/og-image.jpg">
 
- <title>Portflavio - Portfolio Personale</title>
+  <title>Portflavio - Portfolio Personale</title>
 
- <!-- Collegamento ai font di Google -->
- <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet">
+  <!-- Collegamento ai font di Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet">
 
- <!-- Collegamento al file CSS -->
- <link rel="stylesheet" href="css/style.css">
+  <!-- Collegamento al file CSS -->
+  <link rel="stylesheet" href="css/style.css">
 
- <!-- Icone del sito -->
- <link rel="icon" type="image/svg+xml" href="favicon.svg">
- <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
- <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Icone del sito -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
+
 <body>
   <!-- Div Cursore Dinamico -->
   <div class="custom-cursor"></div>
 
- <header>
-   <nav class="schede-container" aria-label="Navigazione principale">
-     <!-- Progetto -->
-     <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
-       <article class="scheda">
-         <span class="lettera" aria-hidden="true">P</span>
-         <span class="parola">Project</span>
-         <span class="numero">2</span>
-       </article>
-     </a>
+  <header>
+    <nav class="schede-container" aria-label="Navigazione principale">
+      <!-- Progetto -->
+      <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">P</span>
+          <span class="parola">Project</span>
+          <span class="numero">2</span>
+        </article>
+      </a>
 
-     <!-- Others -->
-     <a href="#others" class="scheda-link" aria-label="Altri lavori">
-       <article class="scheda">
-         <span class="lettera" aria-hidden="true">O</span>
-         <span class="parola">Others</span>
-         <span class="numero">0</span>
-       </article>
-     </a>
+      <!-- Others -->
+      <a href="#others" class="scheda-link" aria-label="Altri lavori">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">O</span>
+          <span class="parola">Others</span>
+          <span class="numero">0</span>
+        </article>
+      </a>
 
-     <!-- Road -->
-     <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi">
-       <article class="scheda">
-         <span class="lettera" aria-hidden="true">R</span>
-         <span class="parola">Road</span>
-         <span class="numero">2</span>
-       </article>
-     </a>
+      <!-- Road -->
+      <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">R</span>
+          <span class="parola">Road</span>
+          <span class="numero">2</span>
+        </article>
+      </a>
 
-     <!-- Text -->
-     <a href="mailto:info@portflavio.it" class="scheda-link" aria-label="Contattami via email">
-       <article class="scheda">
-         <span class="lettera" aria-hidden="true">T</span>
-         <span class="parola">Text</span>
-         <span class="numero">5</span>
-       </article>
-     </a>
-   </nav>
- </header>
+      <!-- Text -->
+      <a href="mailto:info@portflavio.it" class="scheda-link" aria-label="Contattami via email">
+        <article class="scheda">
+          <span class="lettera" aria-hidden="true">T</span>
+          <span class="parola">Text</span>
+          <span class="numero">5</span>
+        </article>
+      </a>
+    </nav>
+  </header>
 
- <main id="main-content">
-   <h1 class="sr-only" aria-hidden="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">Portfolio Personale di Flavio</h1>
-   <!-- Sezione Project -->
-   <section id="project" class="text-page-container reveal">
-     <div class="sezione-contenuto">
-       <div class="text-content">
-         <h2 class="text-title">Projects</h2>
-         <div class="text-description">
-           <div class="scroll-container">
-             <div class="sub-schede-container">
-               <div class="sub-scheda">
-                 <img src="images/project1.jpg" alt="Progetto 1" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/project2.jpg" alt="Progetto 2" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/project3.jpg" alt="Progetto 3" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/project4.jpg" alt="Progetto 4" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/project5.jpg" alt="Progetto 5" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/project6.jpg" alt="Progetto 6" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-             </div>
-             <div class="scroll-buttons">
-               <button type="button" class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
-               <button type="button" class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </section>
-
-   <!-- Sezione Others -->
-   <section id="others" class="text-page-container reveal">
-     <div class="sezione-contenuto">
-       <div class="text-content">
-         <h2 class="text-title">Others</h2>
-         <div class="text-description">
-           <div class="scroll-container">
-             <div class="sub-schede-container">
-               <div class="sub-scheda">
-                 <img src="images/others1.jpg" alt="Altri 1" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/others2.jpg" alt="Altri 2" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/others3.jpg" alt="Altri 3" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/others4.jpg" alt="Altri 4" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/others5.jpg" alt="Altri 5" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/others6.jpg" alt="Altri 6" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-             </div>
-             <div class="scroll-buttons">
-               <button type="button" class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
-               <button type="button" class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </section>
-
-   <!-- Sezione Road -->
-   <section id="road" class="text-page-container reveal">
-     <div class="sezione-contenuto">
-       <div class="text-content">
-         <h2 class="text-title">Road</h2>
-         <div class="text-description">
-           <div class="scroll-container">
-             <div class="sub-schede-container">
-               <div class="sub-scheda">
-                 <img src="images/road1.jpg" alt="Percorso 1" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/road2.jpg" alt="Percorso 2" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/road3.jpg" alt="Percorso 3" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/road4.jpg" alt="Percorso 4" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/road5.jpg" alt="Percorso 5" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-               <div class="sub-scheda">
-                 <img src="images/road6.jpg" alt="Percorso 6" class="sub-scheda-img" loading="lazy" width="400" height="600">
-               </div>
-             </div>
-             <div class="scroll-buttons">
-               <button class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
-               <button class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </section>
+  <main id="main-content">
+    <h1 class="sr-only" aria-hidden="true"
+      style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+      Portfolio Personale di Flavio</h1>
+    <!-- Sezione Project -->
+    <section id="project" class="text-page-container reveal">
+      <div class="sezione-contenuto">
+        <div class="text-content">
+          <h2 class="text-title">Projects</h2>
+          <div class="text-description">
+            <div class="scroll-container">
+              <div class="sub-schede-container">
+                <!-- Project Card 1 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[COMING SOON]</span>
+                    <span class="card-numero">01</span>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-desc" style="margin-top: 8px;">Qui troverai i miei prossimi progetti, le applicazioni
+                      web in via di sviluppo e molto altro.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Loading...</span>
+                      <span>Next Project</span>
+                    </div>
+                  </div>
+                </div>
 
 
- </main>
+              </div>
+              <div class="scroll-buttons">
+                <button type="button" class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+                <button type="button" class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
- <!-- Collegamento al file JavaScript -->
- <script src="js/script.js"></script>
+    <!-- Sezione Others -->
+    <section id="others" class="text-page-container reveal">
+      <div class="sezione-contenuto">
+        <div class="text-content">
+          <h2 class="text-title">Others</h2>
+          <div class="text-description">
+            <div class="scroll-container">
+              <div class="sub-schede-container">
+                <!-- Card 1: Cisco HTML -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">01</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">HTML Essentials</h3>
+                    <p class="card-desc">Cisco Networking Academy.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Fondamenti e best practice del web development.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>HTML</span>
+                      <span>Web Dev</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2: IFOA Excel -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">02</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Excel Avanzato + VBA</h3>
+                    <p class="card-desc">IFOA - Training Institute.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Competenze avanzate in Microsoft Excel, analisi dei
+                      dati e programmazione Macro con VBA.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Microsoft Excel</span>
+                      <span>VBA</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 3: Google AI -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">03</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Introduction to Generative AI</h3>
+                    <p class="card-desc">Google Cloud Skills Boost.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali di intelligenza artificiale
+                      generativa e applicazioni pratiche su Google Cloud.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Generative AI</span>
+                      <span>Google Cloud</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 4: Simplilearn SQL DA -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">04</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">SQL for Data Analysis</h3>
+                    <p class="card-desc">Simplilearn.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Analisi dei dati tramite interrogazioni complesse su
+                      Server Microsoft SQL.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>SQL</span>
+                      <span>Data Analysis</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 5: Simplilearn Intro SQL -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">05</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Introduction to SQL</h3>
+                    <p class="card-desc">Simplilearn.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Gestione Database relazionali e fondamenti di
+                      scrittura di query SQL.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Relational DB</span>
+                      <span>Queries</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 6: Linux -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">06</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Linux Unhatched</h3>
+                    <p class="card-desc">Cisco Networking Academy.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Fondamenti di Linux (CLI).</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Cisco Academy</span>
+                      <span>Linux</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 7: Cyber -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">07</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Cybersecurity</h3>
+                    <p class="card-desc">Cisco Networking Academy.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali di sicurezza e reti.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Cisco Academy</span>
+                      <span>Security</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 8: CEFI -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[DIPLOMA CEFI]</span>
+                    <span class="card-numero">08</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Amministratore di Rete Linux</h3>
+                    <p class="card-desc">Istituto Cefi Informatica.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Corso di formazione per l'amministrazione,
+                      configurazione e sicurezza di reti basate su sistemi Linux.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>SysAdmin</span>
+                      <span>Networking</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 9: Python -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[CERTIFICAZIONE]</span>
+                    <span class="card-numero">09</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Programmatore Python</h3>
+                    <p class="card-desc">Fondazione ALESS Don Milani - ETS.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali della programmazione procedurale
+                      e orientata agli oggetti con linguaggio Python.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Python</span>
+                      <span>Programmazione</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="scroll-buttons">
+                <button type="button" class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+                <button type="button" class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Road -->
+    <section id="road" class="text-page-container reveal">
+      <div class="sezione-contenuto">
+        <div class="text-content">
+          <h2 class="text-title">Road</h2>
+          <div class="text-description">
+            <div class="scroll-container">
+              <div class="sub-schede-container">
+                <!-- Road Card 1 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[ESPERIENZA]</span>
+                    <span class="card-numero">01</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">IT Support Specialist</h3>
+                    <p class="card-desc">Assinde S.r.l.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Interfaccia tecnica tra azienda e team di sviluppo.
+                      Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale
+                      interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>SQL</span>
+                      <span>Database Management</span>
+                      <span>Data Analysis</span>
+                      <span>IT Support</span>
+                      <span>IT Asset Management</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Road Card 2 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[ESPERIENZA]</span>
+                    <span class="card-numero">02</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Sistemista IT</h3>
+                    <p class="card-desc">5 Emme Informatica S.p.A.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Esperienza di supporto sistemistico e IT presso le
+                      strutture del Senato della Repubblica Italiana.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>IT Support</span>
+                      <span>Sistemista</span>
+                      <span>Supporto Hardware/Software</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Road Card 3 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[ESPERIENZA]</span>
+                    <span class="card-numero">03</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Programmatore Python Junior</h3>
+                    <p class="card-desc">Access Point Coop. Soc. Onlus.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Sviluppo, manutenzione e ottimizzazione del codice
+                      Python per la creazione di un videogioco a uso interno aziendale.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Python</span>
+                      <span>Game Programming</span>
+                      <span>OOP</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Road Card 4 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[ESPERIENZA]</span>
+                    <span class="card-numero">04</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-titolo">Assistenza Helpdesk IT</h3>
+                    <p class="card-desc">Tecnotrans S.R.L.</p>
+                    <p class="card-desc" style="margin-top: 8px;">Supporto tecnico di primo livello, risoluzione
+                      incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>IT Helpdesk</span>
+                      <span>Troubleshooting</span>
+                      <span>Assistenza</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Road Card 5 -->
+                <div class="sub-scheda card-astratta">
+                  <div class="card-header">
+                    <span class="card-tag">[COMING SOON]</span>
+                    <span class="card-numero">05</span>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-desc" style="margin-top: 8px;">Qui troverai i prossimi step della mia carriera
+                      professionale.</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-tech">
+                      <span>Loading...</span>
+                      <span>Next Step</span>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="scroll-buttons">
+                <button class="scroll-btn scroll-left" aria-label="Scorri a sinistra">←</button>
+                <button class="scroll-btn scroll-right" aria-label="Scorri a destra">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- Collegamento al file JavaScript -->
+  <script src="js/script.js"></script>
 </body>
+
 </html>

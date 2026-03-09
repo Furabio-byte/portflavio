@@ -108,6 +108,49 @@ document.addEventListener('DOMContentLoaded', () => {
           leftBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'left'));
           rightBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'right'));
         }
+
+        // --- INIZIO DRAG TO SCROLL ---
+        if (subSchedeContainer) {
+          let isDown = false;
+          let startX;
+          let scrollLeft;
+
+          subSchedeContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            subSchedeContainer.classList.add('grabbing');
+            // Imposta il cursore di trascinamento tramite CSS in style.css
+            subSchedeContainer.style.cursor = 'grabbing';
+            startX = e.pageX - subSchedeContainer.offsetLeft;
+            scrollLeft = subSchedeContainer.scrollLeft;
+            
+            // Previene comportamenti standard di drag delle immagini / elementi
+            e.preventDefault(); 
+          });
+
+          subSchedeContainer.addEventListener('mouseleave', () => {
+            isDown = false;
+            subSchedeContainer.classList.remove('grabbing');
+            subSchedeContainer.style.cursor = 'grab';
+          });
+
+          subSchedeContainer.addEventListener('mouseup', () => {
+            isDown = false;
+            subSchedeContainer.classList.remove('grabbing');
+            subSchedeContainer.style.cursor = 'grab';
+          });
+
+          subSchedeContainer.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - subSchedeContainer.offsetLeft;
+            const walk = (x - startX) * 2; // Moltiplicatore velocità scorrimento trascinamento
+            subSchedeContainer.scrollLeft = scrollLeft - walk;
+          });
+          
+          // Imposta cursore iniziale
+          subSchedeContainer.style.cursor = 'grab';
+        }
+        // --- FINE DRAG TO SCROLL ---
       });
     }
 
