@@ -436,7 +436,6 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   .sezione-contenuto {
     margin: 0 auto 30px; /* Zero margin top, 30px margin bottom esatti. Nessun margine che collassa! */
     height: 70vh;
-    padding: 20px 10px; /* Bordo laterale ridotto del 50% (10px invece degli standard 20px) per mostrare più scheda sul lato destro */
   }
 
   /* SCHEDE PRINCIPALI IN COLONNA UNA SOTTO L'ALTRA */
@@ -456,6 +455,11 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 
   /* ADATTAMENTO SPAZIATURA SUB-SCHEDE ("Tra una scheda e l'altra") */
   /* Imposto il gap a 30px per pareggiare lo spazio delle schede P-O-R-T */
+  .scroll-container {
+    padding-left: 5px;  /* Ridotto da 40px: evita il taglio prematuro delle card a sinistra */
+    padding-right: 5px; /* Ridotto da 40px: evita il taglio prematuro delle card a destra */
+  }
+
   .sub-schede-container {
     gap: 30px;
   }
