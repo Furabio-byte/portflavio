@@ -94,75 +94,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
   class ScrollHandler {
     constructor() {
-      this.initializeScrollButtons();
+      this.initializeCarousels();
     }
 
-    initializeScrollButtons() {
+    initializeCarousels() {
       const containers = document.querySelectorAll('.scroll-container');
       containers.forEach(container => {
         const subSchedeContainer = container.querySelector('.sub-schede-container');
-        const leftBtn = container.querySelector('.scroll-btn.scroll-left');
-        const rightBtn = container.querySelector('.scroll-btn.scroll-right');
+        const dotIndicator = container.querySelector('.dot-indicator');
+        const cards = subSchedeContainer ? subSchedeContainer.querySelectorAll('.sub-scheda') : [];
 
-        if (leftBtn && rightBtn && subSchedeContainer) {
-          leftBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'left'));
-          rightBtn.addEventListener('click', () => this.scroll(subSchedeContainer, 'right'));
-        }
+        if (!subSchedeContainer || !dotIndicator || cards.length === 0) return;
 
-        // --- INIZIO DRAG TO SCROLL ---
-        if (subSchedeContainer) {
-          let isDown = false;
-          let startX;
-          let scrollLeft;
+        // Genera i dots dinamicamente in base al numero di card
+        this.buildDots(dotIndicator, cards, subSchedeContainer);
 
-          subSchedeContainer.addEventListener('mousedown', (e) => {
-            isDown = true;
-            subSchedeContainer.classList.add('grabbing');
-            // Imposta il cursore di trascinamento tramite CSS in style.css
-            subSchedeContainer.style.cursor = 'grabbing';
-            startX = e.pageX - subSchedeContainer.offsetLeft;
-            scrollLeft = subSchedeContainer.scrollLeft;
-            
-            // Previene comportamenti standard di drag delle immagini / elementi
-            e.preventDefault(); 
-          });
+        // Aggiorna il dot attivo allo scroll
+        subSchedeContainer.addEventListener('scroll', () => {
+          this.updateActiveDot(subSchedeContainer, dotIndicator, cards);
+        }, { passive: true });
 
-          subSchedeContainer.addEventListener('mouseleave', () => {
-            isDown = false;
-            subSchedeContainer.classList.remove('grabbing');
-            subSchedeContainer.style.cursor = 'grab';
-          });
+        // --- DRAG TO SCROLL ---
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
-          subSchedeContainer.addEventListener('mouseup', () => {
-            isDown = false;
-            subSchedeContainer.classList.remove('grabbing');
-            subSchedeContainer.style.cursor = 'grab';
-          });
+        subSchedeContainer.addEventListener('mousedown', (e) => {
+          isDown = true;
+          subSchedeContainer.style.cursor = 'grabbing';
+          startX = e.pageX - subSchedeContainer.offsetLeft;
+          scrollLeft = subSchedeContainer.scrollLeft;
+          e.preventDefault();
+        });
 
-          subSchedeContainer.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - subSchedeContainer.offsetLeft;
-            const walk = (x - startX) * 2; // Moltiplicatore velocità scorrimento trascinamento
-            subSchedeContainer.scrollLeft = scrollLeft - walk;
-          });
-          
-          // Imposta cursore iniziale
+        subSchedeContainer.addEventListener('mouseleave', () => {
+          isDown = false;
           subSchedeContainer.style.cursor = 'grab';
-        }
-        // --- FINE DRAG TO SCROLL ---
+        });
+
+        subSchedeContainer.addEventListener('mouseup', () => {
+          isDown = false;
+          subSchedeContainer.style.cursor = 'grab';
+        });
+
+        subSchedeContainer.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - subSchedeContainer.offsetLeft;
+          const walk = (x - startX) * 2;
+          subSchedeContainer.scrollLeft = scrollLeft - walk;
+        });
+
+        subSchedeContainer.style.cursor = 'grab';
       });
     }
 
-    scroll(container, direction) {
-      const scrollAmount = container.offsetWidth * 0.8;
-      const newScrollLeft = direction === 'left'
-        ? container.scrollLeft - scrollAmount
-        : container.scrollLeft + scrollAmount;
+    buildDots(dotIndicator, cards, scroller) {
+      dotIndicator.innerHTML = '';
+      cards.forEach((card, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
 
-      container.scrollTo({
-        left: newScrollLeft,
-        behavior: 'smooth'
+        dot.addEventListener('click', () => {
+          scroller.scrollTo({
+            left: card.offsetLeft - scroller.offsetLeft - 15,
+            behavior: 'smooth'
+          });
+        });
+
+        dotIndicator.appendChild(dot);
+      });
+    }
+
+    updateActiveDot(scroller, dotIndicator, cards) {
+      const dots = dotIndicator.querySelectorAll('.dot');
+      const scrollCenter = scroller.scrollLeft + scroller.offsetWidth / 2;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft - scroller.offsetLeft + card.offsetWidth / 2;
+        const distance = Math.abs(scrollCenter - cardCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === closestIndex);
       });
     }
   }

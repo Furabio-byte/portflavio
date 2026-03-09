@@ -342,33 +342,29 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   transform-origin: left;
 }
  
-/* BOTTONI DI SCROLL */
-.scroll-buttons {
+/* DOT INDICATOR (ex frecce) */
+.dot-indicator {
   display: flex;
-  gap: 20px;
+  gap: 8px;
   justify-content: center;
-  margin-top: -20px;
-}
- 
-.scroll-btn {
-  background: var(--colore-sfondo-scheda);
-  color: var(--colore-testo);
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.3s ease, transform 0.2s ease;
-  font-size: 1.2rem;
+  align-items: center;
+  padding: 12px 0 4px;
 }
 
-.scroll-btn:hover,
-.scroll-btn:focus-visible {
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50px;
+  background-color: var(--colore-testo);
+  opacity: 0.25;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dot.active {
+  width: 24px; /* Si espande a pillola */
   opacity: 1;
-  transform: scale(1.1);
-  outline: 2px solid var(--colore-testo);
-  outline-offset: 2px;
 }
  
 /* TITOLI E TESTI */
