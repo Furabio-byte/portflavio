@@ -112,7 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prima costruzione
         rebuildDots();
 
-        // `scrollend` si attiva solo quando scroll + snap animation sono finiti (zero scia)
+        // scroll real-time: aggiorna i dots durante il movimento → nessun "nero" di mezzo
+        subSchedeContainer.addEventListener('scroll', () => {
+          this.updateActiveDot(subSchedeContainer, dotIndicator);
+        }, { passive: true });
+
+        // scrollend: aggiorna alla posizione finale precisa dopo lo snap (zero scia)
         // Fallback con debounce 250ms per browser che non supportano scrollend
         const onScrollEnd = () => this.updateActiveDot(subSchedeContainer, dotIndicator);
         if ('onscrollend' in window) {
