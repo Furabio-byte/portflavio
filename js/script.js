@@ -112,14 +112,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prima costruzione
         rebuildDots();
 
-        // Aggiorna dot attivo con debounce 120ms — elimina la scia sullo scroll lento mobile
-        let scrollDebounce;
-        subSchedeContainer.addEventListener('scroll', () => {
-          clearTimeout(scrollDebounce);
-          scrollDebounce = setTimeout(() => {
-            this.updateActiveDot(subSchedeContainer, dotIndicator);
-          }, 120);
-        }, { passive: true });
+        // `scrollend` si attiva solo quando scroll + snap animation sono finiti (zero scia)
+        // Fallback con debounce 250ms per browser che non supportano scrollend
+        const onScrollEnd = () => this.updateActiveDot(subSchedeContainer, dotIndicator);
+        if ('onscrollend' in window) {
+          subSchedeContainer.addEventListener('scrollend', onScrollEnd, { passive: true });
+        } else {
+          let scrollDebounce;
+          subSchedeContainer.addEventListener('scroll', () => {
+            clearTimeout(scrollDebounce);
+            scrollDebounce = setTimeout(onScrollEnd, 250);
+          }, { passive: true });
+        }
 
         // Ricalcola i dots se la finestra cambia dimensione (es. rotazione schermo su mobile)
         if (window.ResizeObserver) {
