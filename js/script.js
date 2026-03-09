@@ -112,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prima costruzione
         rebuildDots();
 
-        // Aggiorna il dot attivo allo scroll con debounce (evita la "scia" durante scroll lento)
+        // Aggiorna dot attivo con debounce 120ms — elimina la scia sullo scroll lento mobile
         let scrollDebounce;
         subSchedeContainer.addEventListener('scroll', () => {
           clearTimeout(scrollDebounce);
           scrollDebounce = setTimeout(() => {
             this.updateActiveDot(subSchedeContainer, dotIndicator);
-          }, 50);
+          }, 120);
         }, { passive: true });
 
         // Ricalcola i dots se la finestra cambia dimensione (es. rotazione schermo su mobile)
@@ -167,20 +167,42 @@ document.addEventListener('DOMContentLoaded', () => {
       const cards = scroller.querySelectorAll('.sub-scheda');
       if (cards.length === 0) return;
 
-      cards.forEach((card, i) => {
+      const isMobile = window.innerWidth <= 768;
+
+      let totalDots;
+      if (isMobile) {
+        // Mobile: 1 dot per card (una card alla volta nel viewport)
+        totalDots = cards.length;
+      } else {
+        // Desktop: calcola quante card entrano nel viewport e quante "fermate" servono
+        const cardWidth = cards[0].offsetWidth + 40; // +40 per il gap
+        const cardsPerView = Math.max(1, Math.floor(scroller.clientWidth / cardWidth));
+        totalDots = Math.max(1, Math.ceil(cards.length / cardsPerView));
+      }
+
+      for (let i = 0; i < totalDots; i++) {
         const dot = document.createElement('span');
         dot.classList.add('dot');
         if (i === 0) dot.classList.add('active');
 
         dot.addEventListener('click', () => {
-          scroller.scrollTo({
-            left: card.offsetLeft - scroller.offsetLeft,
-            behavior: 'smooth'
-          });
+          if (isMobile) {
+            // Mobile: salta direttamente alla card corrispondente
+            scroller.scrollTo({
+              left: cards[i].offsetLeft - scroller.offsetLeft,
+              behavior: 'smooth'
+            });
+          } else {
+            // Desktop: salta alla "fermata" corrispondente
+            scroller.scrollTo({
+              left: i * scroller.clientWidth,
+              behavior: 'smooth'
+            });
+          }
         });
 
         dotIndicator.appendChild(dot);
-      });
+      }
     }
 
     updateActiveDot(scroller, dotIndicator) {
@@ -188,20 +210,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const cards = scroller.querySelectorAll('.sub-scheda');
       if (dots.length === 0) return;
 
-      const viewportCenter = scroller.scrollLeft + scroller.clientWidth / 2;
-      let closestIndex = 0;
-      let closestDist = Infinity;
+      const isMobile = window.innerWidth <= 768;
 
-      cards.forEach((card, i) => {
-        const cardCenter = card.offsetLeft - scroller.offsetLeft + card.offsetWidth / 2;
-        const dist = Math.abs(viewportCenter - cardCenter);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closestIndex = i;
-        }
-      });
-
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
+      if (isMobile) {
+        // Mobile: dot attivo = card più vicina al centro del viewport
+        const viewportCenter = scroller.scrollLeft + scroller.clientWidth / 2;
+        let closestIndex = 0;
+        let closestDist = Infinity;
+        cards.forEach((card, i) => {
+          const cardCenter = card.offsetLeft - scroller.offsetLeft + card.offsetWidth / 2;
+          const dist = Math.abs(viewportCenter - cardCenter);
+          if (dist < closestDist) { closestDist = dist; closestIndex = i; }
+        });
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
+      } else {
+        // Desktop: dot attivo = fermata corrente in base allo scroll
+        const currentPage = Math.round(scroller.scrollLeft / scroller.clientWidth);
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentPage));
+      }
     }
   }
 
