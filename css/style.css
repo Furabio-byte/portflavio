@@ -357,16 +357,13 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   border-radius: 50px;
   background-color: var(--colore-testo);
   opacity: 0.25;
-  transform: scaleX(1);
-  transform-origin: center;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: width 0.1s ease, opacity 0.1s ease;
   cursor: pointer;
   flex-shrink: 0;
-  will-change: transform, opacity;
 }
 
 .dot.active {
-  transform: scaleX(3); /* Si "stira" in pillola via GPU, zero scia */
+  width: 24px;
   opacity: 1;
 }
  
