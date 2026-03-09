@@ -106,15 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!subSchedeContainer || !dotIndicator || cards.length === 0) return;
 
-        // Genera i dots dinamicamente in base al numero di card
-        this.buildDots(dotIndicator, cards, subSchedeContainer);
+        // Helper riutilizzabile per (ri)costruire i dots
+        const rebuildDots = () => this.buildDots(dotIndicator, subSchedeContainer);
 
-        // Aggiorna il dot attivo allo scroll
+        // Prima costruzione
+        rebuildDots();
+
+        // Aggiorna il dot attivo allo scroll (funziona sia su desktop che su touch mobile)
         subSchedeContainer.addEventListener('scroll', () => {
-          this.updateActiveDot(subSchedeContainer, dotIndicator, cards);
+          this.updateActiveDot(subSchedeContainer, dotIndicator);
         }, { passive: true });
 
-        // --- DRAG TO SCROLL ---
+        // Ricalcola i dots se la finestra cambia dimensione (es. rotazione schermo su mobile)
+        if (window.ResizeObserver) {
+          const resizeObserver = new ResizeObserver(() => rebuildDots());
+          resizeObserver.observe(subSchedeContainer);
+        }
+
+        // --- DRAG TO SCROLL (solo mouse/desktop) ---
         let isDown = false;
         let startX;
         let scrollLeft;
@@ -149,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    buildDots(dotIndicator, cards, scroller) {
+    buildDots(dotIndicator, scroller) {
       dotIndicator.innerHTML = '';
 
       // Aspetta che il DOM sia pronto per calcolare le dimensioni reali
@@ -174,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 100);
     }
 
-    updateActiveDot(scroller, dotIndicator, cards) {
+    updateActiveDot(scroller, dotIndicator) {
       const dots = dotIndicator.querySelectorAll('.dot');
       if (dots.length === 0) return;
 
