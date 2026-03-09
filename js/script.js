@@ -151,40 +151,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buildDots(dotIndicator, cards, scroller) {
       dotIndicator.innerHTML = '';
-      cards.forEach((card, index) => {
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        if (index === 0) dot.classList.add('active');
 
-        dot.addEventListener('click', () => {
-          scroller.scrollTo({
-            left: card.offsetLeft - scroller.offsetLeft - 15,
-            behavior: 'smooth'
+      // Aspetta che il DOM sia pronto per calcolare le dimensioni reali
+      setTimeout(() => {
+        const totalPages = Math.ceil(scroller.scrollWidth / scroller.clientWidth);
+
+        for (let i = 0; i < totalPages; i++) {
+          const dot = document.createElement('span');
+          dot.classList.add('dot');
+          if (i === 0) dot.classList.add('active');
+
+          // Click su dot: salta alla pagina corrispondente
+          dot.addEventListener('click', () => {
+            scroller.scrollTo({
+              left: i * scroller.clientWidth,
+              behavior: 'smooth'
+            });
           });
-        });
 
-        dotIndicator.appendChild(dot);
-      });
+          dotIndicator.appendChild(dot);
+        }
+      }, 100);
     }
 
     updateActiveDot(scroller, dotIndicator, cards) {
       const dots = dotIndicator.querySelectorAll('.dot');
-      const scrollCenter = scroller.scrollLeft + scroller.offsetWidth / 2;
+      if (dots.length === 0) return;
 
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const cardCenter = card.offsetLeft - scroller.offsetLeft + card.offsetWidth / 2;
-        const distance = Math.abs(scrollCenter - cardCenter);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
+      // Calcola la pagina attuale in base alla posizione di scroll
+      const currentPage = Math.round(scroller.scrollLeft / scroller.clientWidth);
 
       dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === closestIndex);
+        dot.classList.toggle('active', i === currentPage);
       });
     }
   }
