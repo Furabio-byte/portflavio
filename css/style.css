@@ -458,6 +458,12 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 
   .sub-schede-container {
     gap: 30px;
+    scroll-snap-type: x mandatory; /* Su mobile: le card scattano in posizione */
+  }
+
+  /* Ogni card si aggancia al bordo sinistro del viewport */
+  .sub-scheda {
+    scroll-snap-align: start;
   }
 
   /* OTTIMIZZAZIONE SPAZI ESTERNI (INIZIO E FINE PAGINA) */
