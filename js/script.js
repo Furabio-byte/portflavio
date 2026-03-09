@@ -112,9 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prima costruzione
         rebuildDots();
 
-        // Aggiorna il dot attivo allo scroll (funziona sia su desktop che su touch mobile)
+        // Aggiorna il dot attivo allo scroll con debounce (evita la "scia" durante scroll lento)
+        let scrollDebounce;
         subSchedeContainer.addEventListener('scroll', () => {
-          this.updateActiveDot(subSchedeContainer, dotIndicator);
+          clearTimeout(scrollDebounce);
+          scrollDebounce = setTimeout(() => {
+            this.updateActiveDot(subSchedeContainer, dotIndicator);
+          }, 50);
         }, { passive: true });
 
         // Ricalcola i dots se la finestra cambia dimensione (es. rotazione schermo su mobile)
