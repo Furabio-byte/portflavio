@@ -439,9 +439,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  class ContactFormHandler {
+    constructor() {
+      this.form = document.getElementById('contactForm');
+      if (!this.form) return;
+
+      this.emailInput = document.getElementById('contactEmail');
+      this.messageInput = document.getElementById('contactMessage');
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      this.form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const email = this.emailInput.value.trim();
+        const message = this.messageInput.value.trim();
+
+        if (!email || !message) return;
+
+        const subject = encodeURIComponent('Contatto dal portfolio');
+        const body = encodeURIComponent(
+          `Email: ${email}\n\nMessaggio:\n${message}`
+        );
+
+        window.location.href = `mailto:info@portflavio.it?subject=${subject}&body=${body}`;
+      });
+    }
+  }
+
   new RevealHandler();
   new CustomCursorHandler();
   new ContatoreSchede();
   new UIHandler();
   new ScrollHandler();
+  new ContactFormHandler();
 });
