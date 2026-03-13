@@ -173,15 +173,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buildDots(dotIndicator, scroller) {
       dotIndicator.innerHTML = '';
-      dotIndicator.classList.remove('mobile-dots');
       const cards = scroller.querySelectorAll('.sub-scheda');
       if (cards.length === 0) return;
 
       const isMobile = window.innerWidth <= 768;
 
       if (isMobile) {
-        // Mobile: indicatore compatto a finestra mobile per evitare file di dots troppo lunghe.
-        this.renderMobileDots(dotIndicator, scroller, 0);
+        for (let i = 0; i < cards.length; i++) {
+          const dot = document.createElement('span');
+          dot.classList.add('dot');
+          if (i === 0) dot.classList.add('active');
+
+          dot.addEventListener('click', () => {
+            scroller.scrollTo({
+              left: cards[i].offsetLeft - scroller.offsetLeft,
+              behavior: 'smooth'
+            });
+          });
+
+          dotIndicator.appendChild(dot);
+        }
         return;
       }
 
@@ -206,48 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dotIndicator.appendChild(dot);
       }
     }
-
-    renderMobileDots(dotIndicator, scroller, activeIndex) {
-      const cards = scroller.querySelectorAll('.sub-scheda');
-      const totalCards = cards.length;
-      const maxVisibleDots = Math.min(5, totalCards);
-
-      dotIndicator.innerHTML = '';
-      dotIndicator.classList.add('mobile-dots');
-
-      const startIndex = Math.max(
-        0,
-        Math.min(activeIndex - Math.floor(maxVisibleDots / 2), totalCards - maxVisibleDots)
-      );
-
-      for (let visibleIndex = 0; visibleIndex < maxVisibleDots; visibleIndex++) {
-        const cardIndex = startIndex + visibleIndex;
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        dot.dataset.cardIndex = cardIndex;
-
-        if (cardIndex === activeIndex) {
-          dot.classList.add('active');
-        }
-
-        dot.addEventListener('click', () => {
-          scroller.scrollTo({
-            left: cards[cardIndex].offsetLeft - scroller.offsetLeft,
-            behavior: 'smooth'
-          });
-        });
-
-        dotIndicator.appendChild(dot);
-      }
-
-      if (totalCards > maxVisibleDots) {
-        const counter = document.createElement('span');
-        counter.classList.add('dot-counter');
-        counter.textContent = `${activeIndex + 1}/${totalCards}`;
-        dotIndicator.appendChild(counter);
-      }
-    }
-
     updateActiveDot(scroller, dotIndicator) {
       const dots = dotIndicator.querySelectorAll('.dot');
       const cards = scroller.querySelectorAll('.sub-scheda');
@@ -265,8 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const dist = Math.abs(viewportCenter - cardCenter);
           if (dist < closestDist) { closestDist = dist; closestIndex = i; }
         });
-
-        this.renderMobileDots(dotIndicator, scroller, closestIndex);
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
       } else {
         if (dots.length === 0) return;
 

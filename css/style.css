@@ -477,23 +477,6 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
     transition: opacity 0.1s ease;
   }
 
-  .dot-indicator.mobile-dots {
-    min-height: 24px;
-    gap: 10px;
-    flex-wrap: nowrap;
-  }
-
-  .dot-counter {
-    font-family: sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--colore-testo);
-    opacity: 0.7;
-    margin-left: 8px;
-    flex-shrink: 0;
-  }
-
   /* OTTIMIZZAZIONE SPAZI ESTERNI (INIZIO E FINE PAGINA) */
   body {
     padding: 15px; /* Riduco leggermente il padding globale per fare spazio ai 15px del margin della sezione superiore */
