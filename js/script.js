@@ -449,11 +449,16 @@ document.addEventListener('DOMContentLoaded', () => {
       this.websiteInput = document.getElementById('contactWebsite');
       this.statusElement = document.getElementById('contactStatus');
       this.submitButton = document.querySelector('button[form="contactForm"]');
+      this.suggestionButtons = document.querySelectorAll('.contact-suggestion');
       this.apiUrl = window.PORTFLAVIO_CONFIG?.contactApiUrl || '';
       this.bindEvents();
     }
 
     bindEvents() {
+      this.suggestionButtons.forEach((button) => {
+        button.addEventListener('click', () => this.applySuggestedDomain(button.dataset.domain || ''));
+      });
+
       this.form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -512,6 +517,23 @@ document.addEventListener('DOMContentLoaded', () => {
           this.setPending(false);
         }
       });
+    }
+
+    applySuggestedDomain(domain) {
+      if (!domain) return;
+
+      const currentValue = this.emailInput.value.trim();
+      const localPart = currentValue.split('@')[0].trim();
+
+      if (!localPart) {
+        this.setStatus('Scrivi prima la parte iniziale della tua email.', true);
+        this.emailInput.focus();
+        return;
+      }
+
+      this.emailInput.value = `${localPart}${domain}`;
+      this.setStatus('', false);
+      this.emailInput.focus();
     }
 
     setPending(isPending) {

@@ -435,6 +435,31 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   pointer-events: none;
 }
 
+.contact-suggestions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: -2px;
+}
+
+.contact-suggestion {
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1px solid var(--colore-testo);
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contact-suggestion:hover {
+  background-color: var(--colore-testo);
+  color: var(--colore-sfondo-principale);
+}
+
 .contact-field {
   display: flex;
   flex-direction: column;
