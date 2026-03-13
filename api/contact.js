@@ -1,7 +1,14 @@
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const requestStore = new Map();
+
+function getAllowedOrigin() {
+  return process.env.ALLOWED_ORIGIN || "https://www.portflavio.it";
+}
 
 function setCorsHeaders(req, res) {
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || "https://www.portflavio.it";
+  const allowedOrigin = getAllowedOrigin();
   const requestOrigin = req.headers.origin;
   const origin = requestOrigin === allowedOrigin ? requestOrigin : allowedOrigin;
 
@@ -9,6 +16,33 @@ function setCorsHeaders(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
+}
+
+function getClientIp(req) {
+  const forwardedFor = req.headers["x-forwarded-for"];
+
+  if (typeof forwardedFor === "string" && forwardedFor.trim()) {
+    return forwardedFor.split(",")[0].trim();
+  }
+
+  return req.socket?.remoteAddress || "unknown";
+}
+
+function checkRateLimit(req) {
+  const now = Date.now();
+  const key = getClientIp(req);
+  const recentRequests = (requestStore.get(key) || []).filter(
+    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS
+  );
+
+  if (recentRequests.length >= RATE_LIMIT_MAX_REQUESTS) {
+    return { ok: false, retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000) };
+  }
+
+  recentRequests.push(now);
+  requestStore.set(key, recentRequests);
+
+  return { ok: true };
 }
 
 function validatePayload(payload) {
@@ -42,6 +76,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
+  const allowedOrigin = getAllowedOrigin();
+  if (req.headers.origin !== allowedOrigin) {
+    return res.status(403).json({ error: "Forbidden origin." });
+  }
+
+  const rateLimit = checkRateLimit(req);
+  if (!rateLimit.ok) {
+    res.setHeader("Retry-After", rateLimit.retryAfter);
+    return res.status(429).json({ error: "Too many requests. Try again later." });
+  }
+
   const validation = validatePayload(req.body || {});
   if (!validation.ok) {
     return res.status(validation.status).json({ error: validation.error });
@@ -72,8 +117,7 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      const details = await response.text();
-      return res.status(502).json({ error: "Email provider error.", details });
+      return res.status(502).json({ error: "Email provider error." });
     }
 
     return res.status(200).json({ ok: true });
