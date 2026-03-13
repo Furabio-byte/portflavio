@@ -494,7 +494,7 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 
   body.is-mobile-safari .sub-schede-container {
     height: 460px;
-    padding-top: 0;
+    padding-top: 18px;
     padding-bottom: 6px;
     align-items: flex-start;
   }
