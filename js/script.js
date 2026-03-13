@@ -446,25 +446,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
       this.emailInput = document.getElementById('contactEmail');
       this.messageInput = document.getElementById('contactMessage');
+      this.websiteInput = document.getElementById('contactWebsite');
+      this.statusElement = document.getElementById('contactStatus');
+      this.submitButton = document.querySelector('button[form="contactForm"]');
+      this.apiUrl = window.PORTFLAVIO_CONFIG?.contactApiUrl || '';
       this.bindEvents();
     }
 
     bindEvents() {
-      this.form.addEventListener('submit', (event) => {
+      this.form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const email = this.emailInput.value.trim();
         const message = this.messageInput.value.trim();
+        const website = this.websiteInput ? this.websiteInput.value.trim() : '';
 
         if (!email || !message) return;
 
-        const subject = encodeURIComponent('Contatto dal portfolio');
-        const body = encodeURIComponent(
-          `Email: ${email}\n\nMessaggio:\n${message}`
-        );
+        if (!this.apiUrl || this.apiUrl.includes('REPLACE_WITH_YOUR_VERCEL_DOMAIN')) {
+          this.setStatus('Configura prima il dominio Vercel del backend.', true);
+          return;
+        }
 
-        window.location.href = `mailto:info@portflavio.it?subject=${subject}&body=${body}`;
+        this.setPending(true);
+        this.setStatus('Invio in corso...', false);
+
+        try {
+          const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, message, website })
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Invio non riuscito.');
+          }
+
+          this.form.reset();
+          this.setStatus('Messaggio inviato correttamente.', false);
+        } catch (error) {
+          this.setStatus(error.message || 'Errore durante l\'invio.', true);
+        } finally {
+          this.setPending(false);
+        }
       });
+    }
+
+    setPending(isPending) {
+      if (this.submitButton) {
+        this.submitButton.disabled = isPending;
+        this.submitButton.textContent = isPending ? 'Invio...' : 'Invia';
+      }
+    }
+
+    setStatus(message, isError) {
+      if (!this.statusElement) return;
+      this.statusElement.textContent = message;
+      this.statusElement.style.color = isError ? '#8a2b2b' : '';
     }
   }
 

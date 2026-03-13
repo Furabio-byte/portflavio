@@ -459,7 +459,8 @@
                   <span class="card-numero">01</span>
                 </div>
                 <div class="card-body contact-form-body">
-                  <form class="contact-form" id="contactForm">
+                  <form class="contact-form" id="contactForm" novalidate>
+                    <input type="text" id="contactWebsite" name="website" class="contact-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
                     <label class="contact-field">
                       <input type="email" id="contactEmail" name="email" placeholder="Email" required>
                     </label>
@@ -468,6 +469,7 @@
                       <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui.." required></textarea>
                     </label>
                   </form>
+                  <p class="contact-status" id="contactStatus" aria-live="polite"></p>
                 </div>
 
                 <div class="card-footer contact-form-footer">
@@ -486,6 +488,7 @@
 
   </main>
 
+  <script src="js/site-config.js"></script>
   <!-- Collegamento al file JavaScript -->
   <script src="js/script.js"></script>
 </body>

@@ -426,6 +426,15 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   margin-top: 18px;
 }
 
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .contact-field {
   display: flex;
   flex-direction: column;
@@ -460,6 +469,13 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 
 .contact-form-footer {
   align-items: center;
+}
+
+.contact-status {
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  min-height: 1.4rem;
+  opacity: 0.75;
 }
 
 .contact-submit {
