@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const userAgent = navigator.userAgent;
+  const isMobileSafari =
+    /iP(hone|ad|od)/.test(userAgent) &&
+    /WebKit/i.test(userAgent) &&
+    !/CriOS|FxiOS|EdgiOS/i.test(userAgent);
+
+  if (isMobileSafari) {
+    document.body.classList.add('is-mobile-safari');
+  }
+
   const easeInOutSextuple = (t) =>
     t < 0.5 ? 32 * t ** 6 : 1 - (-2 * t + 2) ** 6 / 2;
 
