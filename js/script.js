@@ -239,6 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dotIndicator.appendChild(dot);
       }
+
+      if (totalCards > maxVisibleDots) {
+        const counter = document.createElement('span');
+        counter.classList.add('dot-counter');
+        counter.textContent = `${activeIndex + 1}/${totalCards}`;
+        dotIndicator.appendChild(counter);
+      }
     }
 
     updateActiveDot(scroller, dotIndicator) {
