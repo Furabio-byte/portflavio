@@ -357,7 +357,7 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   border-radius: 50px;
   background-color: var(--colore-testo);
   opacity: 0.25;
-  transition: width 0.1s ease, opacity 0.1s ease;
+  transition: width 0.1s ease, opacity 0.1s ease, transform 0.1s ease;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -467,14 +467,18 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   }
 
   /* Su mobile: niente animazione width (crea forme quadrate brutte a metà transizione).
-     Il dot attivo è semplicemente più largo e opaco, senza intermediari. */
+     Manteniamo pallini fissi e cambiamo solo opacità/scala. */
   .dot {
-    transition: opacity 0.1s ease;
+    width: 8px;
+    transform: scale(1);
+    transition: opacity 0.1s ease, transform 0.1s ease;
   }
 
   .dot.active {
-    width: 24px;
-    transition: opacity 0.1s ease;
+    width: 8px;
+    opacity: 1;
+    transform: scale(1.35);
+    transition: opacity 0.1s ease, transform 0.1s ease;
   }
 
   /* OTTIMIZZAZIONE SPAZI ESTERNI (INIZIO E FINE PAGINA) */
