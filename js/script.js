@@ -173,21 +173,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buildDots(dotIndicator, scroller) {
       dotIndicator.innerHTML = '';
+      dotIndicator.classList.remove('mobile-dots');
       const cards = scroller.querySelectorAll('.sub-scheda');
       if (cards.length === 0) return;
 
       const isMobile = window.innerWidth <= 768;
 
-      let totalDots;
       if (isMobile) {
-        // Mobile: 1 dot per card (una card alla volta nel viewport)
-        totalDots = cards.length;
-      } else {
-        // Desktop: calcola quante card entrano nel viewport e quante "fermate" servono
-        const cardWidth = cards[0].offsetWidth + 40; // +40 per il gap
-        const cardsPerView = Math.max(1, Math.floor(scroller.clientWidth / cardWidth));
-        totalDots = Math.max(1, Math.ceil(cards.length / cardsPerView));
+        // Mobile: indicatore compatto a finestra mobile per evitare file di dots troppo lunghe.
+        this.renderMobileDots(dotIndicator, scroller, 0);
+        return;
       }
+
+      // Desktop: calcola quante card entrano nel viewport e quante "fermate" servono
+      const cardWidth = cards[0].offsetWidth + 40; // +40 per il gap
+      const cardsPerView = Math.max(1, Math.floor(scroller.clientWidth / cardWidth));
+      const totalDots = Math.max(1, Math.ceil(cards.length / cardsPerView));
 
       for (let i = 0; i < totalDots; i++) {
         const dot = document.createElement('span');
@@ -195,19 +196,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (i === 0) dot.classList.add('active');
 
         dot.addEventListener('click', () => {
-          if (isMobile) {
-            // Mobile: salta direttamente alla card corrispondente
-            scroller.scrollTo({
-              left: cards[i].offsetLeft - scroller.offsetLeft,
-              behavior: 'smooth'
-            });
-          } else {
-            // Desktop: salta alla "fermata" corrispondente
-            scroller.scrollTo({
-              left: i * scroller.clientWidth,
-              behavior: 'smooth'
-            });
-          }
+          // Desktop: salta alla "fermata" corrispondente
+          scroller.scrollTo({
+            left: i * scroller.clientWidth,
+            behavior: 'smooth'
+          });
+        });
+
+        dotIndicator.appendChild(dot);
+      }
+    }
+
+    renderMobileDots(dotIndicator, scroller, activeIndex) {
+      const cards = scroller.querySelectorAll('.sub-scheda');
+      const totalCards = cards.length;
+      const maxVisibleDots = Math.min(5, totalCards);
+
+      dotIndicator.innerHTML = '';
+      dotIndicator.classList.add('mobile-dots');
+
+      const startIndex = Math.max(
+        0,
+        Math.min(activeIndex - Math.floor(maxVisibleDots / 2), totalCards - maxVisibleDots)
+      );
+
+      for (let visibleIndex = 0; visibleIndex < maxVisibleDots; visibleIndex++) {
+        const cardIndex = startIndex + visibleIndex;
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.dataset.cardIndex = cardIndex;
+
+        if (cardIndex === activeIndex) {
+          dot.classList.add('active');
+        }
+
+        dot.addEventListener('click', () => {
+          scroller.scrollTo({
+            left: cards[cardIndex].offsetLeft - scroller.offsetLeft,
+            behavior: 'smooth'
+          });
         });
 
         dotIndicator.appendChild(dot);
@@ -217,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveDot(scroller, dotIndicator) {
       const dots = dotIndicator.querySelectorAll('.dot');
       const cards = scroller.querySelectorAll('.sub-scheda');
-      if (dots.length === 0) return;
+      if (cards.length === 0) return;
 
       const isMobile = window.innerWidth <= 768;
 
@@ -231,8 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const dist = Math.abs(viewportCenter - cardCenter);
           if (dist < closestDist) { closestDist = dist; closestIndex = i; }
         });
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === closestIndex));
+
+        this.renderMobileDots(dotIndicator, scroller, closestIndex);
       } else {
+        if (dots.length === 0) return;
+
         // Desktop: dot attivo = fermata corrente in base allo scroll
         const currentPage = Math.round(scroller.scrollLeft / scroller.clientWidth);
         dots.forEach((dot, i) => dot.classList.toggle('active', i === currentPage));
