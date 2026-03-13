@@ -488,19 +488,20 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   
   body.is-mobile-safari .scroll-container {
     gap: 10px;
+    padding-top: 56px;
     padding-bottom: 10px;
   }
 
   body.is-mobile-safari .sub-schede-container {
     height: 460px;
-    padding-top: 12px;
+    padding-top: 0;
     padding-bottom: 6px;
     align-items: flex-start;
   }
 
   body.is-mobile-safari .dot-indicator {
     padding: 0;
-    margin-top: 8px;
+    margin-top: 18px;
   }
 
 
