@@ -461,7 +461,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = this.messageInput.value.trim();
         const website = this.websiteInput ? this.websiteInput.value.trim() : '';
 
-        if (!email || !message) return;
+        if (!email) {
+          this.setStatus('Inserisci la tua email prima di inviare.', true);
+          return;
+        }
+
+        if (!this.emailInput.checkValidity()) {
+          this.setStatus('Inserisci un indirizzo email valido.', true);
+          return;
+        }
+
+        if (!message) {
+          this.setStatus('Scrivi un messaggio prima di inviare.', true);
+          return;
+        }
+
+        if (message.length < 3) {
+          this.setStatus('Scrivi un messaggio un po\' piu dettagliato.', true);
+          return;
+        }
 
         if (!this.apiUrl || this.apiUrl.includes('REPLACE_WITH_YOUR_VERCEL_DOMAIN')) {
           this.setStatus('Configura prima il dominio Vercel del backend.', true);
