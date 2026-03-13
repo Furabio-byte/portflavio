@@ -3,14 +3,31 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 const requestStore = new Map();
 
-function getAllowedOrigin() {
-  return process.env.ALLOWED_ORIGIN || "https://www.portflavio.it";
+function getAllowedOrigins() {
+  const configuredOrigin = process.env.ALLOWED_ORIGIN || "https://www.portflavio.it";
+  const origins = new Set([configuredOrigin]);
+
+  try {
+    const url = new URL(configuredOrigin);
+
+    if (url.hostname.startsWith("www.")) {
+      origins.add(`${url.protocol}//${url.hostname.replace(/^www\./, "")}`);
+    } else {
+      origins.add(`${url.protocol}//www.${url.hostname}`);
+    }
+  } catch (error) {
+    // Se ALLOWED_ORIGIN non è un URL valido, usiamo solo il valore configurato.
+  }
+
+  return origins;
 }
 
 function setCorsHeaders(req, res) {
-  const allowedOrigin = getAllowedOrigin();
+  const allowedOrigins = getAllowedOrigins();
   const requestOrigin = req.headers.origin;
-  const origin = requestOrigin === allowedOrigin ? requestOrigin : allowedOrigin;
+  const origin = allowedOrigins.has(requestOrigin)
+    ? requestOrigin
+    : [...allowedOrigins][0];
 
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -76,8 +93,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
-  const allowedOrigin = getAllowedOrigin();
-  if (req.headers.origin !== allowedOrigin) {
+  const allowedOrigins = getAllowedOrigins();
+  if (!allowedOrigins.has(req.headers.origin)) {
     return res.status(403).json({ error: "Forbidden origin." });
   }
 
