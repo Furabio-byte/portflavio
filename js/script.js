@@ -260,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.schedaLinks = document.querySelectorAll('.scheda-link');
       this.activeScheda = null;
       this.lastTap = null;
+      this.isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       this.bindEvents(); // Esegue il binding dei listener una sola volta
       this.initARIA();
     }
@@ -274,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Usiamo solo 'click' che gestisce nativamente sia mouse che touch
       this.schedaLinks.forEach(link => {
         link.addEventListener('click', (e) => this.handleInteraction(e));
+
+        if (this.isDesktopPointer) {
+          link.addEventListener('mouseenter', () => this.previewScheda(link));
+          link.addEventListener('mouseleave', () => this.clearPreview(link));
+        }
       });
 
       // Swipe per scorrere tra le schede rimarrà basato sul touch
@@ -298,6 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetId = currentSchedaLink.getAttribute('href');
       
       e.preventDefault();
+
+      if (this.isDesktopPointer) {
+        this.navigateToTarget(targetId);
+        return;
+      }
+
       const currentTime = Date.now();
       const timeSinceLastTap = currentTime - (this.lastTap || 0);
       const isQuickTap = timeSinceLastTap <= 400; // Leggermente aumentato per una migliore ux sul doppio tocco effettivo
@@ -326,6 +338,40 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       this.lastTap = currentTime;
+    }
+
+    navigateToTarget(targetId) {
+      if (targetId.startsWith('mailto:')) {
+        window.location.href = targetId;
+        return;
+      }
+
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        smoothScroll(targetElement);
+        history.pushState(null, '', targetId);
+      }
+    }
+
+    previewScheda(schedaLink) {
+      if (this.activeScheda && this.activeScheda !== schedaLink) {
+        this.resetScheda(this.activeScheda);
+      }
+
+      const innerScheda = schedaLink.querySelector('.scheda');
+      if (innerScheda) {
+        innerScheda.classList.add('active', 'is-active');
+      }
+
+      schedaLink.setAttribute('aria-expanded', 'true');
+      this.activeScheda = schedaLink;
+    }
+
+    clearPreview(schedaLink) {
+      if (this.activeScheda === schedaLink) {
+        this.resetScheda(schedaLink);
+        this.activeScheda = null;
+      }
     }
 
     handleSwipe(direction) {
