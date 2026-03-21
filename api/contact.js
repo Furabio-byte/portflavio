@@ -65,9 +65,12 @@ function checkRateLimit(req) {
 function validatePayload(payload) {
   const email = typeof payload.email === "string" ? payload.email.trim() : "";
   const message = typeof payload.message === "string" ? payload.message.trim() : "";
-  const website = typeof payload.website === "string" ? payload.website.trim() : "";
+  const companyFax =
+    typeof payload.company_fax === "string" ? payload.company_fax.trim() : "";
 
-  if (website) {
+  // Honeypot field dedicated to bots. We intentionally ignore the legacy
+  // "website" field because some browsers/password managers may autofill it.
+  if (companyFax) {
     return { ok: false, status: 400, error: "Spam detected." };
   }
 

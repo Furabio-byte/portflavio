@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       this.emailInput = document.getElementById('contactEmail');
       this.messageInput = document.getElementById('contactMessage');
-      this.websiteInput = document.getElementById('contactWebsite');
+      this.honeypotInput = document.getElementById('contactCompanyFax');
       this.statusElement = document.getElementById('contactStatus');
       this.submitButton = document.querySelector('button[form="contactForm"]');
       this.suggestionButtons = document.querySelectorAll('.contact-suggestion');
@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const email = this.emailInput.value.trim();
         const message = this.messageInput.value.trim();
-        const website = this.websiteInput ? this.websiteInput.value.trim() : '';
+        const companyFax = this.honeypotInput ? this.honeypotInput.value.trim() : '';
 
         if (!email) {
           this.setStatus('Inserisci la tua email prima di inviare.', true);
@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, message, website })
+            body: JSON.stringify({ email, message, company_fax: companyFax })
           });
 
           const data = await response.json().catch(() => ({}));
