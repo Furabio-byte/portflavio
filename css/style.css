@@ -551,6 +551,11 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   text-decoration: none;
 }
 
+.privacy-back:hover {
+  background-color: var(--colore-testo);
+  color: var(--colore-sfondo-principale);
+}
+
 
  
 /* CLASSI DI ATTIVAZIONE (TOUCH E JS) */
