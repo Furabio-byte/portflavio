@@ -22,20 +22,6 @@ body {
   padding: 1.25rem;
 }
  
-/* LOGO */
-.logo-container {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  z-index: 1000;
-}
- 
-.logo {
-  width: clamp(40px, 8vw, 60px);
-  height: auto;
-  transition: transform 0.3s ease;
-}
- 
 .schede-container {
   display: flex;
   flex-wrap: wrap;
@@ -110,17 +96,6 @@ body {
   font-size: 1rem;
   font-weight: bold;
   color: var(--colore-testo);
-}
- 
-.frase-r {
-  position: absolute;
-  bottom: 50px;
-  left: 20px;
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--colore-testo);
-  max-width: 80%;
-  transition: opacity 0.3s ease;
 }
  
 /* CONTAINER TESTO PRINCIPALE */
@@ -209,12 +184,6 @@ body {
   cursor: pointer;
 }
  
-.sub-scheda-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .card-astratta {
   background-color: var(--colore-sfondo-principale);
   color: var(--colore-testo);
@@ -331,16 +300,6 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   color: var(--colore-sfondo-principale);
 }
 
-.card-link {
-  color: inherit;
-  text-decoration: none;
-  font-size: 1.5rem;
-  transition: transform 0.2s ease;
-}
-
-.card-astratta:hover .card-link {
-  transform: translateX(5px);
-}
 .card-astratta:hover .card-titolo {
   transform: scale(1.05);
   transform-origin: left;
@@ -535,10 +494,6 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   opacity: 1;
 }
 
-.scheda.is-active .frase-r {
-  opacity: 0;
-}
-
 /* EFFETTI HOVER (SOLO MOUSE/DESKTOP) */
 @media (hover: hover) {
   .scheda-link:hover {
@@ -555,10 +510,6 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
  
   .scheda:hover .frase-r {
     opacity: 0;
-  }
- 
-  .logo:hover {
-    transform: scale(1.1);
   }
  
   .sub-scheda:hover {

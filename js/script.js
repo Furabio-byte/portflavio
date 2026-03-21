@@ -95,11 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    static reset() {
-      Object.keys(localStorage)
-        .filter(key => key.startsWith('portflavio_'))
-        .forEach(key => localStorage.removeItem(key));
-    }
   }
 
   class ScrollHandler {
@@ -323,15 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Logica Navigazione vs Apertura (1 Tocco apre, 2 Tocchi scrolla)
       if (isQuickTap && isAlreadyActive) {
         // AZIONE: Doppio tocco / click sulla stessa scheda già aperta -> Naviga
-        if (targetId.startsWith('mailto:')) {
-          window.location.href = targetId;
-        } else {
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            smoothScroll(targetElement);
-            history.pushState(null, '', targetId);
-          }
-        }
+        this.navigateToTarget(targetId);
       } else {
         // AZIONE: Singolo tocco / click su nuova scheda -> Apri la scheda (Espandi)
         this.toggleScheda(currentSchedaLink);
@@ -341,11 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     navigateToTarget(targetId) {
-      if (targetId.startsWith('mailto:')) {
-        window.location.href = targetId;
-        return;
-      }
-
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         smoothScroll(targetElement);
@@ -383,13 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
           : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
 
         const newScheda = this.schedaLinks[newIndex];
-        const targetId = newScheda.getAttribute('href');
-
-        if (!targetId.startsWith('mailto:')) {
-          this.activeScheda.classList.remove('active');
-          newScheda.classList.add('active');
-          this.activeScheda = newScheda;
-        }
+        this.activeScheda.classList.remove('active');
+        newScheda.classList.add('active');
+        this.activeScheda = newScheda;
       }
     }
 
