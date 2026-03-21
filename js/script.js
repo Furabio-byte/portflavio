@@ -474,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.statusElement = document.getElementById('contactStatus');
       this.submitButton = document.querySelector('button[form="contactForm"]');
       this.suggestionButtons = document.querySelectorAll('.contact-suggestion');
+      this.shareButton = document.getElementById('sharePortfolioButton');
       this.apiUrl = window.PORTFLAVIO_CONFIG?.contactApiUrl || '';
       this.bindEvents();
     }
@@ -482,6 +483,10 @@ document.addEventListener('DOMContentLoaded', () => {
       this.suggestionButtons.forEach((button) => {
         button.addEventListener('click', () => this.applySuggestedDomain(button.dataset.domain || ''));
       });
+
+      if (this.shareButton) {
+        this.shareButton.addEventListener('click', () => this.sharePortfolio());
+      }
 
       this.form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -558,6 +563,35 @@ document.addEventListener('DOMContentLoaded', () => {
       this.emailInput.value = `${localPart}${domain}`;
       this.setStatus('', false);
       this.emailInput.focus();
+    }
+
+    async sharePortfolio() {
+      const shareUrl = 'https://www.portflavio.it';
+      const shareData = {
+        title: 'Portflavio - Portfolio Personale',
+        text: 'Dai un\'occhiata al portfolio di Flavio.',
+        url: shareUrl
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          this.setStatus('Portfolio condiviso.', false);
+          return;
+        }
+
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(shareUrl);
+          this.setStatus('Link copiato negli appunti.', false);
+          return;
+        }
+
+        this.setStatus('Condivisione non disponibile su questo browser.', true);
+      } catch (error) {
+        if (error?.name !== 'AbortError') {
+          this.setStatus('Condivisione non riuscita.', true);
+        }
+      }
     }
 
     setPending(isPending) {

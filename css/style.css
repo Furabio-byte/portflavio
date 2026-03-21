@@ -263,7 +263,8 @@ body {
 /* Rimossa animazione a scatti */
 
 .card-tech span,
-.card-tech a {
+.card-tech a,
+.card-tech button {
   font-family: sans-serif;
   font-size: 0.75rem;
   font-weight: bold;
@@ -273,6 +274,11 @@ body {
   color: inherit;
   text-decoration: none;
   transition: all 0.3s ease;
+}
+
+.card-tech button {
+  background: transparent;
+  cursor: pointer;
 }
 
 /* 
@@ -294,7 +300,8 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 }
 
 .sub-scheda:hover .card-tech span,
-.sub-scheda:hover .card-tech a {
+.sub-scheda:hover .card-tech a,
+.sub-scheda:hover .card-tech button {
   /* I tag diventano solidi al passaggio sulla card (Invert effect) */
   background-color: var(--colore-testo);
   color: var(--colore-sfondo-principale);
@@ -483,6 +490,67 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
   transform: translateY(-2px);
 }
 
+.privacy-page {
+  padding: 20px;
+}
+
+.privacy-shell {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  background-color: var(--colore-sfondo-scheda);
+  border-radius: 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 28px;
+}
+
+.privacy-card {
+  background-color: var(--colore-sfondo-principale);
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
+  color: var(--colore-testo);
+}
+
+.privacy-card h1,
+.privacy-card h2 {
+  font-family: 'Playfair Display SC', serif;
+  margin-bottom: 12px;
+}
+
+.privacy-card h1 {
+  font-size: 2rem;
+}
+
+.privacy-card h2 {
+  font-size: 1.2rem;
+  margin-top: 22px;
+}
+
+.privacy-card p,
+.privacy-card li {
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.privacy-card ul {
+  padding-left: 18px;
+}
+
+.privacy-back {
+  display: inline-flex;
+  margin-top: 24px;
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid var(--colore-testo);
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+}
+
 
  
 /* CLASSI DI ATTIVAZIONE (TOUCH E JS) */
@@ -601,6 +669,19 @@ Nuovi Effetti Alternativi alla Scheda (Senza toccare i tag):
 
   .contact-submit {
     width: 100%;
+  }
+
+  .privacy-page {
+    padding: 12px;
+  }
+
+  .privacy-shell {
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .privacy-card {
+    padding: 18px;
   }
 
   /* OTTIMIZZAZIONE SPAZI ESTERNI (INIZIO E FINE PAGINA) */
