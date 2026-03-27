@@ -142,7 +142,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       if (shouldNavigate) {
         this.navigateToTarget(targetId);
-      } else {
+      } else if (!isAlreadyActive) {
         this.toggleScheda(currentSchedaLink);
       }
 
@@ -200,18 +200,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
 
     toggleScheda(schedaLink) {
-      const isSameLink = schedaLink === this.activeScheda;
       const innerScheda = schedaLink.querySelector('.scheda');
-
-      if (isSameLink) {
-        if (innerScheda) {
-          innerScheda.classList.remove('active', 'is-active');
-        }
-        schedaLink.setAttribute('aria-expanded', 'false');
-        this.activeScheda = null;
-        this.lastTappedScheda = null;
-        return;
-      }
 
       if (this.activeScheda) {
         this.resetScheda(this.activeScheda);
