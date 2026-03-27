@@ -229,7 +229,6 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (!this.statusElement) return;
 
       this.statusElement.textContent = message;
-      this.statusElement.style.color = '';
       this.statusElement.classList.remove('is-error', 'is-success', 'is-animated');
 
       if (tone === 'error' || isError) {

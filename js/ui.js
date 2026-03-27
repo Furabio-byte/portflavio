@@ -110,7 +110,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const timeSinceLastTap = currentTime - this.lastTapTime;
       const isQuickTap = timeSinceLastTap <= 550;
       const isSameScheda = this.lastTappedScheda === currentSchedaLink;
-      const isAlreadyActive = currentSchedaInner && currentSchedaInner.classList.contains('active');
+      const isAlreadyActive = currentSchedaInner?.classList.contains('is-active');
       const shouldNavigate = isQuickTap && isSameScheda && isAlreadyActive;
 
       if (window.navigator && window.navigator.vibrate) {
@@ -142,7 +142,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       const innerScheda = schedaLink.querySelector('.scheda');
       if (innerScheda) {
-        innerScheda.classList.add('active', 'is-active');
+        innerScheda.classList.add('is-active');
       }
 
       schedaLink.setAttribute('aria-expanded', 'true');
@@ -164,7 +164,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       if (innerScheda) {
-        innerScheda.classList.add('active', 'is-active');
+        innerScheda.classList.add('is-active');
       }
 
       schedaLink.setAttribute('aria-expanded', 'true');
@@ -174,7 +174,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     resetScheda(schedaLink) {
       const innerScheda = schedaLink.querySelector('.scheda');
       if (innerScheda) {
-        innerScheda.classList.remove('active', 'is-active');
+        innerScheda.classList.remove('is-active');
       }
       schedaLink.setAttribute('aria-expanded', 'false');
     }

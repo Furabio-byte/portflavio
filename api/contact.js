@@ -15,8 +15,8 @@ function getAllowedOrigins() {
     } else {
       origins.add(`${url.protocol}//www.${url.hostname}`);
     }
-  } catch (error) {
-    // Se ALLOWED_ORIGIN non è un URL valido, usiamo solo il valore configurato.
+  } catch {
+    // Se ALLOWED_ORIGIN non e un URL valido, usiamo solo il valore configurato.
   }
 
   return origins;
@@ -68,8 +68,6 @@ function validatePayload(payload) {
   const companyFax =
     typeof payload.company_fax === "string" ? payload.company_fax.trim() : "";
 
-  // Honeypot field dedicated to bots. We intentionally ignore the legacy
-  // "website" field because some browsers/password managers may autofill it.
   if (companyFax) {
     return { ok: false, status: 400, error: "Spam detected." };
   }
@@ -141,7 +139,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({ ok: true });
-  } catch (error) {
+  } catch {
     return res.status(500).json({ error: "Unexpected server error." });
   }
 }
