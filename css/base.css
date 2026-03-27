@@ -11,6 +11,13 @@
   box-sizing: border-box;
 }
 
+a,
+button,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   min-height: 100vh;
   background-color: var(--colore-sfondo-principale);
