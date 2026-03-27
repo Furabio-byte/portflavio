@@ -1,0 +1,20 @@
+:root {
+  --colore-sfondo-principale: #ded9d2;
+  --colore-sfondo-scheda: #b29a88;
+  --colore-testo: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--colore-sfondo-principale);
+  font-family: 'Playfair Display SC', serif;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+}

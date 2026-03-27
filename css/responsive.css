@@ -1,0 +1,111 @@
+@media (max-width: 768px) {
+  .text-page-container {
+    padding: 0;
+  }
+
+  .sezione-contenuto {
+    margin: 0 auto 30px;
+    height: 70vh;
+  }
+
+  .schede-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+
+  .scheda-link {
+    width: 100%;
+    min-width: 280px;
+    max-width: 400px;
+  }
+
+  .scroll-container {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .sub-schede-container {
+    gap: 30px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .sub-scheda {
+    scroll-snap-align: start;
+  }
+
+  .dot {
+    width: 8px;
+    transform: scale(1);
+    transition: opacity 0.1s ease, transform 0.1s ease;
+  }
+
+  .dot.active {
+    width: 8px;
+    opacity: 1;
+    transform: scale(1.35);
+    transition: opacity 0.1s ease, transform 0.1s ease;
+  }
+
+  .contact-form-card {
+    flex: 0 0 280px;
+    min-height: 450px;
+    width: 280px;
+    max-width: 280px;
+  }
+
+  .text-card-shell {
+    padding: 56px 8px 8px;
+    justify-content: center;
+  }
+
+  .contact-form-body {
+    gap: 12px;
+  }
+
+  .contact-form-footer {
+    align-items: stretch;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .contact-submit {
+    width: 100%;
+  }
+
+  .privacy-page {
+    padding: 12px;
+  }
+
+  .privacy-shell {
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .privacy-card {
+    padding: 18px;
+  }
+
+  body {
+    padding: 15px;
+  }
+
+  body.is-mobile-safari .scroll-container {
+    gap: 10px;
+    padding-top: 56px;
+    padding-bottom: 10px;
+  }
+
+  body.is-mobile-safari .sub-schede-container {
+    height: 460px;
+    padding-top: 18px;
+    padding-bottom: 6px;
+    align-items: flex-start;
+  }
+
+  body.is-mobile-safari .dot-indicator {
+    padding: 0;
+    margin-top: 18px;
+  }
+}
