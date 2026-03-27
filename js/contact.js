@@ -6,6 +6,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.form = document.getElementById('contactForm');
       if (!this.form) return;
 
+      this.card = document.querySelector('.contact-form-card');
       this.emailInput = document.getElementById('contactEmail');
       this.messageInput = document.getElementById('contactMessage');
       this.honeypotInput = document.getElementById('contactCompanyFax');
@@ -13,6 +14,8 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.submitButton = document.querySelector('button[form="contactForm"]');
       this.suggestionButtons = document.querySelectorAll('.contact-suggestion');
       this.shareButton = document.getElementById('sharePortfolioButton');
+      this.emailField = this.emailInput?.closest('.contact-field') || null;
+      this.messageField = this.messageInput?.closest('.contact-field') || null;
       this.apiUrl = window.PORTFLAVIO_CONFIG?.contactApiUrl || '';
       this.bindEvents();
     }
@@ -28,33 +31,34 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       this.form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        this.resetValidationState();
 
         const email = this.emailInput.value.trim();
         const message = this.messageInput.value.trim();
         const companyFax = this.honeypotInput ? this.honeypotInput.value.trim() : '';
 
         if (!email) {
-          this.setStatus('Inserisci la tua email prima di inviare.', true);
+          this.showFieldError(this.emailField, this.emailInput, 'Inserisci la tua email prima di inviare.');
           return;
         }
 
         if (!this.emailInput.checkValidity()) {
-          this.setStatus('Inserisci un indirizzo email valido.', true);
+          this.showFieldError(this.emailField, this.emailInput, 'Inserisci un indirizzo email valido.');
           return;
         }
 
         if (!message) {
-          this.setStatus('Scrivi un messaggio prima di inviare.', true);
+          this.showFieldError(this.messageField, this.messageInput, 'Scrivi un messaggio prima di inviare.');
           return;
         }
 
         if (message.length < 3) {
-          this.setStatus("Scrivi un messaggio un po' piu dettagliato.", true);
+          this.showFieldError(this.messageField, this.messageInput, "Scrivi un messaggio un po' piu dettagliato.");
           return;
         }
 
         if (!this.apiUrl || this.apiUrl.includes('REPLACE_WITH_YOUR_VERCEL_DOMAIN')) {
-          this.setStatus('Configura prima il dominio Vercel del backend.', true);
+          this.setStatus('Il servizio di contatto non e disponibile in questo momento.', true, 'error');
           return;
         }
 
@@ -76,10 +80,10 @@ window.PortflavioApp = window.PortflavioApp || {};
             throw new Error(data.error || 'Invio non riuscito.');
           }
 
-          this.form.reset();
-          this.setStatus('Messaggio inviato correttamente.', false);
+          this.handleSuccessState();
         } catch (error) {
-          this.setStatus(error.message || "Errore durante l'invio.", true);
+          this.setStatus(this.getUserFriendlyError(error), true, 'error');
+          this.animateCard('is-shake');
         } finally {
           this.setPending(false);
         }
@@ -99,6 +103,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       this.emailInput.value = `${localPart}${domain}`;
+      this.resetValidationState();
       this.setStatus('', false);
       this.emailInput.focus();
     }
@@ -114,13 +119,13 @@ window.PortflavioApp = window.PortflavioApp || {};
       try {
         if (navigator.share) {
           await navigator.share(shareData);
-          this.setStatus('Portfolio condiviso.', false);
+          this.setStatus('Portfolio condiviso.', false, 'success');
           return;
         }
 
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(shareUrl);
-          this.setStatus('Link copiato negli appunti.', false);
+          this.setStatus('Link copiato negli appunti.', false, 'success');
           return;
         }
 
@@ -132,6 +137,65 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
     }
 
+    showFieldError(fieldElement, inputElement, message) {
+      if (fieldElement) {
+        fieldElement.classList.add('is-error');
+      }
+
+      this.setStatus(message, true, 'error');
+      this.animateCard('is-shake');
+      inputElement?.focus();
+    }
+
+    handleSuccessState() {
+      this.form.reset();
+      this.resetValidationState();
+      this.card?.classList.add('is-success');
+      this.submitButton?.classList.add('is-success');
+      this.setStatus('Messaggio inviato. Ti rispondero al piu presto.', false, 'success');
+      this.animateCard('is-pulse');
+
+      window.setTimeout(() => {
+        this.submitButton?.classList.remove('is-success');
+      }, 1400);
+    }
+
+    resetValidationState() {
+      this.emailField?.classList.remove('is-error');
+      this.messageField?.classList.remove('is-error');
+      this.card?.classList.remove('is-success');
+    }
+
+    animateCard(className) {
+      if (!this.card) return;
+
+      this.card.classList.remove(className);
+      void this.card.offsetWidth;
+      this.card.classList.add(className);
+
+      window.setTimeout(() => {
+        this.card?.classList.remove(className);
+      }, className === 'is-pulse' ? 650 : 380);
+    }
+
+    getUserFriendlyError(error) {
+      const message = typeof error?.message === 'string' ? error.message : '';
+
+      if (message === 'Forbidden origin.') {
+        return 'Invio non consentito da questa pagina.';
+      }
+
+      if (message === 'Email provider error.') {
+        return "C'e stato un problema temporaneo nell'invio. Riprova tra poco.";
+      }
+
+      if (message === 'Unexpected server error.' || message === 'Invio non riuscito.') {
+        return 'Qualcosa e andato storto. Riprova tra qualche istante.';
+      }
+
+      return message || 'Qualcosa e andato storto. Riprova tra qualche istante.';
+    }
+
     setPending(isPending) {
       if (!this.submitButton) return;
 
@@ -139,11 +203,23 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.submitButton.textContent = isPending ? 'Invio...' : 'Invia';
     }
 
-    setStatus(message, isError) {
+    setStatus(message, isError, tone = null) {
       if (!this.statusElement) return;
 
       this.statusElement.textContent = message;
-      this.statusElement.style.color = isError ? '#8a2b2b' : '';
+      this.statusElement.style.color = '';
+      this.statusElement.classList.remove('is-error', 'is-success', 'is-animated');
+
+      if (tone === 'error' || isError) {
+        this.statusElement.classList.add('is-error');
+      } else if (tone === 'success') {
+        this.statusElement.classList.add('is-success');
+      }
+
+      if (message) {
+        void this.statusElement.offsetWidth;
+        this.statusElement.classList.add('is-animated');
+      }
     }
   }
 
