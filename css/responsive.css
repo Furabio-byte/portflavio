@@ -65,10 +65,15 @@
     gap: 12px;
   }
 
+  .contact-form-card .card-body {
+    margin-bottom: 12px;
+  }
+
   .contact-form-footer {
     align-items: stretch;
     gap: 8px;
     flex-direction: column;
+    padding-top: 10px;
   }
 
   .contact-submit {
