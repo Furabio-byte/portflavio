@@ -62,14 +62,13 @@
   }
 
   .contact-form-body {
-    gap: 8px;
+    gap: 12px;
   }
 
   .contact-form-footer {
     align-items: stretch;
-    gap: 6px;
+    gap: 8px;
     flex-direction: column;
-    padding-top: 2px;
   }
 
   .contact-submit {
