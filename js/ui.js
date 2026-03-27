@@ -72,7 +72,6 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.activeScheda = null;
       this.lastTapTime = 0;
       this.lastTappedScheda = null;
-      this.justSwiped = false;
       this.isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       this.bindEvents();
       this.initARIA();
@@ -93,24 +92,6 @@ window.PortflavioApp = window.PortflavioApp || {};
           link.addEventListener('mouseleave', () => this.clearPreview(link));
         }
       });
-
-      const swipeThreshold = 50;
-      let touchStartY = 0;
-
-      document.addEventListener('touchstart', (event) => {
-        touchStartY = event.touches[0].clientY;
-      }, { passive: true });
-
-      document.addEventListener('touchend', (event) => {
-        const touchDistance = event.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(touchDistance) > swipeThreshold) {
-          this.justSwiped = true;
-          this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
-          window.setTimeout(() => {
-            this.justSwiped = false;
-          }, 250);
-        }
-      }, { passive: true });
     }
 
     handleInteraction(event) {
@@ -122,10 +103,6 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       if (this.isDesktopPointer) {
         this.navigateToTarget(targetId);
-        return;
-      }
-
-      if (this.justSwiped) {
         return;
       }
 
@@ -177,26 +154,6 @@ window.PortflavioApp = window.PortflavioApp || {};
         this.resetScheda(schedaLink);
         this.activeScheda = null;
       }
-    }
-
-    handleSwipe(direction) {
-      if (!this.activeScheda) return;
-
-      const schedaArray = Array.from(this.schedaLinks);
-      const currentIndex = schedaArray.indexOf(this.activeScheda);
-      const newIndex = direction === 'up'
-        ? (currentIndex + 1) % this.schedaLinks.length
-        : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
-
-      const newScheda = this.schedaLinks[newIndex];
-      this.resetScheda(this.activeScheda);
-      const newInnerScheda = newScheda.querySelector('.scheda');
-      if (newInnerScheda) {
-        newInnerScheda.classList.add('active', 'is-active');
-      }
-      newScheda.setAttribute('aria-expanded', 'true');
-      this.activeScheda = newScheda;
-      this.lastTappedScheda = newScheda;
     }
 
     toggleScheda(schedaLink) {
