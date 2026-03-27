@@ -181,8 +181,28 @@ window.PortflavioApp = window.PortflavioApp || {};
     getUserFriendlyError(error) {
       const message = typeof error?.message === 'string' ? error.message : '';
 
+      if (message === 'Invalid email.') {
+        return 'Inserisci un indirizzo email valido.';
+      }
+
+      if (message === 'Invalid message length.') {
+        return 'Scrivi un messaggio più dettagliato.';
+      }
+
+      if (message === 'Spam detected.') {
+        return 'Non è stato possibile inviare il messaggio. Riprova.';
+      }
+
       if (message === 'Forbidden origin.') {
         return 'Invio non consentito da questa pagina.';
+      }
+
+      if (message === 'Too many requests. Try again later.') {
+        return 'Hai effettuato troppi tentativi. Riprova più tardi.';
+      }
+
+      if (message === 'Server email configuration is missing.') {
+        return 'Il servizio di contatto non è disponibile in questo momento.';
       }
 
       if (message === 'Email provider error.') {
