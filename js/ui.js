@@ -43,45 +43,15 @@ window.PortflavioApp = window.PortflavioApp || {};
 
   class ContatoreSchede {
     constructor() {
-      this.STORAGE_PREFIX = 'portflavio_';
-      this.STORAGE_KEY_YEAR = `${this.STORAGE_PREFIX}anno`;
       this.yearElement = document.querySelector('.scheda-link:last-child .numero');
-
-      if (!this.yearElement) {
-        console.warn('Elemento anno non trovato');
-        return;
-      }
-
       this.init();
     }
 
     init() {
-      const currentYear = new Date().getFullYear();
-      const lastTwoDigits = currentYear % 100;
-      const savedYear = this.getSavedYear();
-
-      this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits : lastTwoDigits % 10;
-
-      if (!savedYear || currentYear !== savedYear) {
-        this.saveYear(currentYear);
-      }
-    }
-
-    getSavedYear() {
-      try {
-        const savedYear = localStorage.getItem(this.STORAGE_KEY_YEAR);
-        return savedYear ? parseInt(savedYear, 10) : null;
-      } catch (error) {
-        console.error("Errore nel recupero dell'anno:", error);
-        return null;
-      }
-    }
-
-    saveYear(year) {
-      try {
-        localStorage.setItem(this.STORAGE_KEY_YEAR, year.toString());
-      } catch (error) {
-        console.error("Errore nel salvataggio dell'anno:", error);
+      if (this.yearElement) {
+        const currentYear = new Date().getFullYear();
+        const lastTwoDigits = currentYear % 100;
+        this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits.toString() : (lastTwoDigits % 10).toString();
       }
     }
   }
@@ -90,7 +60,9 @@ window.PortflavioApp = window.PortflavioApp || {};
     constructor() {
       this.schedaLinks = document.querySelectorAll('.scheda-link');
       this.activeScheda = null;
-      this.lastTap = null;
+      this.lastTapTime = 0;
+      this.lastTappedScheda = null;
+      this.justSwiped = false;
       this.isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       this.bindEvents();
       this.initARIA();
@@ -122,7 +94,11 @@ window.PortflavioApp = window.PortflavioApp || {};
       document.addEventListener('touchend', (event) => {
         const touchDistance = event.changedTouches[0].clientY - touchStartY;
         if (Math.abs(touchDistance) > swipeThreshold) {
+          this.justSwiped = true;
           this.handleSwipe(touchDistance > 0 ? 'down' : 'up');
+          window.setTimeout(() => {
+            this.justSwiped = false;
+          }, 250);
         }
       }, { passive: true });
     }
@@ -139,22 +115,29 @@ window.PortflavioApp = window.PortflavioApp || {};
         return;
       }
 
-      const currentTime = Date.now();
-      const timeSinceLastTap = currentTime - (this.lastTap || 0);
-      const isQuickTap = timeSinceLastTap <= 400;
-      const isAlreadyActive = currentSchedaInner && currentSchedaInner.classList.contains('active');
-
-      if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(isQuickTap && isAlreadyActive ? 100 : 50);
+      if (this.justSwiped) {
+        return;
       }
 
-      if (isQuickTap && isAlreadyActive) {
+      const currentTime = Date.now();
+      const timeSinceLastTap = currentTime - this.lastTapTime;
+      const isQuickTap = timeSinceLastTap <= 550;
+      const isSameScheda = this.lastTappedScheda === currentSchedaLink;
+      const isAlreadyActive = currentSchedaInner && currentSchedaInner.classList.contains('active');
+      const shouldNavigate = isQuickTap && isSameScheda && isAlreadyActive;
+
+      if (window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(shouldNavigate ? 100 : 50);
+      }
+
+      if (shouldNavigate) {
         this.navigateToTarget(targetId);
       } else {
         this.toggleScheda(currentSchedaLink);
       }
 
-      this.lastTap = currentTime;
+      this.lastTapTime = currentTime;
+      this.lastTappedScheda = currentSchedaLink;
     }
 
     navigateToTarget(targetId) {
@@ -196,9 +179,14 @@ window.PortflavioApp = window.PortflavioApp || {};
         : (currentIndex - 1 + this.schedaLinks.length) % this.schedaLinks.length;
 
       const newScheda = this.schedaLinks[newIndex];
-      this.activeScheda.classList.remove('active');
-      newScheda.classList.add('active');
+      this.resetScheda(this.activeScheda);
+      const newInnerScheda = newScheda.querySelector('.scheda');
+      if (newInnerScheda) {
+        newInnerScheda.classList.add('active', 'is-active');
+      }
+      newScheda.setAttribute('aria-expanded', 'true');
       this.activeScheda = newScheda;
+      this.lastTappedScheda = newScheda;
     }
 
     toggleScheda(schedaLink) {
@@ -211,6 +199,7 @@ window.PortflavioApp = window.PortflavioApp || {};
         }
         schedaLink.setAttribute('aria-expanded', 'false');
         this.activeScheda = null;
+        this.lastTappedScheda = null;
         return;
       }
 

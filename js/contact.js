@@ -53,12 +53,12 @@ window.PortflavioApp = window.PortflavioApp || {};
         }
 
         if (message.length < 3) {
-          this.showFieldError(this.messageField, this.messageInput, "Scrivi un messaggio un po' più dettagliato.");
+          this.showFieldError(this.messageField, this.messageInput, "Scrivi un messaggio un po' pi\u00F9 dettagliato.");
           return;
         }
 
         if (!this.apiUrl || this.apiUrl.includes('REPLACE_WITH_YOUR_VERCEL_DOMAIN')) {
-          this.setStatus('Il servizio di contatto non è disponibile in questo momento.', true, 'error');
+          this.setStatus('Il servizio di contatto non \u00E8 disponibile in questo momento.', true, 'error');
           return;
         }
 
@@ -129,10 +129,10 @@ window.PortflavioApp = window.PortflavioApp || {};
           return;
         }
 
-        this.setStatus('La condivisione non è disponibile su questo browser.', true, 'error');
+        this.setStatus('La condivisione non \u00E8 disponibile su questo browser.', true, 'error');
       } catch (error) {
         if (error?.name !== 'AbortError') {
-          this.setStatus('La condivisione non è riuscita.', true, 'error');
+          this.setStatus('La condivisione non \u00E8 riuscita.', true, 'error');
         }
       }
     }
@@ -152,7 +152,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.resetValidationState();
       this.card?.classList.add('is-success');
       this.submitButton?.classList.add('is-success');
-      this.setStatus('Messaggio inviato. Ti risponderò al più presto.', false, 'success');
+      this.setStatus('Messaggio inviato. Ti risponder\u00F2 al pi\u00F9 presto.', false, 'success');
       this.animateCard('is-pulse');
 
       window.setTimeout(() => {
@@ -186,11 +186,11 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       if (message === 'Invalid message length.') {
-        return 'Scrivi un messaggio più dettagliato.';
+        return 'Scrivi un messaggio pi\u00F9 dettagliato.';
       }
 
       if (message === 'Spam detected.') {
-        return 'Non è stato possibile inviare il messaggio. Riprova.';
+        return 'Non \u00E8 stato possibile inviare il messaggio. Riprova.';
       }
 
       if (message === 'Forbidden origin.') {
@@ -198,22 +198,22 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       if (message === 'Too many requests. Try again later.') {
-        return 'Hai effettuato troppi tentativi. Riprova più tardi.';
+        return 'Hai effettuato troppi tentativi. Riprova pi\u00F9 tardi.';
       }
 
       if (message === 'Server email configuration is missing.') {
-        return 'Il servizio di contatto non è disponibile in questo momento.';
+        return 'Il servizio di contatto non \u00E8 disponibile in questo momento.';
       }
 
       if (message === 'Email provider error.') {
-        return "C'è stato un problema temporaneo nell'invio. Riprova tra poco.";
+        return "C'\u00E8 stato un problema temporaneo nell'invio. Riprova tra poco.";
       }
 
       if (message === 'Unexpected server error.' || message === 'Invio non riuscito.') {
-        return 'Qualcosa è andato storto. Riprova tra qualche istante.';
+        return 'Qualcosa \u00E8 andato storto. Riprova tra qualche istante.';
       }
 
-      return message || 'Qualcosa è andato storto. Riprova tra qualche istante.';
+      return message || 'Qualcosa \u00E8 andato storto. Riprova tra qualche istante.';
     }
 
     setPending(isPending) {
@@ -221,6 +221,8 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       this.submitButton.disabled = isPending;
       this.submitButton.textContent = isPending ? 'Invio...' : 'Invia';
+      this.submitButton.setAttribute('aria-busy', String(isPending));
+      this.form.setAttribute('aria-busy', String(isPending));
     }
 
     setStatus(message, isError, tone = null) {

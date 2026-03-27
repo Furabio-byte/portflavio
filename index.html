@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Portfolio personale di Flavio">
-  <meta name="theme-color" content="#808000">
-  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ded9d2">
+  <meta name="color-scheme" content="light">
 
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://portflavio.vercel.app; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
@@ -27,6 +27,7 @@
   <meta name="twitter:image" content="https://www.portflavio.it/images/og-image.svg">
 
   <title>Portflavio - Portfolio Personale</title>
+  <link rel="canonical" href="https://www.portflavio.it">
 
   <!-- Collegamento ai font di Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -41,6 +42,7 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Vai al contenuto principale</a>
   <!-- Div Cursore Dinamico -->
   <div class="custom-cursor"></div>
 
@@ -74,20 +76,18 @@
       </a>
 
       <!-- Text -->
-      <a href="#text" class="scheda-link" aria-label="Contatti e riferimenti">
+      <a href="#text" class="scheda-link" aria-label="Text - contatti e riferimenti">
         <article class="scheda">
           <span class="lettera" aria-hidden="true">T</span>
           <span class="parola">Text</span>
-          <span class="numero">5</span>
+          <span class="numero">6</span>
         </article>
       </a>
     </nav>
   </header>
 
   <main id="main-content">
-    <h1 class="sr-only" aria-hidden="true"
-      style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
-      Portfolio Personale di Flavio</h1>
+    <h1 class="sr-only">Portfolio personale di Flavio</h1>
     <!-- Sezione Project -->
     <section id="project" class="text-page-container reveal">
       <div class="sezione-contenuto">
@@ -103,7 +103,7 @@
                     <span class="card-numero">01</span>
                   </div>
                   <div class="card-body">
-                    <p class="card-desc" style="margin-top: 8px;">Qui troverai i miei prossimi progetti, le applicazioni
+                    <p class="card-desc card-desc-spaced">Qui troverai i miei prossimi progetti, le applicazioni
                       web in via di sviluppo e molto altro.</p>
                   </div>
                   <div class="card-footer">
@@ -140,7 +140,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">SQL for Data Analysis</h3>
                     <p class="card-desc">Simplilearn.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Analisi dei dati tramite interrogazioni complesse su
+                    <p class="card-desc card-desc-spaced">Analisi dei dati tramite interrogazioni complesse su
                       Server Microsoft SQL.</p>
                   </div>
                   <div class="card-footer">
@@ -160,7 +160,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Introduction to SQL</h3>
                     <p class="card-desc">Simplilearn.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Gestione Database relazionali e fondamenti di
+                    <p class="card-desc card-desc-spaced">Gestione Database relazionali e fondamenti di
                       scrittura di query SQL.</p>
                   </div>
                   <div class="card-footer">
@@ -180,7 +180,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Excel Avanzato + VBA</h3>
                     <p class="card-desc">IFOA - Training Institute.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Competenze avanzate in Microsoft Excel, analisi dei
+                    <p class="card-desc card-desc-spaced">Competenze avanzate in Microsoft Excel, analisi dei
                       dati e programmazione Macro con VBA.</p>
                   </div>
                   <div class="card-footer">
@@ -200,7 +200,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Introduction to Generative AI</h3>
                     <p class="card-desc">Google Cloud Skills Boost.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali di intelligenza artificiale
+                    <p class="card-desc card-desc-spaced">Principi fondamentali di intelligenza artificiale
                       generativa e applicazioni pratiche su Google Cloud.</p>
                   </div>
                   <div class="card-footer">
@@ -220,7 +220,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Programmatore Python</h3>
                     <p class="card-desc">Fondazione ALESS Don Milani - ETS.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali della programmazione procedurale
+                    <p class="card-desc card-desc-spaced">Principi fondamentali della programmazione procedurale
                       e orientata agli oggetti con linguaggio Python.</p>
                   </div>
                   <div class="card-footer">
@@ -240,7 +240,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Cybersecurity</h3>
                     <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Principi fondamentali di sicurezza e reti.</p>
+                    <p class="card-desc card-desc-spaced">Principi fondamentali di sicurezza e reti.</p>
                   </div>
                   <div class="card-footer">
                     <div class="card-tech">
@@ -259,7 +259,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Amministratore di Rete Linux</h3>
                     <p class="card-desc">Istituto Cefi Informatica.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Corso di formazione per l'amministrazione,
+                    <p class="card-desc card-desc-spaced">Corso di formazione per l'amministrazione,
                       configurazione e sicurezza di reti basate su sistemi Linux.</p>
                   </div>
                   <div class="card-footer">
@@ -279,7 +279,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Linux Unhatched</h3>
                     <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Fondamenti di Linux (CLI).</p>
+                    <p class="card-desc card-desc-spaced">Fondamenti di Linux (CLI).</p>
                   </div>
                   <div class="card-footer">
                     <div class="card-tech">
@@ -298,7 +298,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">HTML Essentials</h3>
                     <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Fondamenti e best practice del web development.</p>
+                    <p class="card-desc card-desc-spaced">Fondamenti e best practice del web development.</p>
                   </div>
                   <div class="card-footer">
                     <div class="card-tech">
@@ -315,7 +315,7 @@
                     <span class="card-numero">10</span>
                   </div>
                   <div class="card-body">
-                    <p class="card-desc" style="margin-top: 8px;">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
+                    <p class="card-desc card-desc-spaced">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
                   </div>
                   <div class="card-footer">
                     <div class="card-tech">
@@ -349,7 +349,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">IT Support Specialist</h3>
                     <p class="card-desc">Assinde S.r.l.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Interfaccia tecnica tra azienda e team di sviluppo.
+                    <p class="card-desc card-desc-spaced">Interfaccia tecnica tra azienda e team di sviluppo.
                       Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale
                       interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
                   </div>
@@ -373,7 +373,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Sistemista IT</h3>
                     <p class="card-desc">5 Emme Informatica S.p.A.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Esperienza di supporto sistemistico e IT presso le
+                    <p class="card-desc card-desc-spaced">Esperienza di supporto sistemistico e IT presso le
                       strutture del Senato della Repubblica Italiana.</p>
                   </div>
                   <div class="card-footer">
@@ -394,7 +394,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Programmatore Python Junior</h3>
                     <p class="card-desc">Access Point Coop. Soc. Onlus.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Sviluppo, manutenzione e ottimizzazione del codice
+                    <p class="card-desc card-desc-spaced">Sviluppo, manutenzione e ottimizzazione del codice
                       Python per la creazione di un videogioco a uso interno aziendale.</p>
                   </div>
                   <div class="card-footer">
@@ -415,7 +415,7 @@
                   <div class="card-body">
                     <h3 class="card-titolo">Assistenza Helpdesk IT</h3>
                     <p class="card-desc">Tecnotrans S.R.L.</p>
-                    <p class="card-desc" style="margin-top: 8px;">Supporto tecnico di primo livello, risoluzione
+                    <p class="card-desc card-desc-spaced">Supporto tecnico di primo livello, risoluzione
                       incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
                   </div>
                   <div class="card-footer">
@@ -434,7 +434,7 @@
                     <span class="card-numero">05</span>
                   </div>
                   <div class="card-body">
-                    <p class="card-desc" style="margin-top: 8px;">Qui troverai i prossimi step della mia carriera
+                    <p class="card-desc card-desc-spaced">Qui troverai i prossimi step della mia carriera
                       professionale.</p>
                   </div>
                   <div class="card-footer">
@@ -470,7 +470,8 @@
                   <form class="contact-form" id="contactForm" novalidate>
                     <input type="text" id="contactCompanyFax" name="company_fax" class="contact-honeypot" tabindex="-1" autocomplete="new-password" inputmode="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-hidden="true">
                     <label class="contact-field">
-                      <input type="email" id="contactEmail" name="email" placeholder="La tua email" required>
+                      <span class="sr-only">La tua email</span>
+                      <input type="email" id="contactEmail" name="email" placeholder="La tua email" autocomplete="email" inputmode="email" aria-describedby="contactStatus" required>
                     </label>
                     <div class="contact-suggestions" aria-label="Suggerimenti dominio email">
                       <button type="button" class="contact-suggestion" data-domain="@gmail.com">@gmail.com</button>
@@ -478,10 +479,11 @@
                     </div>
 
                     <label class="contact-field">
-                      <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." required></textarea>
+                      <span class="sr-only">Scrivi il tuo messaggio</span>
+                      <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." aria-describedby="contactStatus" required></textarea>
                     </label>
                   </form>
-                  <p class="contact-status" id="contactStatus" aria-live="polite"></p>
+                  <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
                 </div>
 
                 <div class="card-footer contact-form-footer">

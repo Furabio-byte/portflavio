@@ -106,6 +106,10 @@
   opacity: 0.8;
 }
 
+.card-desc-spaced {
+  margin-top: 8px;
+}
+
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -138,6 +142,15 @@
 .card-tech button {
   background: transparent;
   cursor: pointer;
+}
+
+.card-tech a:focus-visible,
+.card-tech button:focus-visible,
+.contact-suggestion:focus-visible,
+.contact-submit:focus-visible,
+.privacy-back:focus-visible {
+  outline: 3px solid var(--colore-testo);
+  outline-offset: 3px;
 }
 
 .sub-scheda:hover .card-tech span,
@@ -180,7 +193,12 @@
   aspect-ratio: auto;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.5s ease-out 0.12s, transform 0.5s ease-out 0.12s;
+  transition:
+    opacity 0.5s ease-out 0.12s,
+    transform 0.5s ease-out 0.12s,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
 }
 
 .reveal.active .contact-form-card {
@@ -258,6 +276,12 @@
   transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.contact-field.is-error input,
+.contact-field.is-error textarea {
+  border-color: rgba(138, 43, 43, 0.55);
+  box-shadow: 0 0 0 3px rgba(138, 43, 43, 0.08);
+}
+
 .contact-field textarea {
   min-height: 145px;
   resize: vertical;
@@ -280,6 +304,22 @@
   font-size: 0.9rem;
   min-height: 1.4rem;
   opacity: 0.75;
+  transform: translateY(0);
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.25s ease;
+}
+
+.contact-status.is-success {
+  color: rgba(0, 0, 0, 0.88);
+  opacity: 1;
+}
+
+.contact-status.is-error {
+  color: #8a2b2b;
+  opacity: 1;
+}
+
+.contact-status.is-animated {
+  animation: contact-status-lift 0.36s ease;
 }
 
 .contact-submit {
@@ -292,11 +332,35 @@
   font-weight: 700;
   padding: 10px 18px;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .contact-submit:hover {
   transform: translateY(-2px);
+}
+
+.contact-submit.is-success {
+  background-color: transparent;
+  color: var(--colore-testo);
+}
+
+.contact-submit:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  transform: none;
+}
+
+.contact-form-card.is-success {
+  border-color: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form-card.is-pulse {
+  animation: contact-card-pulse 0.55s ease;
+}
+
+.contact-form-card.is-shake {
+  animation: contact-card-shake 0.32s ease;
 }
 
 .privacy-page {
@@ -363,6 +427,51 @@
 .privacy-back:hover {
   background-color: var(--colore-testo);
   color: var(--colore-sfondo-principale);
+}
+
+@keyframes contact-status-lift {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contact-card-pulse {
+  0% {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08), 0 14px 26px rgba(0, 0, 0, 0.12);
+  }
+
+  100% {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes contact-card-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
 }
 
 .scheda.is-active .lettera {
