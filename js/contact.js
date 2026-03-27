@@ -53,12 +53,12 @@ window.PortflavioApp = window.PortflavioApp || {};
         }
 
         if (message.length < 3) {
-          this.showFieldError(this.messageField, this.messageInput, "Scrivi un messaggio un po' piu dettagliato.");
+          this.showFieldError(this.messageField, this.messageInput, "Scrivi un messaggio un po' più dettagliato.");
           return;
         }
 
         if (!this.apiUrl || this.apiUrl.includes('REPLACE_WITH_YOUR_VERCEL_DOMAIN')) {
-          this.setStatus('Il servizio di contatto non e disponibile in questo momento.', true, 'error');
+          this.setStatus('Il servizio di contatto non è disponibile in questo momento.', true, 'error');
           return;
         }
 
@@ -97,7 +97,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const localPart = currentValue.split('@')[0].trim();
 
       if (!localPart) {
-        this.setStatus("Scrivi prima la parte iniziale della tua email.", true);
+        this.setStatus("Scrivi prima la parte iniziale della tua email.", true, 'error');
         this.emailInput.focus();
         return;
       }
@@ -129,10 +129,10 @@ window.PortflavioApp = window.PortflavioApp || {};
           return;
         }
 
-        this.setStatus('Condivisione non disponibile su questo browser.', true);
+        this.setStatus('La condivisione non è disponibile su questo browser.', true, 'error');
       } catch (error) {
         if (error?.name !== 'AbortError') {
-          this.setStatus('Condivisione non riuscita.', true);
+          this.setStatus('La condivisione non è riuscita.', true, 'error');
         }
       }
     }
@@ -152,7 +152,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       this.resetValidationState();
       this.card?.classList.add('is-success');
       this.submitButton?.classList.add('is-success');
-      this.setStatus('Messaggio inviato. Ti rispondero al piu presto.', false, 'success');
+      this.setStatus('Messaggio inviato. Ti risponderò al più presto.', false, 'success');
       this.animateCard('is-pulse');
 
       window.setTimeout(() => {
@@ -186,14 +186,14 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       if (message === 'Email provider error.') {
-        return "C'e stato un problema temporaneo nell'invio. Riprova tra poco.";
+        return "C'è stato un problema temporaneo nell'invio. Riprova tra poco.";
       }
 
       if (message === 'Unexpected server error.' || message === 'Invio non riuscito.') {
-        return 'Qualcosa e andato storto. Riprova tra qualche istante.';
+        return 'Qualcosa è andato storto. Riprova tra qualche istante.';
       }
 
-      return message || 'Qualcosa e andato storto. Riprova tra qualche istante.';
+      return message || 'Qualcosa è andato storto. Riprova tra qualche istante.';
     }
 
     setPending(isPending) {
