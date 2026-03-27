@@ -66,14 +66,14 @@
   }
 
   .contact-form-card .card-body {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .contact-form-footer {
     align-items: stretch;
     gap: 8px;
     flex-direction: column;
-    padding-top: 10px;
+    padding-top: 12px;
   }
 
   .contact-submit {
