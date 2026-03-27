@@ -43,16 +43,26 @@ window.PortflavioApp = window.PortflavioApp || {};
 
   class ContatoreSchede {
     constructor() {
-      this.yearElement = document.querySelector('.scheda-link:last-child .numero');
+      this.roadElement = document.querySelector('.scheda-link:nth-child(3) .numero');
+      this.textElement = document.querySelector('.scheda-link:last-child .numero');
       this.init();
     }
 
     init() {
-      if (this.yearElement) {
-        const currentYear = new Date().getFullYear();
-        const lastTwoDigits = currentYear % 100;
-        this.yearElement.textContent = lastTwoDigits >= 30 ? lastTwoDigits.toString() : (lastTwoDigits % 10).toString();
+      if (!this.roadElement || !this.textElement) return;
+
+      const currentYear = new Date().getFullYear();
+      const isReasonableYear = currentYear >= 2020 && currentYear <= 2039;
+
+      if (!isReasonableYear) {
+        this.roadElement.textContent = '2';
+        this.textElement.textContent = '6';
+        return;
       }
+
+      const yearDigits = String(currentYear).slice(-2);
+      this.roadElement.textContent = yearDigits.charAt(0);
+      this.textElement.textContent = yearDigits.charAt(1);
     }
   }
 
