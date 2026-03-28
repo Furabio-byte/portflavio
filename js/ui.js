@@ -113,10 +113,6 @@ window.PortflavioApp = window.PortflavioApp || {};
       const isAlreadyActive = currentSchedaInner?.classList.contains('is-active');
       const shouldNavigate = isQuickTap && isSameScheda && isAlreadyActive;
 
-      if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(shouldNavigate ? 100 : 50);
-      }
-
       if (shouldNavigate) {
         this.navigateToTarget(targetId);
       } else if (!isAlreadyActive) {
