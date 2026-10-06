@@ -85,7 +85,9 @@ html:not(.js) .riserva {
     display: block;
     flex-shrink: 0;
     width: 100%;
-    height: 28px;
+    height: 32px;
+    touch-action: none;
+    cursor: grab;
   }
 
   .pannello-maniglia::before {
