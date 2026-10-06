@@ -606,7 +606,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       contenuto.style.removeProperty('--c');
       const righe = LINEE.map((linea, i) => {
         const capolinea = linea.nodi[linea.nodi.length - 1];
-        return `<button type="button" class="riga" data-vai="${capolinea.id}" style="animation-delay:${0.15 + i * 0.18}s"><span>${esc(linea.id)}</span><span>${esc(linea.nome)} &rsaquo; ${esc(capolinea.nome)}</span><span>${linea.nodi.length}</span></button>`;
+        return `<button type="button" class="riga" data-vai="${capolinea.id}" style="animation-delay:${0.15 + i * 0.18}s"><span>${esc(linea.id)}</span><span>${esc(linea.nome)} &rsaquo; ${esc(capolinea.nome)}</span><span>${linea.nodi.filter((n) => !n.futura).length}</span></button>`;
       }).join('');
       const scorrimento = stazioni.filter((s) => !s.futura).map((s) => s.nome).join(' · ');
       riempi(`<div class="pan-testa"><span class="sigla sigla-neutra" aria-hidden="true">P</span><span class="pan-linea">PORT</span></div>
