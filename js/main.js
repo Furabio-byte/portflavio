@@ -3,6 +3,8 @@ window.PortflavioApp = window.PortflavioApp || {};
 document.addEventListener('DOMContentLoaded', () => {
   const app = window.PortflavioApp;
 
+  app.applicaLingua?.();
+
   new app.ContatoreSchede();
   new app.ContactFormHandler();
   app.avviaMappa();

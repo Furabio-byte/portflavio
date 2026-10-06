@@ -220,13 +220,15 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (!this.submitButton) return;
 
       this.submitButton.disabled = isPending;
-      this.submitButton.textContent = isPending ? 'Invio...' : 'Invia';
+      const tr = app.t || ((testo) => testo);
+      this.submitButton.textContent = tr(isPending ? 'Invio...' : 'Invia');
       this.submitButton.setAttribute('aria-busy', String(isPending));
       this.form.setAttribute('aria-busy', String(isPending));
     }
 
     setStatus(message, isError, tone = null) {
       if (!this.statusElement) return;
+      if (message && app.t) message = app.t(message);
 
       this.statusElement.textContent = message;
       this.statusElement.classList.remove('is-error', 'is-success', 'is-animated');

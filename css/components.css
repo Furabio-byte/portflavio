@@ -1592,3 +1592,665 @@
 
 @keyframes entra-destra { from { opacity: 0; transform: translateX(40px); } }
 @keyframes entra-sinistra { from { opacity: 0; transform: translateX(-40px); } }
+
+/* ======================================================
+   Stato del servizio, uscite, orari, linea in costruzione
+   ====================================================== */
+.stato-punto {
+  width: 8px;
+  height: 8px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background-color: #0f8a4a;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #0f8a4a 20%, transparent);
+}
+
+.stato-punto[data-stato="lavori"] { background-color: #e8a200; box-shadow: 0 0 0 3px color-mix(in srgb, #e8a200 22%, transparent); }
+.stato-punto[data-stato="arrivo"] { background-color: #1f4fa3; box-shadow: 0 0 0 3px color-mix(in srgb, #1f4fa3 22%, transparent); }
+.stato-punto[data-stato="disponibile"] { animation: battito 2s ease-in-out infinite; }
+
+@keyframes battito {
+  50% { box-shadow: 0 0 0 6px color-mix(in srgb, #0f8a4a 0%, transparent); }
+}
+
+.linea-stato {
+  margin: -2px 0 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.linea-stato::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: #0f8a4a;
+  vertical-align: 1px;
+}
+
+.linea-stato[data-stato="lavori"]::before { background-color: #e8a200; }
+.linea-stato[data-stato="arrivo"]::before { background-color: #1f4fa3; }
+
+.stato-servizio {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.stato-servizio li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.stato-servizio button {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.stato-servizio button:hover {
+  background-color: var(--rule);
+}
+
+.stato-testo {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  line-height: 1.35;
+}
+
+.stato-testo strong {
+  display: block;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.stato-etichetta {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background-color: #0f8a4a;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stato-etichetta[data-stato="lavori"] { background-color: #e8a200; color: #111; }
+.stato-etichetta[data-stato="arrivo"] { background-color: #1f4fa3; }
+
+.azioni-port .pan-bottone svg {
+  flex-shrink: 0;
+}
+
+.uscite {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+
+.uscite a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 10px;
+  background-color: #111;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease), background-color 0.2s ease;
+}
+
+[data-theme="dark"] .uscite a {
+  background-color: #f2f1ec;
+  color: #111;
+}
+
+.uscite a:hover {
+  transform: translateY(-2px);
+  background-color: var(--c, #111);
+  color: var(--ct, #fff);
+}
+
+.uscita-freccia {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: var(--c, #e8a200);
+  color: var(--ct, #fff);
+  font-size: 0.9rem;
+}
+
+.caso-studio {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-left: 4px solid var(--c);
+  border-radius: 0 12px 12px 0;
+  background-color: color-mix(in srgb, var(--c) 7%, transparent);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.caso-studio h4 {
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.caso-studio img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.orari {
+  list-style: none;
+}
+
+.orari button {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.orari-anno {
+  color: var(--c);
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+.pan-nota {
+  font-size: 0.85rem;
+}
+
+.linea.cantiere .solida {
+  stroke-dasharray: 12 9;
+  stroke-dashoffset: 0;
+  animation: appari 0.8s ease forwards;
+  opacity: 0;
+}
+
+/* ======================================================
+   Il biglietto
+   ====================================================== */
+.biglietto-finestra {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #141414;
+}
+
+.biglietto-finestra::backdrop {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(31, 79, 163, 0.35), transparent 50%),
+    radial-gradient(circle at 85% 90%, rgba(215, 38, 43, 0.3), transparent 50%),
+    rgba(10, 10, 12, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.biglietto-finestra[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 18px 16px 48px;
+}
+
+.biglietto-azioni {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.biglietto-azioni form {
+  display: contents;
+}
+
+.biglietto-azioni .pan-bottone {
+  background-color: #f2f1ec;
+  color: #111;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+.biglietto-azioni .pan-bottone.secondario {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.biglietto-scena {
+  width: min(780px, 100%);
+  animation: biglietto-entra 0.7s var(--ease) both;
+}
+
+@keyframes biglietto-entra {
+  from { opacity: 0; transform: translateY(40px) rotate(-1.5deg) scale(0.97); }
+}
+
+.biglietto {
+  --carta: #fffdf6;
+  --b-ink: #141414;
+  --b-muted: #6b6a66;
+  --b-riga: rgba(20, 20, 20, 0.12);
+  --tacca: rgba(10, 10, 12, 0.82);
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  color: var(--b-ink);
+  font-family: var(--font);
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgba(232, 162, 0, 0.1), transparent 55%),
+    radial-gradient(90% 50% at 0% 100%, rgba(31, 79, 163, 0.08), transparent 55%),
+    repeating-linear-gradient(-35deg, rgba(20, 20, 20, 0.022) 0 1px, transparent 1px 7px),
+    var(--carta);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* filigrana: l'anello di PORT, enorme e quasi invisibile */
+.biglietto::after {
+  content: '';
+  position: absolute;
+  right: -120px;
+  top: 160px;
+  width: 420px;
+  height: 420px;
+  border: 46px solid rgba(20, 20, 20, 0.035);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.b-testa {
+  position: relative;
+  padding: 0 34px 26px;
+}
+
+.b-bande {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 12px;
+  margin: 0 -34px 26px;
+}
+
+.b-bande span {
+  background-color: var(--c);
+}
+
+.b-intestazione {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.b-micro {
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  color: var(--b-muted);
+  text-transform: uppercase;
+}
+
+.b-marchio {
+  margin: 2px 0 4px;
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.b-sotto {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--b-muted);
+}
+
+.b-snodo {
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+  fill: var(--carta);
+  stroke: var(--b-ink);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.b-snodo circle {
+  stroke-width: 5;
+}
+
+.b-campi {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 24px;
+  border: 1px solid var(--b-riga);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--b-riga);
+}
+
+.b-campi div {
+  padding: 10px 12px;
+  background-color: var(--carta);
+}
+
+.b-campi dt {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--b-muted);
+}
+
+.b-campi dd {
+  margin-top: 2px;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.4rem;
+  line-height: 1.1;
+}
+
+/* linea di strappo con le tacche ai lati, come un biglietto vero */
+.b-strappo {
+  position: relative;
+  height: 0;
+  margin: 0 22px;
+  border-top: 2px dashed rgba(20, 20, 20, 0.22);
+}
+
+.b-strappo::before,
+.b-strappo::after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--tacca);
+}
+
+.b-strappo::before { left: -38px; }
+.b-strappo::after { right: -38px; }
+
+.b-corpo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 28px 34px 30px;
+}
+
+.b-linea-titolo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--c);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.b-linea-titolo .sigla {
+  width: 28px;
+  height: 28px;
+  font-size: 0.82rem;
+}
+
+.b-linea-titolo small {
+  color: var(--b-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.b-conta {
+  margin-left: auto;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.3rem;
+  color: var(--b-muted);
+}
+
+.b-fermate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  padding-left: 30px;
+}
+
+.b-fermate::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 6px;
+  border-radius: 6px;
+  background-color: var(--c);
+}
+
+.b-fermate li {
+  position: relative;
+}
+
+.b-punto {
+  position: absolute;
+  left: -30px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  border: 4px solid var(--c);
+  border-radius: 50%;
+  background-color: var(--carta);
+}
+
+.b-titolo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 1.02rem;
+}
+
+.b-anno,
+.b-stato {
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.05rem;
+  color: var(--b-muted);
+}
+
+.b-stato {
+  padding: 0 6px;
+  border-radius: 4px;
+  background-color: color-mix(in srgb, var(--c) 14%, transparent);
+  color: var(--b-ink);
+  font-size: 0.95rem;
+}
+
+.b-ente {
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.b-desc {
+  margin-top: 4px;
+  color: #3d3c39;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.b-tech {
+  margin-top: 5px;
+  color: var(--b-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.b-griglia {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  list-style: none;
+}
+
+.b-griglia li {
+  position: relative;
+  padding-left: 24px;
+}
+
+.b-griglia .b-punto {
+  left: 0;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  border-width: 3px;
+}
+
+.b-griglia strong {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.b-griglia span:not(.b-punto) {
+  color: var(--b-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.b-doppia {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.b-contatti {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.b-contatti span {
+  display: block;
+  color: var(--b-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.b-cantiere .b-punto {
+  border-style: dashed;
+}
+
+.b-piede {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 24px 34px 30px;
+}
+
+.b-qr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.b-qr .qr {
+  width: 96px;
+  height: 96px;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: #fff;
+  color: #111;
+  box-shadow: 0 0 0 1px var(--b-riga);
+}
+
+.b-qr p {
+  max-width: 110px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--b-muted);
+}
+
+.b-codice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* codice a barre decorativo, larghezze irregolari */
+.b-barre {
+  width: min(280px, 100%);
+  height: 46px;
+  background:
+    repeating-linear-gradient(90deg,
+      #141414 0 2px, transparent 2px 4px,
+      #141414 4px 5px, transparent 5px 8px,
+      #141414 8px 11px, transparent 11px 12px,
+      #141414 12px 13px, transparent 13px 16px,
+      #141414 16px 18px, transparent 18px 21px);
+}
+
+.b-seriale {
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.22em;
+}
+
+.b-nota {
+  color: var(--b-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
