@@ -203,21 +203,52 @@ window.PortflavioApp = window.PortflavioApp || {};
     hubG.addEventListener('click', () => { if (!trascinato) seleziona(HUB, { vola: false }); });
     hubG.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); seleziona(HUB); } });
 
-    /* ---------- Geometria delle linee (per percorsi sulle curve) ---------- */
+    /* ---------- Geometria delle linee ----------
+       Ogni binario viene campionato una volta sola in una tabella di punti (ogni 2 unità).
+       Treni, stazioni e percorsi leggono la tabella: niente getPointAtLength a ogni fotogramma,
+       che su Safari è lentissimo ed era la causa del lag. */
+    const PASSO = 2;
+
+    function campiona(linea) {
+      if (linea.tabella) return;
+      const tot = linea.pathEl.getTotalLength();
+      const n = Math.ceil(tot / PASSO) + 1;
+      const tabella = new Float32Array(n * 2);
+      for (let i = 0; i < n; i += 1) {
+        const q = linea.pathEl.getPointAtLength(Math.min(i * PASSO, tot));
+        tabella[i * 2] = q.x;
+        tabella[i * 2 + 1] = q.y;
+      }
+      linea.tot = tot;
+      linea.tabella = tabella;
+      linea.campioni = n;
+    }
+
+    // punto sul binario alla distanza l, interpolato dalla tabella
+    function puntoSu(linea, l) {
+      const t = linea.tabella;
+      const f = Math.min(Math.max(l / PASSO, 0), linea.campioni - 1);
+      const i = Math.floor(f);
+      const j = Math.min(i + 1, linea.campioni - 1);
+      const k = f - i;
+      return { x: t[i * 2] + (t[j * 2] - t[i * 2]) * k, y: t[i * 2 + 1] + (t[j * 2 + 1] - t[i * 2 + 1]) * k };
+    }
+
     function misuraLinee() {
       LINEE.forEach((linea) => {
-        const tot = linea.pathEl.getTotalLength();
-        linea.tot = tot;
+        if (linea.misurata) return;
+        campiona(linea);
+        const t = linea.tabella;
         linea.nodi.forEach((nodo) => {
           let migliore = 0;
           let distanza = Infinity;
-          for (let l = 0; l <= tot; l += 2) {
-            const q = linea.pathEl.getPointAtLength(l);
-            const d = (q.x - nodo.x) ** 2 + (q.y - nodo.y) ** 2;
-            if (d < distanza) { distanza = d; migliore = l; }
+          for (let i = 0; i < linea.campioni; i += 1) {
+            const d = (t[i * 2] - nodo.x) ** 2 + (t[i * 2 + 1] - nodo.y) ** 2;
+            if (d < distanza) { distanza = d; migliore = i * PASSO; }
           }
           nodo.len = distanza < 30 ? migliore : null;
         });
+        linea.misurata = true;
       });
     }
 
@@ -229,7 +260,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const punti = [];
       const dir = lb > la ? 1 : -1;
       for (let l = la; dir > 0 ? l < lb : l > lb; l += 6 * dir) {
-        const q = linea.pathEl.getPointAtLength(l);
+        const q = puntoSu(linea, l);
         punti.push([q.x, q.y]);
       }
       punti.push([b.x, b.y]);
@@ -257,11 +288,15 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
 
     function posa(treno, l, dir) {
-      const p = treno.linea.pathEl;
-      const a = p.getPointAtLength(l);
-      const b = p.getPointAtLength(Math.min(Math.max(l + dir, 0), treno.linea.tot));
+      const a = puntoSu(treno.linea, l);
+      const b = puntoSu(treno.linea, Math.min(Math.max(l + dir * PASSO, 0), treno.linea.tot));
       const angolo = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-      treno.g.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${angolo})`);
+      // si scrive solo se il treno si è davvero spostato: i treni in sosta non costano nulla
+      const valore = `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${angolo.toFixed(0)})`;
+      if (treno.ultimo !== valore) {
+        treno.g.setAttribute('transform', valore);
+        treno.ultimo = valore;
+      }
     }
 
     function muoviTreni(ora) {
@@ -316,9 +351,18 @@ window.PortflavioApp = window.PortflavioApp || {};
         const ty = k * scala * (vbDisegnato.y - vb.y);
         vista.classList.add('in-movimento');
         svg.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${k})`;
-        window.clearTimeout(timerConsolida);
-        timerConsolida = window.setTimeout(consolida, 160);
+        programmaConsolida();
       });
+    }
+
+    // il ridisegno nitido aspetta che il gesto sia finito: mai durante un pizzico o un trascinamento
+    function programmaConsolida(attese = 0) {
+      window.clearTimeout(timerConsolida);
+      timerConsolida = window.setTimeout(() => {
+        // con un dito ancora appoggiato aspetta, ma mai più di qualche secondo
+        if (puntatori.size > 0 && attese < 25) { programmaConsolida(attese + 1); return; }
+        consolida();
+      }, 160);
     }
 
     function consolida() {
@@ -939,7 +983,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const percorso = percorsoMinimo(daId, aId);
       if (percorso.length < 2) { esito.innerHTML = '<p class="pan-desc">Scegli due stazioni diverse.</p>'; return; }
 
-      if (!LINEE[0].tot) misuraLinee();
+      misuraLinee();
       const punti = [[percorso[0].x, percorso[0].y]];
       for (let i = 1; i < percorso.length; i += 1) punti.push(...tratto(percorso[i - 1], percorso[i]).slice(1));
       tracciato = crea('polyline', { class: 'percorso-tracciato', points: punti.map((q) => q.join(',')).join(' ') }, gPercorso);

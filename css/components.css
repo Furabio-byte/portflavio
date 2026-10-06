@@ -35,8 +35,10 @@
   pointer-events: none;
 }
 
-.vista.in-movimento #mappa {
+/* la mappa è sempre un livello grafico pronto: all'inizio del gesto non va creato nulla */
+#mappa {
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .vista.in-movimento #mappa * {
@@ -1299,8 +1301,7 @@
 }
 
 [data-theme="dark"] .treno .faro {
-  opacity: 0.35;
-  filter: blur(4px);
+  opacity: 0.22;
 }
 
 .treno .luce {
