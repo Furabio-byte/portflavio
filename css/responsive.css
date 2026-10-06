@@ -106,14 +106,29 @@ html:not(.js) .riserva {
     padding-top: 4px;
   }
 
-  .zoom,
-  .viaggio-barra {
-    bottom: 80px;
+  /* su mobile il foglio occupa la parte bassa: i controlli della mappa salgono in alto */
+  .zoom {
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+    left: auto;
+  }
+
+  .zoom button {
+    width: 40px;
+    height: 40px;
   }
 
   .viaggio-barra {
-    max-width: calc(100% - 120px);
-    left: calc(50% + 30px);
+    top: 12px;
+    bottom: auto;
+    left: 12px;
+    max-width: calc(100% - 76px);
+    transform: translateY(-20px);
+  }
+
+  .viaggio-barra.attiva {
+    transform: none;
   }
 
   .minimappa {
