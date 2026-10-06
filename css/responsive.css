@@ -4,6 +4,8 @@ html:not(.js) .strumenti,
 html:not(.js) .legenda,
 html:not(.js) #mappa,
 html:not(.js) #treni,
+html:not(.js) #btnLingua,
+html:not(.js) #btnBiglietto,
 html:not(.js) .zoom,
 html:not(.js) .minimappa,
 html:not(.js) .viaggio-barra,
@@ -42,8 +44,47 @@ html:not(.js) .riserva {
 
   .cerca > kbd,
   #btnAiuto,
+  #btnSuono,
+  #btnBiglietto,
   .strumento .testo {
     display: none;
+  }
+
+  /* biglietto su telefono: tutto in colonna */
+  .b-testa,
+  .b-corpo,
+  .b-piede {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .b-bande {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+
+  .b-campi,
+  .b-griglia,
+  .b-doppia {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .b-doppia,
+  .b-griglia {
+    grid-template-columns: 1fr;
+  }
+
+  .b-snodo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .b-piede {
+    grid-template-columns: 1fr;
+  }
+
+  .b-codice {
+    align-items: flex-start;
   }
 
   .strumento {
@@ -142,6 +183,79 @@ html:not(.js) .riserva {
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 7mm;
+  }
+
+  body.stampa-biglietto > *:not(#biglietto) {
+    display: none !important;
+  }
+
+  body.stampa-biglietto #biglietto {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    background: none;
+  }
+
+  .biglietto-finestra::backdrop {
+    background: #fff;
+    backdrop-filter: none;
+  }
+
+  body.stampa-biglietto .biglietto-azioni {
+    display: none;
+  }
+
+  body.stampa-biglietto .biglietto-scena {
+    width: 100%;
+    animation: none;
+  }
+
+  body.stampa-biglietto .biglietto {
+    --tacca: #fff;
+    border-radius: 14px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+    font-size: 11.5px;
+  }
+
+  /* in stampa il foglio A4 è stretto come un telefono: si torna alla disposizione larga, compatta, in una pagina */
+  body.stampa-biglietto,
+  html:has(body.stampa-biglietto) { background: #fff; }
+  body.stampa-biglietto .biglietto { font-size: 9.5px; }
+  body.stampa-biglietto .b-testa,
+  body.stampa-biglietto .b-corpo,
+  body.stampa-biglietto .b-piede { padding-left: 28px; padding-right: 28px; }
+  body.stampa-biglietto .b-bande { height: 8px; margin: 0 -28px 12px; }
+  body.stampa-biglietto .b-marchio { font-size: 30px; }
+  body.stampa-biglietto .b-snodo { width: 48px; height: 48px; }
+  body.stampa-biglietto .b-campi { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 10px; }
+  body.stampa-biglietto .b-campi div { padding: 6px 10px; }
+  body.stampa-biglietto .b-campi dd { font-size: 15px; }
+  body.stampa-biglietto .b-testa { padding-bottom: 12px; }
+  body.stampa-biglietto .b-corpo { gap: 11px; padding-top: 12px; padding-bottom: 10px; }
+  body.stampa-biglietto .b-linea-titolo { margin-bottom: 7px; padding-bottom: 5px; font-size: 13px; }
+  body.stampa-biglietto .b-fermate { gap: 6px; }
+  body.stampa-biglietto .b-titolo { font-size: 12px; }
+  body.stampa-biglietto .b-ente { font-size: 10.5px; }
+  body.stampa-biglietto .b-desc { margin-top: 2px; font-size: 10px; line-height: 1.4; }
+  body.stampa-biglietto .b-tech { margin-top: 2px; font-size: 9px; }
+  body.stampa-biglietto .b-griglia { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 22px; }
+  body.stampa-biglietto .b-griglia strong { font-size: 11px; }
+  body.stampa-biglietto .b-griglia span:not(.b-punto) { font-size: 9.5px; }
+  body.stampa-biglietto .b-doppia { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  body.stampa-biglietto .b-contatti { gap: 4px; font-size: 10.5px; }
+  body.stampa-biglietto .b-piede { grid-template-columns: auto minmax(0, 1fr); padding-top: 10px; padding-bottom: 12px; break-inside: avoid; }
+  body.stampa-biglietto .b-qr .qr { width: 68px; height: 68px; padding: 5px; }
+  body.stampa-biglietto .b-codice { align-items: flex-end; }
+  body.stampa-biglietto .b-barre { height: 28px; }
+  body.stampa-biglietto .b-linea { break-inside: avoid; }
+  body.stampa-biglietto .biglietto::after { top: 90px; }
+
   .testata .cerca,
   .strumenti,
   .legenda,

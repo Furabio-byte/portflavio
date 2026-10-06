@@ -10,8 +10,11 @@
     tema = null;
   }
 
-  if (!tema) {
-    tema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  // senza una scelta salvata il tema è automatico: scuro di sera e di notte, come una città che accende le luci
+  if (tema !== 'light' && tema !== 'dark') {
+    const ora = new Date().getHours();
+    tema = ora >= 20 || ora < 7 ? 'dark' : 'light';
+    root.dataset.temaAuto = '1';
   }
 
   root.dataset.theme = tema;

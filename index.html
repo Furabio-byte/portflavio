@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="light dark">
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://portflavio.vercel.app; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
+    content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self' https://portflavio.vercel.app; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
 
   <meta property="og:title" content="Portflavio - Portfolio Personale">
   <meta property="og:description" content="Portfolio personale di Flavio, scopri i miei progetti e il mio percorso.">
@@ -45,7 +45,7 @@
 </head>
 
 <body>
-  <a class="skip-link" href="#main-content">Vai al contenuto principale</a>
+  <a class="skip-link" href="#main-content" data-en="Skip to main content">Vai al contenuto principale</a>
 
   <div class="intro" id="intro" aria-hidden="true">
     <div class="intro-centro">
@@ -59,59 +59,72 @@
   </div>
 
   <header class="testata">
-    <h1>Portfolio personale di Flavio</h1>
+    <h1 data-en="Flavio's personal portfolio">Portfolio personale di Flavio</h1>
     <div class="cerca" role="search">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <label class="sr-only" for="cercaInput">Cerca stazione o competenza</label>
-      <input id="cercaInput" type="search" placeholder="Cerca stazioni, competenze o comandi" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="risultati" aria-autocomplete="list">
+      <label class="sr-only" for="cercaInput" data-en="Search a station or skill">Cerca stazione o competenza</label>
+      <input id="cercaInput" type="search" placeholder="Cerca stazioni, competenze o comandi" data-en-placeholder="Search stations, skills or commands" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="risultati" aria-autocomplete="list">
       <kbd aria-hidden="true">/</kbd>
       <ul class="risultati" id="risultati" role="listbox" aria-label="Risultati"></ul>
     </div>
     <div class="strumenti">
-      <button class="strumento" id="btnViaggio" type="button" aria-pressed="false" title="Viaggio guidato"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l12 8-12 8z"/></svg><span class="testo">Viaggio</span></button>
-      <button class="strumento" id="btnPercorso" type="button" aria-pressed="false" title="Calcola percorso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg><span class="testo">Percorso</span></button>
-      <button class="strumento" id="btnElenco" type="button" aria-pressed="false" title="Vista elenco"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="testo">Elenco</span></button>
-      <button class="strumento" id="btnTema" type="button" aria-pressed="false" title="Tema scuro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="sr-only">Tema scuro</span></button>
-      <button class="strumento" id="btnSuono" type="button" aria-pressed="false" title="Suoni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span class="sr-only">Suoni</span></button>
-      <button class="strumento" id="btnAiuto" type="button" title="Scorciatoie da tastiera"><span aria-hidden="true">?</span><span class="sr-only">Scorciatoie da tastiera</span></button>
+      <button class="strumento" id="btnViaggio" type="button" aria-pressed="false" title="Viaggio guidato" data-en-title="Guided tour"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l12 8-12 8z"/></svg><span class="testo" data-en="Tour">Viaggio</span></button>
+      <button class="strumento" id="btnPercorso" type="button" aria-pressed="false" title="Calcola percorso" data-en-title="Plan a route"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg><span class="testo" data-en="Route">Percorso</span></button>
+      <button class="strumento" id="btnElenco" type="button" aria-pressed="false" title="Vista elenco" data-en-title="List view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="testo" data-en="List">Elenco</span></button>
+      <button class="strumento" id="btnTema" type="button" aria-pressed="false" title="Tema scuro" data-en-title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="sr-only" data-en="Dark theme">Tema scuro</span></button>
+      <button class="strumento" id="btnLingua" type="button" title="English" data-en-title="Italiano" lang="en"><span aria-hidden="true">EN</span><span class="sr-only" data-en="Italiano">English</span></button>
+      <button class="strumento" id="btnBiglietto" type="button" title="Il tuo biglietto: CV da stampare" data-en-title="Your ticket: printable CV"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a3 3 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a3 3 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2"/></svg><span class="testo" data-en="Ticket">Biglietto</span></button>
+      <button class="strumento" id="btnSuono" type="button" aria-pressed="false" title="Suoni" data-en-title="Sounds"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span class="sr-only" data-en="Sounds">Suoni</span></button>
+      <button class="strumento" id="btnAiuto" type="button" title="Scorciatoie da tastiera" data-en-title="Keyboard shortcuts"><span aria-hidden="true">?</span><span class="sr-only" data-en="Keyboard shortcuts">Scorciatoie da tastiera</span></button>
     </div>
   </header>
 
-  <nav class="legenda" id="legenda" aria-label="Linee"></nav>
+  <nav class="legenda" id="legenda" aria-label="Linee" data-en-aria-label="Lines"></nav>
 
   <main class="corpo" id="main-content">
     <div class="vista" id="vista">
-      <svg id="mappa" role="group" aria-label="Mappa del portfolio: quattro linee, Project, Others, Road e Text, che partono da PORT"></svg>
+      <svg id="mappa" role="group" aria-label="Mappa del portfolio: quattro linee, Project, Others, Road e Text, che partono da PORT" data-en-aria-label="Portfolio map: four lines, Project, Others, Road and Text, leaving from PORT"></svg>
       <div class="minimappa" id="minimappa" aria-hidden="true"></div>
       <div class="suggerimento" id="suggerimento" aria-hidden="true"></div>
       <div class="zoom" role="group" aria-label="Zoom">
-        <button type="button" id="zoomPiu" aria-label="Ingrandisci">+</button>
-        <button type="button" id="zoomMeno" aria-label="Riduci">&minus;</button>
-        <button type="button" id="zoomReset" aria-label="Mostra tutta la mappa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        <button type="button" id="zoomPiu" aria-label="Ingrandisci" data-en-aria-label="Zoom in">+</button>
+        <button type="button" id="zoomMeno" aria-label="Riduci" data-en-aria-label="Zoom out">&minus;</button>
+        <button type="button" id="zoomReset" aria-label="Mostra tutta la mappa" data-en-aria-label="Show the whole map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       </div>
       <div class="viaggio-barra" id="viaggioBarra">
         <span id="viaggioTesto"></span>
         <span class="traccia" aria-hidden="true"><span id="viaggioProgresso"></span></span>
         <button type="button" id="viaggioPausa" aria-label="Pausa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg></button>
-        <button type="button" id="viaggioStop" aria-label="Termina viaggio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg></button>
+        <button type="button" id="viaggioStop" aria-label="Termina viaggio" data-en-aria-label="End tour"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg></button>
       </div>
 
       <div class="elenco" id="elenco">
         <section class="elenco-linea" data-linea="P" data-colore="#d7262b" data-solida="M600,380 V260" data-tratteggio="M600,260 V160" style="--c:#d7262b" aria-labelledby="linea-P">
           <h2 id="linea-P"><span class="sigla" aria-hidden="true">P</span><span class="linea-nome">Project</span> <span class="numero">1</span></h2>
+          <p class="linea-stato" data-stato="lavori" data-en="Works in progress on SLIDE">Lavori in corso su SLIDE</p>
           <ol>
             <li class="voce" data-x="600" data-y="260" data-et="r" data-etichetta="SLIDE">
               <article>
-                <span class="voce-tag">[IN SVILUPPO]</span><span class="voce-num">01</span>
+                <span class="voce-tag" data-en="[IN DEVELOPMENT]">[IN SVILUPPO]</span><span class="voce-num">01</span>
                 <h3 class="voce-titolo">SLIDE</h3>
-                <p class="voce-desc">Cabina fotografica vintage online per creare ricordi pronti da condividere, una posa per volta.</p>
-                <a class="voce-link" href="https://slidemylife.com/" target="_blank" rel="noopener noreferrer">Visita sito</a>
+                <p class="voce-desc" data-en="An online vintage photo booth to create memories ready to share, one pose at a time.">Cabina fotografica vintage online per creare ricordi pronti da condividere, una posa per volta.</p>
+                <a class="voce-link" href="https://slidemylife.com/" target="_blank" rel="noopener noreferrer" data-en="Visit site">Visita sito</a>
+                <!--
+                  Caso di studio (compare nella scheda di SLIDE appena viene scritto):
+                  <div class="voce-caso">
+                    <h4>Il problema</h4><p>...</p>
+                    <h4>Cosa ho costruito</h4><p>...</p>
+                    <h4>Tecnologie</h4><p>...</p>
+                    <h4>Il mio ruolo</h4><p>...</p>
+                    <img src="images/slide-1.webp" alt="...">
+                  </div>
+                -->
               </article>
             </li>
             <li class="voce voce-futura" data-x="600" data-y="165" data-et="r" data-etichetta="Next Project">
               <article>
                 <span class="voce-tag">[COMING SOON]</span><span class="voce-num">02</span>
-                <p class="voce-desc">Qui troverai i miei prossimi progetti, le applicazioni web in via di sviluppo e molto altro.</p>
+                <p class="voce-desc" data-en="Here you will find my next projects, the web apps I am building and much more.">Qui troverai i miei prossimi progetti, le applicazioni web in via di sviluppo e molto altro.</p>
                 <ul class="voce-tech"><li>Loading...</li><li>Next Project</li></ul>
               </article>
             </li>
@@ -119,101 +132,104 @@
         </section>
         <section class="elenco-linea" data-linea="O" data-colore="#1f4fa3" data-solida="M600,380 H262 Q220,380 220,338 V162 Q220,120 262,120 H430" data-tratteggio="M430,120 H510" style="--c:#1f4fa3" aria-labelledby="linea-O">
           <h2 id="linea-O"><span class="sigla" aria-hidden="true">O</span><span class="linea-nome">Others</span> <span class="numero">10</span></h2>
+          <p class="linea-stato" data-stato="arrivo" data-en="New certification coming soon">Nuova certificazione in arrivo</p>
           <ol>
             <li class="voce" data-x="510" data-y="380" data-et="bl" data-etichetta="Claude Code 101">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">01</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">01</span>
                 <h3 class="voce-titolo">Claude Code 101</h3>
                 <p class="voce-ente">Anthropic.</p>
-                <p class="voce-desc">Fondamenti di Claude Code per lavorare su codebase, automatizzare attivita di sviluppo e gestire workflow di coding assistito dall'AI.</p>
+                <p class="voce-desc" data-en="Claude Code fundamentals for working on codebases, automating development tasks and managing AI-assisted coding workflows.">Fondamenti di Claude Code per lavorare su codebase, automatizzare attivita di sviluppo e gestire workflow di coding assistito dall'AI.</p>
                 <ul class="voce-tech"><li>Claude Code</li><li>AI Coding</li></ul>
+                <!-- Uscita (link al certificato verificabile): <a class="voce-link" href="URL" target="_blank" rel="noopener noreferrer" data-en="Verify certificate">Verifica certificato</a> -->
+                <!-- Orario: aggiungere data-anno="2025" al <li class="voce"> per mostrare l'anno -->
               </article>
             </li>
             <li class="voce" data-x="430" data-y="380" data-et="bl" data-etichetta="SQL for Data Analysis">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">02</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">02</span>
                 <h3 class="voce-titolo">SQL for Data Analysis</h3>
                 <p class="voce-ente">Simplilearn.</p>
-                <p class="voce-desc">Analisi dei dati tramite interrogazioni complesse su Server Microsoft SQL.</p>
+                <p class="voce-desc" data-en="Data analysis through complex queries on Microsoft SQL Server.">Analisi dei dati tramite interrogazioni complesse su Server Microsoft SQL.</p>
                 <ul class="voce-tech"><li>SQL</li><li>Data Analysis</li></ul>
               </article>
             </li>
             <li class="voce" data-x="350" data-y="380" data-et="bl" data-etichetta="Introduction to SQL">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">03</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">03</span>
                 <h3 class="voce-titolo">Introduction to SQL</h3>
                 <p class="voce-ente">Simplilearn.</p>
-                <p class="voce-desc">Gestione Database relazionali e fondamenti di scrittura di query SQL.</p>
+                <p class="voce-desc" data-en="Relational database management and the fundamentals of writing SQL queries.">Gestione Database relazionali e fondamenti di scrittura di query SQL.</p>
                 <ul class="voce-tech"><li>Relational DB</li><li>Queries</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="270" data-y="380" data-et="bl" data-etichetta="Excel Avanzato + VBA">
+            <li class="voce" data-x="270" data-y="380" data-et="bl" data-etichetta="Excel Avanzato + VBA" data-etichetta-en="Advanced Excel + VBA">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">04</span>
-                <h3 class="voce-titolo">Excel Avanzato + VBA</h3>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">04</span>
+                <h3 class="voce-titolo" data-en="Advanced Excel + VBA">Excel Avanzato + VBA</h3>
                 <p class="voce-ente">IFOA - Training Institute.</p>
-                <p class="voce-desc">Competenze avanzate in Microsoft Excel, analisi dei dati e programmazione Macro con VBA.</p>
+                <p class="voce-desc" data-en="Advanced Microsoft Excel skills, data analysis and macro programming with VBA.">Competenze avanzate in Microsoft Excel, analisi dei dati e programmazione Macro con VBA.</p>
                 <ul class="voce-tech"><li>Microsoft Excel</li><li>VBA</li></ul>
               </article>
             </li>
             <li class="voce" data-x="220" data-y="300" data-et="l" data-etichetta="Introduction to Generative AI">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">05</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">05</span>
                 <h3 class="voce-titolo">Introduction to Generative AI</h3>
                 <p class="voce-ente">Google Cloud Skills Boost.</p>
-                <p class="voce-desc">Principi fondamentali di intelligenza artificiale generativa e applicazioni pratiche su Google Cloud.</p>
+                <p class="voce-desc" data-en="Core principles of generative artificial intelligence and practical applications on Google Cloud.">Principi fondamentali di intelligenza artificiale generativa e applicazioni pratiche su Google Cloud.</p>
                 <ul class="voce-tech"><li>Generative AI</li><li>Google Cloud</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="220" data-y="230" data-et="l" data-etichetta="Programmatore Python">
+            <li class="voce" data-x="220" data-y="230" data-et="l" data-etichetta="Programmatore Python" data-etichetta-en="Python Programmer">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">06</span>
-                <h3 class="voce-titolo">Programmatore Python</h3>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">06</span>
+                <h3 class="voce-titolo" data-en="Python Programmer">Programmatore Python</h3>
                 <p class="voce-ente">Fondazione ALESS Don Milani - ETS.</p>
-                <p class="voce-desc">Principi fondamentali della programmazione procedurale e orientata agli oggetti con linguaggio Python.</p>
-                <ul class="voce-tech"><li>Python</li><li>Programmazione</li></ul>
+                <p class="voce-desc" data-en="Core principles of procedural and object-oriented programming in Python.">Principi fondamentali della programmazione procedurale e orientata agli oggetti con linguaggio Python.</p>
+                <ul class="voce-tech"><li>Python</li><li data-en="Programming">Programmazione</li></ul>
               </article>
             </li>
             <li class="voce" data-x="220" data-y="160" data-et="l" data-etichetta="Cybersecurity">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">07</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">07</span>
                 <h3 class="voce-titolo">Cybersecurity</h3>
                 <p class="voce-ente">Cisco Networking Academy.</p>
-                <p class="voce-desc">Principi fondamentali di sicurezza e reti.</p>
+                <p class="voce-desc" data-en="Core principles of security and networking.">Principi fondamentali di sicurezza e reti.</p>
                 <ul class="voce-tech"><li>Cisco Academy</li><li>Security</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="280" data-y="120" data-et="tr" data-etichetta="Amministratore di Rete Linux">
+            <li class="voce" data-x="280" data-y="120" data-et="tr" data-etichetta="Amministratore di Rete Linux" data-etichetta-en="Linux Network Administrator">
               <article>
-                <span class="voce-tag">[DIPLOMA CEFI]</span><span class="voce-num">08</span>
-                <h3 class="voce-titolo">Amministratore di Rete Linux</h3>
+                <span class="voce-tag" data-en="[CEFI DIPLOMA]">[DIPLOMA CEFI]</span><span class="voce-num">08</span>
+                <h3 class="voce-titolo" data-en="Linux Network Administrator">Amministratore di Rete Linux</h3>
                 <p class="voce-ente">Istituto Cefi Informatica.</p>
-                <p class="voce-desc">Corso di formazione per l'amministrazione, configurazione e sicurezza di reti basate su sistemi Linux.</p>
+                <p class="voce-desc" data-en="Training course on administering, configuring and securing Linux-based networks.">Corso di formazione per l'amministrazione, configurazione e sicurezza di reti basate su sistemi Linux.</p>
                 <ul class="voce-tech"><li>SysAdmin</li><li>Networking</li></ul>
               </article>
             </li>
             <li class="voce" data-x="355" data-y="120" data-et="tr" data-etichetta="Linux Unhatched">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">09</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">09</span>
                 <h3 class="voce-titolo">Linux Unhatched</h3>
                 <p class="voce-ente">Cisco Networking Academy.</p>
-                <p class="voce-desc">Fondamenti di Linux (CLI).</p>
+                <p class="voce-desc" data-en="Linux fundamentals (CLI).">Fondamenti di Linux (CLI).</p>
                 <ul class="voce-tech"><li>Cisco Academy</li><li>Linux</li></ul>
               </article>
             </li>
             <li class="voce" data-x="430" data-y="120" data-et="tr" data-etichetta="HTML Essentials">
               <article>
-                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">10</span>
+                <span class="voce-tag" data-en="[CERTIFICATION]">[CERTIFICAZIONE]</span><span class="voce-num">10</span>
                 <h3 class="voce-titolo">HTML Essentials</h3>
                 <p class="voce-ente">Cisco Networking Academy.</p>
-                <p class="voce-desc">Fondamenti e best practice del web development.</p>
+                <p class="voce-desc" data-en="Web development fundamentals and best practices.">Fondamenti e best practice del web development.</p>
                 <ul class="voce-tech"><li>HTML</li><li>Web Dev</li></ul>
               </article>
             </li>
             <li class="voce voce-futura" data-x="510" data-y="120" data-et="tr" data-etichetta="Next Cert">
               <article>
                 <span class="voce-tag">[COMING SOON]</span><span class="voce-num">11</span>
-                <p class="voce-desc">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
+                <p class="voce-desc" data-en="Here you will find the next courses, certifications and learning milestones of my career.">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
                 <ul class="voce-tech"><li>Loading...</li><li>Next Cert</li></ul>
               </article>
             </li>
@@ -221,47 +237,48 @@
         </section>
         <section class="elenco-linea" data-linea="R" data-colore="#0f8a4a" data-solida="M600,380 H860 L1000,520 H1060" data-tratteggio="M1060,520 H1140" style="--c:#0f8a4a" aria-labelledby="linea-R">
           <h2 id="linea-R"><span class="sigla" aria-hidden="true">R</span><span class="linea-nome">Road</span> <span class="numero">4</span></h2>
+          <p class="linea-stato" data-stato="disponibile" data-en="Looking for the next stop: open to new opportunities">In cerca della prossima fermata: disponibile per nuove opportunità</p>
           <ol>
             <li class="voce" data-x="700" data-y="380" data-et="tr" data-etichetta="IT Support Specialist">
               <article>
-                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">01</span>
+                <span class="voce-tag" data-en="[EXPERIENCE]">[ESPERIENZA]</span><span class="voce-num">01</span>
                 <h3 class="voce-titolo">IT Support Specialist</h3>
                 <p class="voce-ente">Assinde S.r.l.</p>
-                <p class="voce-desc">Interfaccia tecnica tra azienda e team di sviluppo. Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
+                <p class="voce-desc" data-en="Technical link between the company and the development team. Checking and analysing data in company databases with SQL, updating the internal management system, technical support, company hardware management, switchboard and IT inventory.">Interfaccia tecnica tra azienda e team di sviluppo. Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
                 <ul class="voce-tech"><li>SQL</li><li>Database Management</li><li>Data Analysis</li><li>IT Support</li><li>IT Asset Management</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="800" data-y="380" data-et="tr" data-etichetta="Sistemista IT">
+            <li class="voce" data-x="800" data-y="380" data-et="tr" data-etichetta="Sistemista IT" data-etichetta-en="IT Systems Specialist">
               <article>
-                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">02</span>
-                <h3 class="voce-titolo">Sistemista IT</h3>
+                <span class="voce-tag" data-en="[EXPERIENCE]">[ESPERIENZA]</span><span class="voce-num">02</span>
+                <h3 class="voce-titolo" data-en="IT Systems Specialist">Sistemista IT</h3>
                 <p class="voce-ente">5 Emme Informatica S.p.A.</p>
-                <p class="voce-desc">Esperienza di supporto sistemistico e IT presso le strutture del Senato della Repubblica Italiana.</p>
-                <ul class="voce-tech"><li>IT Support</li><li>Sistemista</li><li>Supporto Hardware/Software</li></ul>
+                <p class="voce-desc" data-en="Systems and IT support experience at the offices of the Senate of the Italian Republic.">Esperienza di supporto sistemistico e IT presso le strutture del Senato della Repubblica Italiana.</p>
+                <ul class="voce-tech"><li>IT Support</li><li data-en="Systems">Sistemista</li><li data-en="Hardware/Software Support">Supporto Hardware/Software</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="920" data-y="440" data-et="r" data-etichetta="Programmatore Python Junior">
+            <li class="voce" data-x="920" data-y="440" data-et="r" data-etichetta="Programmatore Python Junior" data-etichetta-en="Junior Python Programmer">
               <article>
-                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">03</span>
-                <h3 class="voce-titolo">Programmatore Python Junior</h3>
+                <span class="voce-tag" data-en="[EXPERIENCE]">[ESPERIENZA]</span><span class="voce-num">03</span>
+                <h3 class="voce-titolo" data-en="Junior Python Programmer">Programmatore Python Junior</h3>
                 <p class="voce-ente">Access Point Coop. Soc. Onlus.</p>
-                <p class="voce-desc">Sviluppo, manutenzione e ottimizzazione del codice Python per la creazione di un videogioco a uso interno aziendale.</p>
+                <p class="voce-desc" data-en="Developing, maintaining and optimising Python code to build a video game for internal company use.">Sviluppo, manutenzione e ottimizzazione del codice Python per la creazione di un videogioco a uso interno aziendale.</p>
                 <ul class="voce-tech"><li>Python</li><li>Game Programming</li><li>OOP</li></ul>
               </article>
             </li>
-            <li class="voce" data-x="1030" data-y="520" data-et="b" data-etichetta="Assistenza Helpdesk IT">
+            <li class="voce" data-x="1030" data-y="520" data-et="b" data-etichetta="Assistenza Helpdesk IT" data-etichetta-en="IT Helpdesk Support">
               <article>
-                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">04</span>
-                <h3 class="voce-titolo">Assistenza Helpdesk IT</h3>
+                <span class="voce-tag" data-en="[EXPERIENCE]">[ESPERIENZA]</span><span class="voce-num">04</span>
+                <h3 class="voce-titolo" data-en="IT Helpdesk Support">Assistenza Helpdesk IT</h3>
                 <p class="voce-ente">Tecnotrans S.R.L.</p>
-                <p class="voce-desc">Supporto tecnico di primo livello, risoluzione incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
-                <ul class="voce-tech"><li>IT Helpdesk</li><li>Troubleshooting</li><li>Assistenza</li></ul>
+                <p class="voce-desc" data-en="First-level technical support, solving hardware and software incidents, assisting workstations and internal company users.">Supporto tecnico di primo livello, risoluzione incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
+                <ul class="voce-tech"><li>IT Helpdesk</li><li>Troubleshooting</li><li data-en="Support">Assistenza</li></ul>
               </article>
             </li>
             <li class="voce voce-futura" data-x="1140" data-y="520" data-et="t" data-etichetta="Next Step">
               <article>
                 <span class="voce-tag">[COMING SOON]</span><span class="voce-num">05</span>
-                <p class="voce-desc">Qui troverai i prossimi step della mia carriera professionale.</p>
+                <p class="voce-desc" data-en="Here you will find the next steps of my career.">Qui troverai i prossimi step della mia carriera professionale.</p>
                 <ul class="voce-tech"><li>Loading...</li><li>Next Step</li></ul>
               </article>
             </li>
@@ -269,40 +286,56 @@
         </section>
         <section class="elenco-linea" data-linea="T" data-colore="#e8a200" data-solida="M600,380 V560 L680,640 H860" style="--c:#e8a200" aria-labelledby="linea-T">
           <h2 id="linea-T"><span class="sigla" aria-hidden="true">T</span><span class="linea-nome">Text</span> <span class="numero">4</span></h2>
+          <p class="linea-stato" data-stato="regolare" data-en="Good service">Servizio regolare</p>
           <ol>
-            <li class="voce" data-x="600" data-y="470" data-et="l" data-etichetta="Contattami" data-tipo="modulo">
+            <li class="voce" data-x="600" data-y="470" data-et="l" data-etichetta="Contattami" data-etichetta-en="Contact me" data-tipo="modulo">
               <article>
-                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">01</span>
-                <h3 class="voce-titolo">Contattami</h3>
+                <span class="voce-tag" data-en="[CONTACT ME]">[CONTATTAMI]</span><span class="voce-num">01</span>
+                <h3 class="voce-titolo" data-en="Contact me">Contattami</h3>
               </article>
             </li>
             <li class="voce" data-x="600" data-y="555" data-et="l" data-etichetta="LinkedIn">
               <article>
-                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">02</span>
+                <span class="voce-tag" data-en="[CONTACT ME]">[CONTATTAMI]</span><span class="voce-num">02</span>
                 <h3 class="voce-titolo">LinkedIn</h3>
                 <a class="voce-link" href="https://www.linkedin.com/in/flavio-iachini-b306b8198" target="_blank" rel="noopener noreferrer">LinkedIn</a>
               </article>
             </li>
-            <li class="voce" data-x="730" data-y="640" data-et="b" data-etichetta="Condividimi" data-tipo="condividi">
+            <li class="voce" data-x="730" data-y="640" data-et="b" data-etichetta="Condividimi" data-etichetta-en="Share me" data-tipo="condividi">
               <article>
-                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">03</span>
-                <h3 class="voce-titolo">Condividimi</h3>
+                <span class="voce-tag" data-en="[CONTACT ME]">[CONTATTAMI]</span><span class="voce-num">03</span>
+                <h3 class="voce-titolo" data-en="Share me">Condividimi</h3>
               </article>
             </li>
             <li class="voce" data-x="840" data-y="640" data-et="b" data-etichetta="Privacy">
               <article>
-                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">04</span>
+                <span class="voce-tag" data-en="[CONTACT ME]">[CONTATTAMI]</span><span class="voce-num">04</span>
                 <h3 class="voce-titolo">Privacy</h3>
                 <a class="voce-link" href="privacy.html">Privacy</a>
               </article>
             </li>
           </ol>
         </section>
+        <!--
+          Linea in costruzione (obiettivi e studi in corso). Togliere il commento e scrivere le stazioni:
+          <section class="elenco-linea" data-linea="C" data-cantiere data-colore="#8a8a85" data-solida="M600,380 L470,250 H300" style="--c:#8a8a85" aria-labelledby="linea-C">
+            <h2 id="linea-C"><span class="sigla" aria-hidden="true">C</span><span class="linea-nome" data-en="Under construction">In costruzione</span> <span class="numero">2</span></h2>
+            <p class="linea-stato" data-stato="lavori" data-en="Works in progress">Lavori in corso</p>
+            <ol>
+              <li class="voce" data-x="520" data-y="300" data-et="t" data-etichetta="Obiettivo 1" data-anno="2026">
+                <article><span class="voce-tag" data-en="[GOAL]">[OBIETTIVO]</span><span class="voce-num">01</span><h3 class="voce-titolo">...</h3><p class="voce-desc">...</p></article>
+              </li>
+              <li class="voce" data-x="380" data-y="250" data-et="t" data-etichetta="Obiettivo 2">
+                <article><span class="voce-tag" data-en="[GOAL]">[OBIETTIVO]</span><span class="voce-num">02</span><h3 class="voce-titolo">...</h3><p class="voce-desc">...</p></article>
+              </li>
+            </ol>
+          </section>
+        -->
       </div>
     </div>
 
-    <aside class="pannello" id="pannello" aria-label="Dettagli stazione">
-      <button class="pannello-maniglia" id="maniglia" type="button" aria-label="Apri o chiudi il pannello" aria-expanded="true"></button>
+    <aside class="pannello" id="pannello" aria-label="Dettagli stazione" data-en-aria-label="Station details">
+      <button class="pannello-maniglia" id="maniglia" type="button" aria-label="Apri o chiudi il pannello" data-en-aria-label="Open or close the panel" aria-expanded="true"></button>
       <div class="pannello-contenuto" id="contenuto" aria-live="polite"></div>
     </aside>
   </main>
@@ -312,42 +345,53 @@
       <form class="contact-form" id="contactForm" novalidate>
         <input type="text" id="contactCompanyFax" name="company_fax" class="contact-honeypot" tabindex="-1" autocomplete="new-password" inputmode="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-hidden="true">
         <label class="contact-field">
-          <span class="sr-only">La tua email</span>
-          <input type="email" id="contactEmail" name="email" placeholder="La tua email" autocomplete="email" inputmode="email" aria-describedby="contactStatus" required>
+          <span class="sr-only" data-en="Your email">La tua email</span>
+          <input type="email" id="contactEmail" name="email" placeholder="La tua email" data-en-placeholder="Your email" autocomplete="email" inputmode="email" aria-describedby="contactStatus" required>
         </label>
-        <div class="contact-suggestions" aria-label="Suggerimenti dominio email">
+        <div class="contact-suggestions" aria-label="Suggerimenti dominio email" data-en-aria-label="Email domain suggestions">
           <button type="button" class="contact-suggestion" data-domain="@gmail.com">@gmail.com</button>
           <button type="button" class="contact-suggestion" data-domain="@outlook.com">@outlook.com</button>
         </div>
         <label class="contact-field">
-          <span class="sr-only">Scrivi il tuo messaggio</span>
-          <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." aria-describedby="contactStatus" required></textarea>
+          <span class="sr-only" data-en="Write your message">Scrivi il tuo messaggio</span>
+          <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." data-en-placeholder="Write to me here..." aria-describedby="contactStatus" required></textarea>
         </label>
       </form>
       <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
-      <button type="submit" form="contactForm" class="contact-submit">Invia</button>
+      <button type="submit" form="contactForm" class="contact-submit" data-en="Send">Invia</button>
     </div>
-    <button type="button" class="pan-bottone" id="sharePortfolioButton">Condividimi</button>
+    <button type="button" class="pan-bottone" id="sharePortfolioButton" data-en="Share me">Condividimi</button>
   </div>
 
   <dialog class="aiuto" id="aiuto" aria-labelledby="aiutoTitolo">
-    <h2 id="aiutoTitolo">Scorciatoie</h2>
+    <h2 id="aiutoTitolo" data-en="Shortcuts">Scorciatoie</h2>
     <dl>
-      <dt><kbd>/</kbd> <kbd>Ctrl</kbd> <kbd>K</kbd></dt><dd>Cerca stazioni, competenze e comandi</dd>
-      <dt><kbd>&larr;</kbd> <kbd>&rarr;</kbd></dt><dd>Stazione precedente e successiva</dd>
+      <dt><kbd>/</kbd> <kbd>Ctrl</kbd> <kbd>K</kbd></dt><dd data-en="Search stations, skills and commands">Cerca stazioni, competenze e comandi</dd>
+      <dt><kbd>&larr;</kbd> <kbd>&rarr;</kbd></dt><dd data-en="Previous and next station">Stazione precedente e successiva</dd>
       <dt><kbd>+</kbd> <kbd>&minus;</kbd></dt><dd>Zoom</dd>
-      <dt><kbd>0</kbd></dt><dd>Mappa intera</dd>
-      <dt><kbd>V</kbd></dt><dd>Viaggio guidato</dd>
-      <dt><kbd>L</kbd></dt><dd>Vista elenco</dd>
-      <dt><kbd>F</kbd></dt><dd>Schermo intero</dd>
-      <dt><kbd>Esc</kbd></dt><dd>Torna a PORT</dd>
+      <dt><kbd>0</kbd></dt><dd data-en="Whole map">Mappa intera</dd>
+      <dt><kbd>V</kbd></dt><dd data-en="Guided tour">Viaggio guidato</dd>
+      <dt><kbd>L</kbd></dt><dd data-en="List view">Vista elenco</dd>
+      <dt><kbd>F</kbd></dt><dd data-en="Full screen">Schermo intero</dd>
+      <dt><kbd>B</kbd></dt><dd data-en="Your ticket (printable CV)">Il tuo biglietto (CV da stampare)</dd>
+      <dt><kbd>E</kbd></dt><dd data-en="Switch language">Cambia lingua</dd>
+      <dt><kbd>Esc</kbd></dt><dd data-en="Back to PORT">Torna a PORT</dd>
     </dl>
-    <form method="dialog"><button class="pan-bottone" type="submit">Chiudi</button></form>
+    <form method="dialog"><button class="pan-bottone" type="submit" data-en="Close">Chiudi</button></form>
+  </dialog>
+
+  <dialog class="biglietto-finestra" id="biglietto" aria-labelledby="bigliettoTitolo">
+    <div class="biglietto-azioni">
+      <button type="button" class="pan-bottone" id="bigliettoStampa" data-en="Print or save as PDF">Stampa o salva PDF</button>
+      <form method="dialog"><button class="pan-bottone secondario" type="submit" data-en="Close">Chiudi</button></form>
+    </div>
+    <div class="biglietto-scena" id="bigliettoScena"></div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="js/site-config.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/mappa.js"></script>
   <script src="js/contact.js"></script>

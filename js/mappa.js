@@ -19,6 +19,10 @@ window.PortflavioApp = window.PortflavioApp || {};
   };
   const easing = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
   const testo = (root, sel) => root.querySelector(sel)?.textContent.trim() || null;
+  // traduzione dei testi dell'interfaccia (vedi i18n.js)
+  const tr = (s) => (app.t ? app.t(s) : s);
+  const ETICHETTE_STATO = { regolare: 'Servizio regolare', lavori: 'Lavori in corso', arrivo: 'In arrivo', disponibile: 'Disponibile' };
+  const QR_SITO = '<svg class="qr" viewBox="0 0 25 25" role="img" aria-label="Codice QR per www.portflavio.it"><path d="M0 0.5h7m1 0h1m3 0h1m1 0h1m3 0h7m-25 1h1m5 0h1m1 0h2m1 0h3m4 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h3m2 0h1m4 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h3m2 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m2 0h1m1 0h1m4 0h1m1 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-14 1h3m2 0h1m-17 1h1m2 0h6m5 0h2m1 0h1m2 0h1m1 0h3m-23 1h4m2 0h2m2 0h1m2 0h1m1 0h1m1 0h5m-24 1h2m3 0h3m1 0h2m1 0h2m1 0h1m2 0h2m1 0h1m2 0h1m-25 1h1m4 0h1m1 0h2m2 0h2m2 0h2m2 0h1m1 0h4m-24 1h3m1 0h5m2 0h1m2 0h1m2 0h1m5 0h1m-25 1h1m4 0h1m1 0h1m1 0h2m1 0h1m1 0h4m2 0h1m2 0h1m-24 1h2m1 0h4m2 0h2m1 0h2m1 0h1m1 0h2m1 0h5m-25 1h1m1 0h2m4 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h1m-25 1h1m1 0h1m2 0h9m2 0h5m1 0h2m-16 1h2m1 0h3m2 0h1m3 0h1m1 0h2m-24 1h7m1 0h1m2 0h2m3 0h1m1 0h1m1 0h1m3 0h1m-25 1h1m5 0h1m1 0h1m4 0h1m1 0h2m3 0h1m2 0h2m-25 1h1m1 0h3m1 0h1m1 0h2m5 0h6m-21 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m4 0h2m-25 1h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h1m1 0h1m2 0h5m-25 1h1m5 0h1m3 0h3m2 0h1m3 0h2m1 0h3m-25 1h7m1 0h2m2 0h1m3 0h2m3 0h1m2 0h1" stroke="currentColor" fill="none" shape-rendering="crispEdges"/></svg>';
   // testo bianco o nero, a seconda di quanto è chiaro il colore della linea
   const testoSu = (hex) => {
     const n = parseInt(hex.replace('#', ''), 16);
@@ -27,6 +31,29 @@ window.PortflavioApp = window.PortflavioApp || {};
   };
 
   // Le linee e le stazioni vengono lette dall'elenco nell'HTML: è l'unica fonte dei contenuti.
+  // I testi si rileggono quando cambia la lingua, le posizioni restano.
+  function leggiVoce(voce) {
+    const articolo = voce.querySelector('article');
+    const inglese = app.lingua && app.lingua() === 'en';
+    return {
+      nome: (inglese && voce.dataset.etichettaEn) || voce.dataset.etichetta,
+      tag: testo(articolo, '.voce-tag'),
+      titolo: testo(articolo, '.voce-titolo'),
+      ente: testo(articolo, '.voce-ente'),
+      desc: Array.from(articolo.querySelectorAll('.voce-desc')).map((p) => p.textContent.trim()),
+      tech: Array.from(articolo.querySelectorAll('.voce-tech li')).map((li) => li.textContent.trim()),
+      // le "uscite" della stazione: sito, certificato verificabile, profilo...
+      uscite: Array.from(articolo.querySelectorAll('a.voce-link')).map((a) => ({ href: a.getAttribute('href'), testo: a.textContent.trim(), esterno: a.target === '_blank' })),
+      caso: articolo.querySelector('.voce-caso')?.innerHTML.trim() || null,
+      anno: voce.dataset.anno || null
+    };
+  }
+
+  function leggiStato(sezione) {
+    const p = sezione.querySelector('.linea-stato');
+    return p ? { tipo: p.dataset.stato || 'regolare', testo: p.textContent.trim() } : null;
+  }
+
   function leggiLinee() {
     return Array.from(document.querySelectorAll('.elenco-linea')).map((sezione) => {
       const linea = {
@@ -36,33 +63,25 @@ window.PortflavioApp = window.PortflavioApp || {};
         colore: sezione.dataset.colore,
         solida: sezione.dataset.solida,
         tratteggio: sezione.dataset.tratteggio || null,
+        cantiere: 'cantiere' in sezione.dataset,
+        stato: leggiStato(sezione),
         sezione,
         nodi: []
       };
 
       sezione.querySelectorAll('.voce').forEach((voce, indice) => {
-        const articolo = voce.querySelector('article');
-        const titolo = testo(articolo, '.voce-titolo');
-        const num = testo(articolo, '.voce-num');
-        const link = articolo.querySelector('.voce-link');
         linea.nodi.push({
-          id: `${linea.id}-${num}`,
+          id: `${linea.id}-${testo(voce, '.voce-num')}`,
           x: Number(voce.dataset.x),
           y: Number(voce.dataset.y),
-          nome: voce.dataset.etichetta,
           posizione: voce.dataset.et,
           tipo: voce.dataset.tipo || null,
           futura: voce.classList.contains('voce-futura'),
-          tag: testo(articolo, '.voce-tag'),
-          num,
-          titolo,
-          ente: testo(articolo, '.voce-ente'),
-          desc: Array.from(articolo.querySelectorAll('.voce-desc')).map((p) => p.textContent.trim()),
-          tech: Array.from(articolo.querySelectorAll('.voce-tech li')).map((li) => li.textContent.trim()),
-          link: link ? { href: link.getAttribute('href'), testo: link.textContent.trim(), esterno: link.target === '_blank' } : null,
+          num: testo(voce, '.voce-num'),
           linea,
           indice,
-          voce
+          voce,
+          ...leggiVoce(voce)
         });
       });
 
@@ -125,7 +144,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const ritardo = i * 0.25;
       crea('path', { d: linea.solida, 'data-linea': linea.id, style: `--c:${linea.colore};--d:${ritardo}s`, pathLength: 1 }, gBagliore);
       crea('path', { d: linea.solida + (linea.tratteggio ? ` ${linea.tratteggio}` : ''), 'data-linea': linea.id, style: `--d:${ritardo}s` }, gBordi);
-      const g = crea('g', { class: 'linea', 'data-linea': linea.id, style: `--c:${linea.colore};--d:${ritardo}s` }, gLinee);
+      const g = crea('g', { class: `linea${linea.cantiere ? ' cantiere' : ''}`, 'data-linea': linea.id, style: `--c:${linea.colore};--d:${ritardo}s` }, gLinee);
       linea.pathEl = crea('path', { d: linea.solida, class: 'solida', pathLength: 1 }, g);
       if (linea.tratteggio) crea('path', { d: linea.tratteggio, class: 'tratteggio' }, g);
       // un impulso di luce scorre lungo la linea attiva
@@ -178,11 +197,13 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       // zoom semantico: avvicinandosi compare l'ente o la prima competenza
       const dettaglio = nodo.futura ? null : (nodo.ente || nodo.tech[0]);
+      let sotto = null;
       if (dettaglio) {
-        const sotto = crea('text', { class: 'sottoetichetta', x, y: y + 15, 'text-anchor': ancora, 'data-linea': linea.id }, gEtichette);
+        sotto = crea('text', { class: 'sottoetichetta', x, y: y + 15, 'text-anchor': ancora, 'data-linea': linea.id }, gEtichette);
         if (rotazione) sotto.setAttribute('transform', `rotate(${rotazione} ${x} ${y})`);
         sotto.textContent = dettaglio;
       }
+      nodo.sotto = sotto;
 
       nodo.g = g;
       nodo.t = etichetta;
@@ -558,10 +579,20 @@ window.PortflavioApp = window.PortflavioApp || {};
       bottone.type = 'button';
       bottone.style.setProperty('--c', linea.colore);
       bottone.setAttribute('aria-pressed', 'false');
-      bottone.innerHTML = `<span class="sigla" aria-hidden="true">${esc(linea.id)}</span>${esc(linea.nome)}<span class="num">${esc(linea.num)}</span>`;
       bottone.addEventListener('click', () => filtra(filtro === linea.id ? null : linea.id));
       legenda.appendChild(bottone);
+      linea.bottone = bottone;
     });
+
+    // ogni linea mostra il suo stato del servizio con un pallino: verde regolare, ambra lavori, blu in arrivo
+    function disegnaLegenda() {
+      LINEE.forEach((linea) => {
+        const stato = linea.stato ? `<span class="stato-punto" data-stato="${esc(linea.stato.tipo)}" aria-hidden="true"></span>` : '';
+        linea.bottone.innerHTML = `<span class="sigla" aria-hidden="true">${esc(linea.id)}</span>${esc(linea.nome)}<span class="num">${esc(linea.num)}</span>${stato}`;
+        linea.bottone.title = linea.stato ? `${linea.nome}: ${linea.stato.testo}` : linea.nome;
+      });
+    }
+    disegnaLegenda();
 
     function filtra(id) {
       filtro = id;
@@ -709,23 +740,28 @@ window.PortflavioApp = window.PortflavioApp || {};
       contenuto.style.setProperty('--ct', testoSu(linea.colore));
 
       let h = `<div class="pan-testa"><span class="sigla" style="--c:${linea.colore}" aria-hidden="true">${esc(linea.id)}</span><span class="pan-linea">${esc(linea.nome)} &middot; ${pos + 1}/${linea.nodi.length}</span>
-        <div class="pan-nav"><button type="button" data-vai="${prec}" aria-label="Stazione precedente">${ICONA_PREC}</button><button type="button" data-vai="${succ}" ${succ ? '' : 'disabled'} aria-label="Stazione successiva">${ICONA_SUCC}</button></div></div>`;
+        <div class="pan-nav"><button type="button" data-vai="${prec}" aria-label="${esc(tr('Stazione precedente'))}">${ICONA_PREC}</button><button type="button" data-vai="${succ}" ${succ ? '' : 'disabled'} aria-label="${esc(tr('Stazione successiva'))}">${ICONA_SUCC}</button></div></div>`;
       // il cartello della stazione, come quelli smaltati sulle banchine
-      h += `<div class="cartello${nodo.futura ? ' futura' : ''}" style="--c:${linea.colore};--ct:${testoSu(linea.colore)}"><span class="cartello-tag">${esc(nodo.tag)} &middot; ${esc(nodo.num)}</span><h2 class="cartello-nome">${esc(nodo.titolo || nodo.nome)}</h2></div>`;
+      h += `<div class="cartello${nodo.futura ? ' futura' : ''}" style="--c:${linea.colore};--ct:${testoSu(linea.colore)}"><span class="cartello-tag">${esc(nodo.tag)} &middot; ${esc(nodo.num)}${nodo.anno ? ` &middot; ${esc(nodo.anno)}` : ''}</span><h2 class="cartello-nome">${esc(nodo.titolo || nodo.nome)}</h2></div>`;
       h += striscia(linea, nodo);
       if (nodo.ente) h += `<p class="pan-ente">${esc(nodo.ente)}</p>`;
       nodo.desc.forEach((p) => { h += `<p class="pan-desc">${esc(p)}</p>`; });
       if (nodo.tech.length) {
         h += `<ul class="pan-tech">${nodo.tech.map((t) => `<li><button type="button" class="${condivise.has(t) ? 'condivisa' : ''}" data-cerca="${esc(t)}">${esc(t)}</button></li>`).join('')}</ul>`;
       }
+      // caso di studio: compare solo se è stato scritto nell'HTML
+      if (nodo.caso) h += `<p class="pan-sezione">${tr('Caso di studio')}</p><div class="caso-studio">${nodo.caso}</div>`;
+      // uscite: link verso l'esterno, come i cartelli d'uscita delle stazioni
+      if (nodo.uscite.length) {
+        h += `<p class="pan-sezione">${tr('Uscite')}</p><ul class="uscite">${nodo.uscite.map((u) => `<li><a href="${esc(u.href)}"${u.esterno ? ' target="_blank" rel="noopener noreferrer"' : ''}><span class="uscita-freccia" aria-hidden="true">&#8599;</span>${esc(u.testo)}</a></li>`).join('')}</ul>`;
+      }
       if (altri.length) {
-        h += `<p class="pan-sezione">Coincidenze</p><ul class="collegamenti">${altri.map((s) => `<li><button type="button" data-vai="${s.id}" style="--c2:${s.linea.colore}"><span class="sigla" style="--c:${s.linea.colore}" aria-hidden="true">${esc(s.linea.id)}</span>${esc(s.nome)}<small>${esc(s.tech.filter((t) => nodo.tech.includes(t)).join(', '))}</small></button></li>`).join('')}</ul>`;
+        h += `<p class="pan-sezione">${tr('Coincidenze')}</p><ul class="collegamenti">${altri.map((s) => `<li><button type="button" data-vai="${s.id}" style="--c2:${s.linea.colore}"><span class="sigla" style="--c:${s.linea.colore}" aria-hidden="true">${esc(s.linea.id)}</span>${esc(s.nome)}<small>${esc(s.tech.filter((t) => nodo.tech.includes(t)).join(', '))}</small></button></li>`).join('')}</ul>`;
       }
       if (nodo.tipo === 'modulo') h += '<div data-posto="modulo"></div>';
       h += '<div class="azioni">';
-      if (nodo.link) h += `<a class="pan-bottone" href="${esc(nodo.link.href)}"${nodo.link.esterno ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(nodo.link.testo)} &rarr;</a>`;
       if (nodo.tipo === 'condividi') h += '<span data-posto="condividi"></span>';
-      h += '<button class="pan-bottone secondario" type="button" data-azione="da">Parti da qui</button><button class="pan-bottone secondario" type="button" data-azione="link">Condividi stazione</button></div>';
+      h += `<button class="pan-bottone secondario" type="button" data-azione="da">${tr('Parti da qui')}</button><button class="pan-bottone secondario" type="button" data-azione="link">${tr('Condividi stazione')}</button></div>`;
 
       riempi(h);
       contenuto.querySelector('[data-posto="modulo"]')?.replaceWith(modulo);
@@ -742,29 +778,43 @@ window.PortflavioApp = window.PortflavioApp || {};
         const capolinea = linea.nodi[linea.nodi.length - 1];
         return `<button type="button" class="riga" data-vai="${capolinea.id}" style="animation-delay:${0.15 + i * 0.18}s"><span>${esc(linea.id)}</span><span>${esc(linea.nome)} &rsaquo; ${esc(capolinea.nome)}</span><span>${linea.nodi.filter((n) => !n.futura).length}</span></button>`;
       }).join('');
-      const scorrimento = stazioni.filter((s) => !s.futura).map((s) => s.nome).join(' · ');
+      // il tabellone fa scorrere gli annunci di servizio, come nelle stazioni vere
+      const annunci = LINEE.filter((l) => l.stato).map((l) => `${l.nome}: ${l.stato.testo}`).join('   \u00B7   ');
       riempi(`<div class="pan-testa"><span class="sigla sigla-neutra" aria-hidden="true">P</span><span class="pan-linea">PORT</span></div>
-        <h2 class="pan-titolo">Portfolio personale di Flavio</h2>
-        <div class="tabellone" role="group" aria-label="Tabellone delle linee"><div class="ora"><span>PORT</span><span data-orologio>${orario()}</span></div>${righe}<div class="scorrimento" aria-hidden="true"><span>${esc(scorrimento)}</span></div></div>
-        <p class="pan-desc">Ogni linea è una sezione. Tocca una stazione per aprirla, isola una linea dalla legenda, cerca una competenza o calcola un percorso tra due stazioni.</p>`);
+        <h2 class="pan-titolo">${tr('Portfolio personale di Flavio')}</h2>
+        <div class="tabellone" role="group" aria-label="${esc(tr('Tabellone delle linee'))}"><div class="ora"><span>PORT</span><span data-orologio>${orario()}</span></div>${righe}<div class="scorrimento" aria-hidden="true"><span>${esc(annunci)}</span></div></div>
+        <div class="azioni azioni-port">
+          <button type="button" class="pan-bottone" data-azione="biglietto"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a3 3 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a3 3 0 0 0 0-6z"/></svg>${tr('Il tuo biglietto')}</button>
+          <button type="button" class="pan-bottone secondario" data-azione="poster"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>${tr('Scarica il poster')}</button>
+        </div>`);
       contenuto.querySelectorAll('.tabellone .riga span:nth-child(2)').forEach((el, i) => paletteRotanti(el, 250 + i * 180));
+
+      // stato del servizio di ogni linea
+      let extra = `<p class="pan-sezione">${tr('Stato del servizio')}</p><ul class="stato-servizio">${LINEE.filter((l) => l.stato).map((l) => `<li><button type="button" data-filtra="${l.id}"><span class="sigla" style="--c:${l.colore}" aria-hidden="true">${esc(l.id)}</span><span class="stato-testo"><strong>${esc(l.nome)}</strong>${esc(l.stato.testo)}</span><span class="stato-etichetta" data-stato="${esc(l.stato.tipo)}">${tr(ETICHETTE_STATO[l.stato.tipo] || 'Servizio regolare')}</span></button></li>`).join('')}</ul>`;
+
+      // orari: compaiono quando le stazioni hanno l'anno (data-anno nell'HTML)
+      const datate = stazioni.filter((n) => n.anno).sort((a, b) => String(b.anno).localeCompare(String(a.anno)));
+      if (datate.length) {
+        extra += `<p class="pan-sezione">${tr('Orari')}</p><ol class="orari">${datate.map((n) => `<li><button type="button" data-vai="${n.id}" style="--c:${n.linea.colore}"><span class="orari-anno">${esc(n.anno)}</span><span>${esc(n.nome)}</span></button></li>`).join('')}</ol>`;
+      }
 
       // quanto della mappa è stato esplorato
       const fatte = visitabili.filter((s) => visitate.has(s.id)).length;
-      let extra = `<div class="esplorazione"><div class="esplorazione-testa"><span class="pan-sezione">Esplorazione</span><span>${fatte}/${visitabili.length}</span></div>
-        <div class="esplorazione-barra" role="progressbar" aria-label="Stazioni visitate" aria-valuemin="0" aria-valuemax="${visitabili.length}" aria-valuenow="${fatte}"><span style="width:${fatte / visitabili.length * 100}%"></span></div>
-        ${fatte === visitabili.length ? '<p class="pan-desc">Hai visitato tutte le stazioni.</p>' : ''}</div>`;
+      extra += `<div class="esplorazione"><div class="esplorazione-testa"><span class="pan-sezione">${tr('Esplorazione')}</span><span>${fatte}/${visitabili.length}</span></div>
+        <div class="esplorazione-barra" role="progressbar" aria-label="${esc(tr('Stazioni visitate'))}" aria-valuemin="0" aria-valuemax="${visitabili.length}" aria-valuenow="${fatte}"><span style="width:${fatte / visitabili.length * 100}%"></span></div>
+        ${fatte === visitabili.length ? `<p class="pan-desc">${tr('Hai visitato tutte le stazioni.')}</p>` : ''}</div>`;
 
       if (recenti.length) {
-        extra += `<p class="pan-sezione">Visitate di recente</p><ul class="collegamenti">${recenti.map((id) => perId[id]).map((n) => `<li><button type="button" data-vai="${n.id}" style="--c2:${n.linea.colore}"><span class="sigla" style="--c:${n.linea.colore}" aria-hidden="true">${esc(n.linea.id)}</span>${esc(n.nome)}<small>${esc(n.linea.nome)}</small></button></li>`).join('')}</ul>`;
+        extra += `<p class="pan-sezione">${tr('Visitate di recente')}</p><ul class="collegamenti">${recenti.map((id) => perId[id]).map((n) => `<li><button type="button" data-vai="${n.id}" style="--c2:${n.linea.colore}"><span class="sigla" style="--c:${n.linea.colore}" aria-hidden="true">${esc(n.linea.id)}</span>${esc(n.nome)}<small>${esc(n.linea.nome)}</small></button></li>`).join('')}</ul>`;
       }
 
       // le competenze più ricorrenti: toccandone una si accendono le stazioni che la contengono
       const conteggio = new Map();
       visitabili.forEach((s) => s.tech.forEach((t) => conteggio.set(t, (conteggio.get(t) || 0) + 1)));
       const competenze = [...conteggio].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'it')).slice(0, 16);
-      extra += `<p class="pan-sezione">Competenze</p><ul class="competenze">${competenze.map(([t, n]) => `<li><button type="button" data-cerca="${esc(t)}">${esc(t)}${n > 1 ? `<span>${n}</span>` : ''}</button></li>`).join('')}</ul>`;
+      extra += `<p class="pan-sezione">${tr('Competenze')}</p><ul class="competenze">${competenze.map(([t, n]) => `<li><button type="button" data-cerca="${esc(t)}">${esc(t)}${n > 1 ? `<span>${n}</span>` : ''}</button></li>`).join('')}</ul>`;
 
+      extra += `<p class="pan-desc pan-nota">${tr('Ogni linea è una sezione. Tocca una stazione per aprirla, isola una linea dalla legenda, cerca una competenza o calcola un percorso tra due stazioni.')}</p>`;
       contenuto.insertAdjacentHTML('beforeend', extra);
     }
 
@@ -800,6 +850,12 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (!azione) return;
       if (azione.dataset.azione === 'link') condividiStazione(corrente);
       if (azione.dataset.azione === 'da') apriPercorso(corrente.id);
+      if (azione.dataset.azione === 'biglietto') apriBiglietto();
+      if (azione.dataset.azione === 'poster') scaricaPoster();
+    });
+    contenuto.addEventListener('click', (e) => {
+      const linea = e.target.closest('[data-filtra]');
+      if (linea) filtra(linea.dataset.filtra);
     });
 
     /* ---------- Avvisi e condivisione ---------- */
@@ -820,7 +876,7 @@ window.PortflavioApp = window.PortflavioApp || {};
           return;
         }
         await navigator.clipboard.writeText(url);
-        avvisa('Link alla stazione copiato');
+        avvisa(tr('Link alla stazione copiato'));
       } catch (error) {
         if (error?.name !== 'AbortError') avvisa(url);
       }
@@ -836,17 +892,21 @@ window.PortflavioApp = window.PortflavioApp || {};
     function elencoComandi() {
       const scuro = document.documentElement.dataset.theme === 'dark';
       return [
-        { nome: viaggioAttivo() ? (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio') : 'Viaggio guidato', tasto: 'V', azione: () => bottoneViaggio.click() },
-        { nome: 'Calcola percorso', azione: () => apriPercorso(corrente && !corrente.hub ? corrente.id : undefined) },
-        { nome: vista.classList.contains('mostra-elenco') ? 'Torna alla mappa' : 'Vista elenco', tasto: 'L', azione: () => bottoneElenco.click() },
-        { nome: scuro ? 'Tema chiaro' : 'Tema scuro', azione: () => cambiaTema() },
-        { nome: suoniAttivi ? 'Disattiva suoni' : 'Attiva suoni', azione: () => attivaSuoni(!suoniAttivi) },
-        { nome: 'Mappa intera', tasto: '0', azione: mappaIntera },
-        ...(document.fullscreenEnabled ? [{ nome: document.fullscreenElement ? 'Esci da schermo intero' : 'Schermo intero', tasto: 'F', azione: schermoIntero }] : []),
-        ...(visitate.size ? [{ nome: 'Azzera stazioni visitate', azione: azzeraVisitate }] : []),
-        { nome: 'Torna a PORT', tasto: 'Esc', azione: () => { filtra(null); seleziona(HUB); } },
-        { nome: 'Scorciatoie', tasto: '?', azione: apriAiuto },
-        ...LINEE.map((l) => ({ nome: `Linea ${l.nome}`, sigla: l.id, colore: l.colore, azione: () => filtra(l.id) }))
+        { nome: tr(viaggioAttivo() ? (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio') : 'Viaggio guidato'), tasto: 'V', azione: () => bottoneViaggio.click() },
+        { nome: tr('Il tuo biglietto (CV da stampare)'), tasto: 'B', azione: apriBiglietto },
+        { nome: tr('Scarica il poster della mappa'), azione: scaricaPoster },
+        { nome: app.lingua && app.lingua() === 'en' ? 'Italiano' : 'English', tasto: 'E', azione: cambiaLingua },
+        { nome: tr('Calcola percorso'), azione: () => apriPercorso(corrente && !corrente.hub ? corrente.id : undefined) },
+        { nome: tr(vista.classList.contains('mostra-elenco') ? 'Torna alla mappa' : 'Vista elenco'), tasto: 'L', azione: () => bottoneElenco.click() },
+        { nome: tr(scuro ? 'Tema chiaro' : 'Tema scuro'), azione: () => cambiaTema() },
+        ...(temaAuto ? [] : [{ nome: tr('Tema automatico (scuro di notte)'), azione: temaAutomatico }]),
+        { nome: tr(suoniAttivi ? 'Disattiva suoni' : 'Attiva suoni'), azione: () => attivaSuoni(!suoniAttivi) },
+        { nome: tr('Mappa intera'), tasto: '0', azione: mappaIntera },
+        ...(document.fullscreenEnabled ? [{ nome: tr(document.fullscreenElement ? 'Esci da schermo intero' : 'Schermo intero'), tasto: 'F', azione: schermoIntero }] : []),
+        ...(visitate.size ? [{ nome: tr('Azzera stazioni visitate'), azione: azzeraVisitate }] : []),
+        { nome: tr('Torna a PORT'), tasto: 'Esc', azione: () => { filtra(null); seleziona(HUB); } },
+        { nome: tr('Scorciatoie'), tasto: '?', azione: apriAiuto },
+        ...LINEE.map((l) => ({ nome: `${tr('Linea')} ${l.nome}`, sigla: l.id, colore: l.colore, azione: () => filtra(l.id) }))
       ];
     }
 
@@ -884,7 +944,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       }
 
       attivo = 0;
-      lista.innerHTML = risultati.length ? risultati.map(voceRisultato).join('') : '<li class="vuoto">Nessuna stazione</li>';
+      lista.innerHTML = risultati.length ? risultati.map(voceRisultato).join('') : `<li class="vuoto">${tr('Nessuna stazione')}</li>`;
       lista.classList.add('aperti');
       input.setAttribute('aria-expanded', 'true');
       if (risultati.length) input.setAttribute('aria-activedescendant', 'ris-0');
@@ -951,10 +1011,10 @@ window.PortflavioApp = window.PortflavioApp || {};
       fermaViaggio();
       bottonePercorso.setAttribute('aria-pressed', 'true');
       contenuto.style.removeProperty('--c');
-      riempi(`<div class="pan-testa"><span class="sigla sigla-neutra" aria-hidden="true">${ICONA_PERCORSO}</span><span class="pan-linea">Percorso</span></div>
-        <div class="pianifica"><label for="selDa">DA</label><select id="selDa">${opzioni()}</select>
-        <button type="button" class="scambia" id="scambia" aria-label="Inverti partenza e arrivo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"/></svg></button>
-        <label for="selA">A</label><select id="selA">${opzioni()}</select></div>
+      riempi(`<div class="pan-testa"><span class="sigla sigla-neutra" aria-hidden="true">${ICONA_PERCORSO}</span><span class="pan-linea">${tr('Percorso')}</span></div>
+        <div class="pianifica"><label for="selDa">${tr('DA')}</label><select id="selDa">${opzioni()}</select>
+        <button type="button" class="scambia" id="scambia" aria-label="${esc(tr('Inverti partenza e arrivo'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"/></svg></button>
+        <label for="selA">${tr('A')}</label><select id="selA">${opzioni()}</select></div>
         <div id="esito" aria-live="polite"></div>`);
       const da = $('selDa');
       const a = $('selA');
@@ -981,7 +1041,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       tracciato?.remove();
       const esito = $('esito');
       const percorso = percorsoMinimo(daId, aId);
-      if (percorso.length < 2) { esito.innerHTML = '<p class="pan-desc">Scegli due stazioni diverse.</p>'; return; }
+      if (percorso.length < 2) { esito.innerHTML = `<p class="pan-desc">${tr('Scegli due stazioni diverse.')}</p>`; return; }
 
       misuraLinee();
       const punti = [[percorso[0].x, percorso[0].y]];
@@ -991,12 +1051,12 @@ window.PortflavioApp = window.PortflavioApp || {};
 
       const fermate = percorso.length - 1;
       const cambi = percorso.filter((n, i) => n.hub && i > 0 && i < percorso.length - 1).length;
-      let h = `<p class="riepilogo">${fermate} ${fermate === 1 ? 'fermata' : 'fermate'} &middot; ${cambi ? 'cambio a PORT' : 'nessun cambio'}</p><ol class="tappe">`;
+      let h = `<p class="riepilogo">${fermate} ${tr(fermate === 1 ? 'fermata' : 'fermate')} &middot; ${tr(cambi ? 'cambio a PORT' : 'nessun cambio')}</p><ol class="tappe">`;
       percorso.forEach((n, i) => {
         const cambio = n.hub && i > 0 && i < percorso.length - 1;
         const colore = n.hub ? (percorso[i + 1] && !percorso[i + 1].hub ? percorso[i + 1].linea.colore : 'var(--ink)') : n.linea.colore;
         const nota = cambio
-          ? `<small>Cambio: ${esc(percorso[i - 1].linea.nome)} &rarr; ${esc(percorso[i + 1].linea.nome)}</small>`
+          ? `<small>${tr('Cambio:')} ${esc(percorso[i - 1].linea.nome)} &rarr; ${esc(percorso[i + 1].linea.nome)}</small>`
           : (!n.hub && (i === 0 || i === percorso.length - 1) ? `<small>${esc(n.linea.nome)}</small>` : '');
         h += `<li class="${cambio ? 'cambio' : ''}" style="--c:${colore}">${esc(n.nome)}${nota}</li>`;
       });
@@ -1035,10 +1095,10 @@ window.PortflavioApp = window.PortflavioApp || {};
       const mostraPausa = attivo && !inPausa;
       iconaViaggio.innerHTML = mostraPausa ? '<path d="M7 5h3v14H7zM14 5h3v14h-3z"/>' : '<path d="M7 4l12 8-12 8z"/>';
       bottoneViaggio.setAttribute('aria-pressed', String(attivo));
-      bottoneViaggio.title = !attivo ? 'Viaggio guidato' : (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio');
+      bottoneViaggio.title = tr(!attivo ? 'Viaggio guidato' : (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio'));
       bottoneViaggio.setAttribute('aria-label', bottoneViaggio.title);
       $('viaggioPausa').innerHTML = mostraPausa ? ICONA_PAUSA : ICONA_PLAY;
-      $('viaggioPausa').setAttribute('aria-label', inPausa ? 'Riprendi' : 'Pausa');
+      $('viaggioPausa').setAttribute('aria-label', tr(inPausa ? 'Riprendi' : 'Pausa'));
       barra.classList.toggle('in-pausa', inPausa);
     }
 
@@ -1070,7 +1130,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       const prossima = giro[passo + 1];
       seleziona(nodo, { daViaggio: true, vola: false, storia: false });
       vola(nodo.x, nodo.y + scostamento(520), 520, 900);
-      $('viaggioTesto').textContent = `${passo + 1}/${giro.length}${prossima ? ` · Prossima: ${prossima.nome}` : ''}`;
+      $('viaggioTesto').textContent = `${passo + 1}/${giro.length}${prossima ? ` · ${tr('Prossima:')} ${prossima.nome}` : ''}`;
       $('viaggioProgresso').style.width = `${(passo + 1) / giro.length * 100}%`;
       // il conto alla rovescia della fermata riparte da capo
       barra.classList.remove('conta');
@@ -1109,7 +1169,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     const pausaPerLettura = () => {
       if (!viaggioAttivo() || inPausa) return;
       pausaViaggio(true);
-      avvisa('Viaggio in pausa: premi ▶ per riprendere');
+      avvisa(tr('Viaggio in pausa: premi ▶ per riprendere'));
     };
     contenuto.addEventListener('wheel', pausaPerLettura, { passive: true });
     contenuto.addEventListener('touchstart', pausaPerLettura, { passive: true });
@@ -1131,14 +1191,36 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
     bottoneElenco.addEventListener('click', () => elenco(!vista.classList.contains('mostra-elenco')));
 
-    /* ---------- Tema ---------- */
+    /* ---------- Tema: scelto a mano, oppure automatico (scuro dalle 20 alle 7) ---------- */
     const bottoneTema = $('btnTema');
-    function tema(scuro) {
+    let temaAuto = document.documentElement.dataset.temaAuto === '1';
+    const notte = () => { const ora = new Date().getHours(); return ora >= 20 || ora < 7; };
+
+    function applicaTema(scuro) {
       document.documentElement.dataset.theme = scuro ? 'dark' : 'light';
       bottoneTema.setAttribute('aria-pressed', String(scuro));
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', scuro ? '#0e0f11' : '#fbfaf7');
+    }
+
+    function tema(scuro) {
+      temaAuto = false;
+      delete document.documentElement.dataset.temaAuto;
+      applicaTema(scuro);
       try { localStorage.setItem('pf-tema', scuro ? 'dark' : 'light'); } catch (error) { /* preferenza solo per questa visita */ }
     }
+
+    function temaAutomatico() {
+      temaAuto = true;
+      document.documentElement.dataset.temaAuto = '1';
+      try { localStorage.removeItem('pf-tema'); } catch (error) { /* nulla da togliere */ }
+      applicaTema(notte());
+      avvisa(tr('Tema automatico: scuro dalle 20 alle 7'));
+    }
+
+    // come una città che accende le luci: la sera il tema automatico passa da solo al neon
+    window.setInterval(() => {
+      if (temaAuto && (document.documentElement.dataset.theme === 'dark') !== notte()) applicaTema(notte());
+    }, 60000);
     bottoneTema.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'dark'));
     // il nuovo tema si apre a cerchio dal pulsante, con la View Transitions API dove disponibile
     function cambiaTema() {
@@ -1164,7 +1246,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       scrivi('pf-recenti', []);
       stazioni.forEach((n) => n.g.classList.remove('visitata'));
       if (corrente?.hub) mostraHub();
-      avvisa('Esplorazione azzerata');
+      avvisa(tr('Esplorazione azzerata'));
     }
 
     /* ---------- Suoni (spenti di default) ---------- */
@@ -1179,7 +1261,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       bottoneSuono.setAttribute('aria-pressed', String(on));
       try { localStorage.setItem('pf-suoni', on ? '1' : '0'); } catch (error) { /* solo per questa visita */ }
       if (on) suona(0);
-      avvisa(on ? 'Suoni attivati' : 'Suoni disattivati');
+      avvisa(tr(on ? 'Suoni attivati' : 'Suoni disattivati'));
     }
     bottoneSuono.addEventListener('click', () => attivaSuoni(!suoniAttivi));
 
@@ -1299,7 +1381,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     document.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); input.focus(); return; }
-      if (e.target.closest('input, textarea, select') || aiuto.open || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target.closest('input, textarea, select') || aiuto.open || finestraBiglietto?.open || e.metaKey || e.ctrlKey || e.altKey) return;
       const tasto = e.key.toLowerCase();
       if (tasto === '/') { e.preventDefault(); input.focus(); return; }
       if (tasto === '?') { apriAiuto(); return; }
@@ -1309,6 +1391,8 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (tasto === 'v') bottoneViaggio.click();
       if (tasto === 'l') bottoneElenco.click();
       if (tasto === 'f') schermoIntero();
+      if (tasto === 'b') apriBiglietto();
+      if (tasto === 'e') cambiaLingua();
       if (tasto === 'escape') { filtra(null); elenco(false); seleziona(HUB); }
       if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && corrente) {
         e.preventDefault();
@@ -1321,6 +1405,211 @@ window.PortflavioApp = window.PortflavioApp || {};
         if (prossimo) { seleziona(prossimo); prossimo.g.focus({ preventScroll: true }); }
       }
     });
+
+    /* ---------- Il biglietto: un CV in forma di biglietto della metro ---------- */
+    const finestraBiglietto = $('biglietto');
+    const scenaBiglietto = $('bigliettoScena');
+    const EMAIL = 'info@portflavio.it';
+    const LINKEDIN = 'https://www.linkedin.com/in/flavio-iachini-b306b8198';
+
+    function costruisciBiglietto() {
+      const anno = new Date().getFullYear();
+      const perLinea = (id) => LINEE.find((l) => l.id === id);
+      const vere = (l) => (l ? l.nodi.filter((n) => !n.futura) : []);
+      const conta = stazioni.filter((n) => !n.futura).length;
+      const intestazione = (l, sottotitolo) => `<h3 class="b-linea-titolo"><span class="sigla" style="--c:${l.colore}" aria-hidden="true">${esc(l.id)}</span>${esc(l.nome)}<small>${sottotitolo}</small><span class="b-conta">${vere(l).length}</span></h3>`;
+      const sito = (n) => n.uscite.find((u) => u.esterno)?.href.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      const seriale = `PF-${anno}-${String(conta).padStart(2, '0')}${LINEE.map((l) => l.id).join('')}`;
+
+      const R = perLinea('R');
+      const O = perLinea('O');
+      const P = perLinea('P');
+      const cantiere = LINEE.filter((l) => l.cantiere);
+
+      let h = `<article class="biglietto" lang="${app.lingua ? app.lingua() : 'it'}">
+        <header class="b-testa">
+          <div class="b-bande" aria-hidden="true">${LINEE.filter((l) => !l.cantiere).map((l) => `<span style="--c:${l.colore}"></span>`).join('')}</div>
+          <div class="b-intestazione">
+            <div>
+              <p class="b-micro">${tr('Biglietto')} &middot; PASS ${anno}</p>
+              <h2 class="b-marchio" id="bigliettoTitolo">PORTFLAVIO</h2>
+              <p class="b-sotto">${tr('Portfolio personale di Flavio')}</p>
+            </div>
+            <svg class="b-snodo" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6v20" stroke="#d7262b"/><path d="M6 32h20" stroke="#1f4fa3"/><path d="M38 32h20" stroke="#0f8a4a"/><path d="M32 38v20" stroke="#e8a200"/><circle cx="32" cy="32" r="9"/></svg>
+          </div>
+          <dl class="b-campi">
+            <div><dt>${tr('Passeggero')}</dt><dd>Flavio</dd></div>
+            <div><dt>${tr('Linee')}</dt><dd>${LINEE.map((l) => esc(l.id)).join(' ')}</dd></div>
+            <div><dt>${tr('Stazioni')}</dt><dd>${conta}</dd></div>
+            <div><dt>${tr('Validità')}</dt><dd>${anno}</dd></div>
+          </dl>
+        </header>
+        <div class="b-strappo" aria-hidden="true"></div>
+        <div class="b-corpo">`;
+
+      if (R) {
+        h += `<section class="b-linea" style="--c:${R.colore}">${intestazione(R, tr('Esperienze'))}<ol class="b-fermate">${vere(R).map((n) => `
+          <li><span class="b-punto" aria-hidden="true"></span><div>
+            <p class="b-titolo"><strong>${esc(n.titolo || n.nome)}</strong>${n.anno ? `<span class="b-anno">${esc(n.anno)}</span>` : ''}</p>
+            ${n.ente ? `<p class="b-ente">${esc(n.ente)}</p>` : ''}
+            ${n.desc[0] ? `<p class="b-desc">${esc(n.desc[0])}</p>` : ''}
+            ${n.tech.length ? `<p class="b-tech">${n.tech.map(esc).join(' &middot; ')}</p>` : ''}
+          </div></li>`).join('')}</ol></section>`;
+      }
+      if (O) {
+        h += `<section class="b-linea" style="--c:${O.colore}">${intestazione(O, tr('Certificazioni'))}<ol class="b-griglia">${vere(O).map((n) => `
+          <li><span class="b-punto" aria-hidden="true"></span><div><strong>${esc(n.titolo || n.nome)}</strong><span>${esc((n.ente || '').replace(/\.$/, ''))}${n.anno ? ` &middot; ${esc(n.anno)}` : ''}</span></div></li>`).join('')}</ol></section>`;
+      }
+      h += '<div class="b-doppia">';
+      if (P) {
+        h += `<section class="b-linea" style="--c:${P.colore}">${intestazione(P, tr('Progetti'))}<ol class="b-fermate">${vere(P).map((n) => `
+          <li><span class="b-punto" aria-hidden="true"></span><div><p class="b-titolo"><strong>${esc(n.titolo || n.nome)}</strong><span class="b-stato">${esc(n.tag.replace(/[[\]]/g, ''))}</span></p>
+          ${n.desc[0] ? `<p class="b-desc">${esc(n.desc[0])}</p>` : ''}${sito(n) ? `<p class="b-tech">${esc(sito(n))}</p>` : ''}</div></li>`).join('')}</ol></section>`;
+      }
+      const T = perLinea('T');
+      h += `<section class="b-linea" style="--c:${T ? T.colore : '#e8a200'}"><h3 class="b-linea-titolo"><span class="sigla" style="--c:${T ? T.colore : '#e8a200'}" aria-hidden="true">T</span>Text<small>${tr('Contatti')}</small></h3>
+        <ul class="b-contatti"><li><span>${tr('Email')}</span>${EMAIL}</li><li><span>LinkedIn</span>linkedin.com/in/flavio-iachini-b306b8198</li><li><span>${tr('Mappa')}</span>www.portflavio.it</li></ul></section>`;
+      h += '</div>';
+      cantiere.forEach((l) => {
+        h += `<section class="b-linea b-cantiere" style="--c:${l.colore}">${intestazione(l, tr('In costruzione'))}<ol class="b-griglia">${vere(l).map((n) => `<li><span class="b-punto" aria-hidden="true"></span><div><strong>${esc(n.titolo || n.nome)}</strong><span>${esc(n.anno || '')}</span></div></li>`).join('')}</ol></section>`;
+      });
+
+      h += `</div>
+        <div class="b-strappo" aria-hidden="true"></div>
+        <footer class="b-piede">
+          <div class="b-qr">${QR_SITO}<p>${tr('Inquadra per aprire la mappa')}</p></div>
+          <div class="b-codice">
+            <span class="b-barre" aria-hidden="true"></span>
+            <span class="b-seriale">${seriale}</span>
+            <p class="b-nota">${tr('Valido su tutte le linee')} &middot; www.portflavio.it</p>
+          </div>
+        </footer>
+      </article>`;
+      return h;
+    }
+
+    function apriBiglietto() {
+      if (!finestraBiglietto?.showModal) return;
+      scenaBiglietto.innerHTML = costruisciBiglietto();
+      if (!finestraBiglietto.open) finestraBiglietto.showModal();
+    }
+
+    $('btnBiglietto')?.addEventListener('click', apriBiglietto);
+    $('bigliettoStampa')?.addEventListener('click', () => {
+      document.body.classList.add('stampa-biglietto');
+      window.print();
+    });
+    window.addEventListener('afterprint', () => document.body.classList.remove('stampa-biglietto'));
+
+    /* ---------- Poster: la mappa come immagine da condividere ---------- */
+    const PROPRIETA = ['fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-linecap', 'stroke-linejoin', 'opacity', 'font-size', 'font-weight', 'font-family', 'paint-order', 'letter-spacing', 'display', 'visibility'];
+
+    async function scaricaPoster() {
+      avvisa(tr('Preparo il poster...'));
+      const sfondo = getComputedStyle(document.body).backgroundColor;
+      const inchiostro = getComputedStyle(document.body).color;
+      const copia = svg.cloneNode(true);
+      const originali = svg.querySelectorAll('*');
+      const copie = copia.querySelectorAll('*');
+      // gli stili vengono scritti dentro gli elementi: l'immagine non conosce il CSS del sito
+      originali.forEach((el, i) => {
+        const stile = getComputedStyle(el);
+        copie[i].setAttribute('style', PROPRIETA.map((p) => `${p}:${stile.getPropertyValue(p)}`).join(';'));
+      });
+      // il poster mostra la mappa completa e ferma, qualunque sia lo stato delle animazioni
+      copia.querySelectorAll('.arco, .percorso-tracciato, .flusso, .alone, .presa, .area, .sottoetichetta').forEach((n) => n.remove());
+      copia.querySelectorAll('*').forEach((n) => { n.style.opacity = '1'; n.style.display = ''; });
+      copia.querySelectorAll('.solida, .bagliore path').forEach((n) => { n.style.strokeDasharray = 'none'; });
+      copia.querySelectorAll('.punto').forEach((n) => { n.setAttribute('r', 7); n.style.fill = sfondo; });
+      copia.querySelectorAll('.etichetta-mappa').forEach((n) => { n.style.opacity = '1'; });
+
+      const larghezza = 1320;
+      const altezza = 1020;
+      const poster = crea('svg', { viewBox: `-60 -200 ${larghezza} ${altezza}`, width: larghezza * 2, height: altezza * 2 });
+      crea('rect', { x: -60, y: -200, width: larghezza, height: altezza, fill: sfondo }, poster);
+      const titolo = crea('text', { x: 0, y: -110, style: `font: 800 72px Inter, Helvetica, Arial, sans-serif; fill:${inchiostro}; letter-spacing:-2px` }, poster);
+      titolo.textContent = 'PORT';
+      const sotto = crea('text', { x: 4, y: -72, style: `font: 600 22px Inter, Helvetica, Arial, sans-serif; fill:${inchiostro}` }, poster);
+      sotto.textContent = tr('Portfolio personale di Flavio');
+      LINEE.forEach((l, i) => {
+        const x = 760 + i * 120;
+        crea('circle', { cx: x, cy: -100, r: 16, fill: l.colore }, poster);
+        const lettera = crea('text', { x, y: -93, 'text-anchor': 'middle', style: 'font: 800 18px Inter, Helvetica, Arial, sans-serif; fill:#fff' }, poster);
+        lettera.textContent = l.id;
+        const nome = crea('text', { x: x + 24, y: -94, style: `font: 600 16px Inter, Helvetica, Arial, sans-serif; fill:${inchiostro}` }, poster);
+        nome.textContent = l.nome;
+      });
+      const mappa = crea('g', {}, poster);
+      Array.from(copia.childNodes).forEach((n) => mappa.appendChild(n));
+      const piede = crea('text', { x: 0, y: 780, style: `font: 700 20px Inter, Helvetica, Arial, sans-serif; fill:${inchiostro}` }, poster);
+      piede.textContent = 'www.portflavio.it';
+
+      const dati = new XMLSerializer().serializeToString(poster);
+      const url = URL.createObjectURL(new Blob([dati], { type: 'image/svg+xml' }));
+      try {
+        const img = new Image();
+        img.decoding = 'async';
+        await new Promise((ok, ko) => { img.onload = ok; img.onerror = ko; img.src = url; });
+        const tela = document.createElement('canvas');
+        tela.width = larghezza * 2;
+        tela.height = altezza * 2;
+        tela.getContext('2d').drawImage(img, 0, 0, tela.width, tela.height);
+        const png = await new Promise((ok) => tela.toBlob(ok, 'image/png'));
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(png);
+        link.download = 'portflavio-mappa.png';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(link.href), 4000);
+        avvisa(tr('Poster scaricato'));
+      } catch (error) {
+        avvisa(tr('Il poster non è disponibile su questo browser'));
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    /* ---------- Lingua: italiano e inglese ---------- */
+    const bottoneLingua = $('btnLingua');
+
+    function etichettaLingua() {
+      if (!bottoneLingua) return;
+      const inglese = app.lingua && app.lingua() === 'en';
+      bottoneLingua.querySelector('[aria-hidden]').textContent = inglese ? 'IT' : 'EN';
+      bottoneLingua.setAttribute('lang', inglese ? 'it' : 'en');
+    }
+
+    function cambiaLingua() {
+      if (!app.impostaLingua) return;
+      app.impostaLingua(app.lingua() === 'en' ? 'it' : 'en');
+    }
+
+    // al cambio di lingua: testi delle stazioni riletti dall'HTML, etichette e pannello ridisegnati
+    document.addEventListener('pf:lingua', () => {
+      LINEE.forEach((linea) => {
+        linea.nome = testo(linea.sezione, '.linea-nome');
+        linea.stato = leggiStato(linea.sezione);
+        linea.nodi.forEach((nodo) => {
+          Object.assign(nodo, leggiVoce(nodo.voce));
+          nodo.t.textContent = nodo.nome;
+          if (nodo.sotto) nodo.sotto.textContent = nodo.futura ? '' : (nodo.ente || nodo.tech[0] || '');
+          nodo.g.setAttribute('aria-label', `${linea.nome}: ${nodo.nome}`);
+        });
+      });
+      disegnaLegenda();
+      etichettaLingua();
+      aggiornaComandiViaggio();
+      if (finestraBiglietto?.open) scenaBiglietto.innerHTML = costruisciBiglietto();
+      if (percorsoAttivo()) chiudiPercorso(false);
+      if (corrente) {
+        if (corrente.hub) mostraHub();
+        else mostraStazione(corrente, collegati(corrente));
+      }
+    });
+
+    bottoneLingua?.addEventListener('click', cambiaLingua);
+    etichettaLingua();
 
     /* ---------- Apertura: una volta per visita ---------- */
     const intro = $('intro');
