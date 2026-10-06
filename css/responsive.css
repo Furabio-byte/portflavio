@@ -39,7 +39,7 @@ html:not(.js) .riserva {
     max-width: none;
   }
 
-  .cerca kbd,
+  .cerca > kbd,
   #btnAiuto,
   .strumento .testo {
     display: none;

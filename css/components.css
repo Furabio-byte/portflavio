@@ -530,6 +530,7 @@
 
 /* ---------- Pannello ---------- */
 .pannello-contenuto > * {
+  flex-shrink: 0;
   animation: entra 0.35s var(--ease) both;
 }
 
@@ -750,7 +751,7 @@
 
 .pan-bottone:hover {
   background-color: var(--c, #555);
-  color: #fff;
+  color: var(--ct, #fff);
 }
 
 .pan-bottone.secondario {
@@ -1028,7 +1029,7 @@
 .contact-submit:hover,
 .contact-submit.is-success {
   background-color: var(--c, #0f8a4a);
-  color: #fff;
+  color: var(--ct, #fff);
 }
 
 .contact-submit:disabled {
@@ -1152,3 +1153,310 @@
 @keyframes conferma {
   40% { transform: scale(0.95); }
 }
+
+/* ======================================================
+   Rifinitura premium
+   ====================================================== */
+
+/* bordo chiaro sotto le linee: separa i colori come nelle mappe stampate */
+.bordi path {
+  fill: none;
+  stroke: var(--bg);
+  stroke-width: 17;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  animation: appari 0.6s ease forwards;
+  animation-delay: var(--d);
+}
+
+/* neon nel tema scuro */
+.bagliore {
+  display: none;
+}
+
+[data-theme="dark"] .bagliore {
+  display: inline;
+}
+
+.bagliore path {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: disegna 1.4s var(--ease) forwards;
+  animation-delay: var(--d);
+}
+
+.linea .flusso {
+  stroke: #ffffff;
+  stroke-width: 3;
+  stroke-dasharray: 0.035 0.965;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  animation: none;
+}
+
+.linea.scorre .flusso {
+  opacity: 0.95;
+  animation: flusso 2.6s linear infinite;
+}
+
+[data-theme="dark"] .linea.scorre .flusso {
+  filter: drop-shadow(0 0 4px #fff);
+}
+
+/* il neon rende scure le etichette troppo pesanti: alleggerisce il bordo */
+[data-theme="dark"] .etichetta-mappa,
+[data-theme="dark"] .sottoetichetta {
+  stroke-width: 5px;
+}
+
+.sottoetichetta {
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: var(--muted);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+#mappa.vicino .sottoetichetta {
+  opacity: 1;
+}
+
+.arco {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.85;
+  pointer-events: none;
+  animation: disegna 0.9s var(--ease) forwards;
+  animation-delay: var(--d);
+}
+
+[data-theme="dark"] .arco {
+  filter: drop-shadow(0 0 3px var(--c));
+}
+
+.hub .anello-esterno {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 7;
+  opacity: 0.45;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ruota 24s linear infinite;
+}
+
+.treno .faro {
+  fill: var(--c);
+  opacity: 0;
+}
+
+[data-theme="dark"] .treno .faro {
+  opacity: 0.35;
+  filter: blur(4px);
+}
+
+.treno .luce {
+  fill: var(--c);
+}
+
+[data-theme="dark"] .treno .luce {
+  fill: #fff6cf;
+}
+
+#mappa.in-attesa,
+#mappa.in-attesa * {
+  animation-play-state: paused !important;
+}
+
+/* leggera vignettatura ai bordi della mappa */
+.vista::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(0, 0, 0, 0.05));
+}
+
+[data-theme="dark"] .vista::after {
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.45));
+}
+
+.zoom,
+.minimappa,
+.viaggio-barra,
+.suggerimento {
+  z-index: 3;
+}
+
+/* cartello della stazione */
+.cartello {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 20px 28px;
+  border-radius: 16px;
+  background-color: var(--c);
+  color: var(--ct, #fff);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 14px 30px -18px var(--c);
+}
+
+.cartello::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.22), transparent 38%);
+  pointer-events: none;
+}
+
+.cartello::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 10px;
+  height: 3px;
+  border-radius: 3px;
+  background-color: currentColor;
+  opacity: 0.35;
+}
+
+.cartello.futura {
+  background: repeating-linear-gradient(135deg, var(--c) 0 12px, color-mix(in srgb, var(--c) 82%, #000) 12px 24px);
+}
+
+.cartello-tag {
+  position: relative;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+.cartello-nome {
+  position: relative;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+/* palette comandi */
+.risultati button {
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+}
+
+.risultati kbd {
+  color: var(--muted);
+}
+
+/* apertura */
+.intro {
+  display: none;
+}
+
+.js .intro.attiva {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  background-color: #0b0b0b;
+  cursor: pointer;
+  transition: opacity 0.7s var(--ease), visibility 0.7s;
+}
+
+.intro.esci {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.intro-centro {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.intro-linea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 9px;
+  transform-origin: 4.5px 4.5px;
+  animation: intro-linea 1.1s var(--ease) forwards;
+}
+
+.intro-p { background-color: #d7262b; --l: 50vh; transform: translate(-4.5px, -4.5px) rotate(-90deg); animation-delay: 0.15s; }
+.intro-o { background-color: #1f4fa3; --l: 50vw; transform: translate(-4.5px, -4.5px) rotate(180deg); animation-delay: 0.3s; }
+.intro-r { background-color: #0f8a4a; --l: 50vw; transform: translate(-4.5px, -4.5px) rotate(0deg); animation-delay: 0.45s; }
+.intro-t { background-color: #e8a200; --l: 50vh; transform: translate(-4.5px, -4.5px) rotate(90deg); animation-delay: 0.6s; }
+
+.intro-snodo {
+  position: absolute;
+  left: -26px;
+  top: -26px;
+  width: 52px;
+  height: 52px;
+  border: 7px solid #fff;
+  border-radius: 50%;
+  background-color: #0b0b0b;
+  transform: scale(0);
+  animation: intro-snodo 0.6s var(--ease) 0.05s forwards;
+}
+
+.intro-scritta {
+  position: absolute;
+  left: 50%;
+  bottom: 54px;
+  transform: translateX(-50%);
+  color: #ffb000;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  padding: 0 0.4em;
+  background-color: #0b0b0b;
+  text-shadow: 0 0 10px rgba(255, 176, 0, 0.55);
+}
+
+/* tema che si apre a cerchio */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: rivela-tema 0.7s var(--ease);
+}
+
+@keyframes rivela-tema {
+  from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0)); }
+  to { clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0)); }
+}
+
+@keyframes flusso { to { stroke-dashoffset: 0; } }
+@keyframes ruota { to { transform: rotate(360deg); } }
+@keyframes intro-linea { to { width: var(--l); } }
+@keyframes intro-snodo { to { transform: scale(1); } }
