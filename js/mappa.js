@@ -991,7 +991,66 @@ window.PortflavioApp = window.PortflavioApp || {};
     const aiuto = $('aiuto');
     const apriAiuto = () => { if (aiuto.showModal && !aiuto.open) aiuto.showModal(); };
     $('btnAiuto').addEventListener('click', apriAiuto);
-    $('maniglia').addEventListener('click', () => apriPannello(!pannello.classList.contains('aperto')));
+    $('maniglia').addEventListener('click', () => {
+      if (Date.now() - fineTrascinoFoglio < 350) return;
+      apriPannello(!pannello.classList.contains('aperto'));
+    });
+
+    /* ---------- Foglio mobile: si trascina in basso per chiuderlo, in alto per aprirlo ---------- */
+    let trascinoFoglio = null;
+    let fineTrascinoFoglio = 0;
+    const SBIRCIA = 64;
+
+    pannello.addEventListener('touchstart', (e) => {
+      if (window.innerWidth > 960 || e.touches.length !== 1) return;
+      if (e.target.closest('input, textarea, select')) return;
+      const aperto = pannello.classList.contains('aperto');
+      const dallaManiglia = Boolean(e.target.closest('#maniglia'));
+      // a foglio aperto si trascina dalla maniglia, o dal contenuto quando è già in cima
+      if (aperto && !dallaManiglia && contenuto.scrollTop > 0) return;
+      trascinoFoglio = { y0: e.touches[0].clientY, t0: performance.now(), aperto, dy: 0, attivo: false, altezza: pannello.offsetHeight };
+    }, { passive: true });
+
+    pannello.addEventListener('touchmove', (e) => {
+      if (!trascinoFoglio) return;
+      const dy = e.touches[0].clientY - trascinoFoglio.y0;
+      if (!trascinoFoglio.attivo) {
+        // parte solo se il gesto va nella direzione giusta: giù se aperto, su se chiuso
+        if (Math.abs(dy) < 8) return;
+        if ((trascinoFoglio.aperto && dy < 0) || (!trascinoFoglio.aperto && dy > 0)) { trascinoFoglio = null; return; }
+        trascinoFoglio.attivo = true;
+        pannello.style.transition = 'none';
+      }
+      e.preventDefault();
+      trascinoFoglio.dy = dy;
+      const chiuso = trascinoFoglio.altezza - SBIRCIA;
+      const base = trascinoFoglio.aperto ? 0 : chiuso;
+      const y = Math.min(Math.max(base + dy, 0), chiuso);
+      pannello.style.transform = `translateY(${y}px)`;
+    }, { passive: false });
+
+    const fineFoglio = () => {
+      if (!trascinoFoglio) return;
+      const { attivo, dy, t0, aperto, altezza } = trascinoFoglio;
+      trascinoFoglio = null;
+      if (!attivo) return;
+      fineTrascinoFoglio = Date.now();
+      const velocita = dy / Math.max(performance.now() - t0, 1);
+      pannello.style.transition = '';
+      pannello.style.transform = '';
+      const soglia = altezza * 0.25;
+      if (aperto) apriPannello(!(dy > soglia || velocita > 0.5));
+      else apriPannello(-dy > soglia || velocita < -0.5);
+    };
+    pannello.addEventListener('touchend', fineFoglio);
+    pannello.addEventListener('touchcancel', fineFoglio);
+
+    // a foglio chiuso, toccare la parte che sporge lo apre
+    pannello.addEventListener('click', (e) => {
+      if (window.innerWidth > 960 || pannello.classList.contains('aperto') || e.target.closest('#maniglia')) return;
+      if (Date.now() - fineTrascinoFoglio < 350) return;
+      apriPannello(true);
+    });
 
     document.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); input.focus(); return; }
