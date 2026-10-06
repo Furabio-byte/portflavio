@@ -24,6 +24,17 @@
 }
 
 /* mentre la mappa si muove: un solo livello grafico, nessuna animazione da ridisegnare */
+/* livello dei treni, sopra la mappa: non intercetta tocchi e click */
+#treni {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
 .vista.in-movimento #mappa {
   will-change: transform;
 }
@@ -82,7 +93,7 @@
   transition: filter 0.35s ease;
 }
 
-#mappa.filtra [data-linea]:not(.attiva) {
+:is(#mappa, #treni).filtra [data-linea]:not(.attiva) {
   filter: opacity(0.1);
 }
 

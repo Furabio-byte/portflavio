@@ -113,7 +113,11 @@ window.PortflavioApp = window.PortflavioApp || {};
     const gLinee = crea('g', {}, svg);
     const gPercorso = crea('g', {}, svg);
     const gArchi = crea('g', {}, svg);
-    const gTreni = crea('g', {}, svg);
+    // i treni vivono in un livello a parte, leggero, che segue la mappa in tempo reale:
+    // così continuano a muoversi anche mentre la mappa viene spostata o ingrandita
+    const svgTreni = crea('svg', { id: 'treni', 'aria-hidden': 'true', focusable: 'false' });
+    svg.after(svgTreni);
+    const gTreni = crea('g', {}, svgTreni);
     const gEtichette = crea('g', {}, svg);
     const gStazioni = crea('g', {}, svg);
 
@@ -261,12 +265,6 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
 
     function muoviTreni(ora) {
-      // mentre la mappa si muove i treni aspettano: la mappa resta un'immagine ferma e scorre fluida
-      if (vista.classList.contains('in-movimento')) {
-        treni.forEach((treno) => { treno.t0 += 16; });
-        requestAnimationFrame(muoviTreni);
-        return;
-      }
       treni.forEach((treno) => {
         if (treno.stato === 'sosta') {
           posa(treno, treno.a, treno.dir);
@@ -309,6 +307,7 @@ window.PortflavioApp = window.PortflavioApp || {};
         rafApplica = null;
         aggiornaMinimappa();
         aggiornaGriglia();
+        svgTreni.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
         nascondiSuggerimento();
         if (!vbDisegnato) { consolida(); return; }
         const scala = vista.clientWidth / vbDisegnato.w;
@@ -325,6 +324,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     function consolida() {
       window.clearTimeout(timerConsolida);
       svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+      svgTreni.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
       svg.style.transform = '';
       svg.classList.toggle('vicino', vb.w < 640);
       vbDisegnato = { ...vb };
@@ -527,6 +527,8 @@ window.PortflavioApp = window.PortflavioApp || {};
     function filtra(id) {
       filtro = id;
       svg.classList.toggle('filtra', Boolean(id));
+      svgTreni.classList.toggle('filtra', Boolean(id));
+      svgTreni.querySelectorAll('[data-linea]').forEach((n) => n.classList.toggle('attiva', n.dataset.linea === id));
       svg.querySelectorAll('[data-linea]').forEach((n) => n.classList.toggle('attiva', n.dataset.linea === id));
       Array.from(legenda.children).forEach((b, i) => b.setAttribute('aria-pressed', String(LINEE[i].id === id)));
       if (id) scorri(LINEE.find((l) => l.id === id));
