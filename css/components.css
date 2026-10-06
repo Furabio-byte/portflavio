@@ -135,6 +135,7 @@
 }
 
 .stazione.visitata:not(.selezionata) .punto {
+  fill: var(--punto);
   fill: color-mix(in srgb, var(--c) 28%, var(--punto));
 }
 
@@ -1393,6 +1394,7 @@
 }
 
 .cartello.futura {
+  background: var(--c);
   background: repeating-linear-gradient(135deg, var(--c) 0 12px, color-mix(in srgb, var(--c) 82%, #000) 12px 24px);
 }
 
@@ -1815,6 +1817,7 @@
     radial-gradient(circle at 20% 10%, rgba(31, 79, 163, 0.35), transparent 50%),
     radial-gradient(circle at 85% 90%, rgba(215, 38, 43, 0.3), transparent 50%),
     rgba(10, 10, 12, 0.82);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
@@ -1823,6 +1826,8 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 18px 16px 48px;
 }
 

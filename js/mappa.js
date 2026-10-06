@@ -95,6 +95,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     const LINEE = leggiLinee();
     const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const touch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     const vista = $('vista');
     const pannello = $('pannello');
     const contenuto = $('contenuto');
@@ -905,7 +906,7 @@ window.PortflavioApp = window.PortflavioApp || {};
         ...(document.fullscreenEnabled ? [{ nome: tr(document.fullscreenElement ? 'Esci da schermo intero' : 'Schermo intero'), tasto: 'F', azione: schermoIntero }] : []),
         ...(visitate.size ? [{ nome: tr('Azzera stazioni visitate'), azione: azzeraVisitate }] : []),
         { nome: tr('Torna a PORT'), tasto: 'Esc', azione: () => { filtra(null); seleziona(HUB); } },
-        { nome: tr('Scorciatoie'), tasto: '?', azione: apriAiuto },
+        ...(touch ? [] : [{ nome: tr('Scorciatoie'), tasto: '?', azione: apriAiuto }]),
         ...LINEE.map((l) => ({ nome: `${tr('Linea')} ${l.nome}`, sigla: l.id, colore: l.colore, azione: () => filtra(l.id) }))
       ];
     }
@@ -1555,6 +1556,16 @@ window.PortflavioApp = window.PortflavioApp || {};
         tela.height = altezza * 2;
         tela.getContext('2d').drawImage(img, 0, 0, tela.width, tela.height);
         const png = await new Promise((ok) => tela.toBlob(ok, 'image/png'));
+        // su telefono (Safari e Chrome) il foglio di condivisione permette di salvarlo direttamente in Foto
+        const file = window.File && new File([png], 'portflavio-mappa.png', { type: 'image/png' });
+        if (file && touch && navigator.canShare?.({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: 'PORT' });
+            return;
+          } catch (error) {
+            if (error.name === 'AbortError') return;
+          }
+        }
         const link = document.createElement('a');
         link.href = URL.createObjectURL(png);
         link.download = 'portflavio-mappa.png';
