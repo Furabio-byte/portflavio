@@ -123,6 +123,7 @@ html:not(.js) .riserva {
     right: 0;
     bottom: 0;
     z-index: 30;
+    height: calc(100vh - 16px);
     height: calc(100dvh - 16px);
     border-left: none;
     border-top: 1px solid var(--rule);
@@ -324,5 +325,12 @@ html:not(.js) .riserva {
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* su touch le scorciatoie da tastiera non servono: i comandi restano, i tasti spariscono */
+@media (hover: none) and (pointer: coarse) {
+  .risultati kbd {
+    display: none;
   }
 }
