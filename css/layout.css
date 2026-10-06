@@ -62,7 +62,7 @@
   stroke-width: 2;
 }
 
-.cerca kbd {
+.cerca > kbd {
   position: absolute;
   right: 12px;
   top: 50%;

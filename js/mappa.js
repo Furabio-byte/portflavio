@@ -19,6 +19,12 @@ window.PortflavioApp = window.PortflavioApp || {};
   };
   const easing = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
   const testo = (root, sel) => root.querySelector(sel)?.textContent.trim() || null;
+  // testo bianco o nero, a seconda di quanto è chiaro il colore della linea
+  const testoSu = (hex) => {
+    const n = parseInt(hex.replace('#', ''), 16);
+    const lum = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+    return lum > 0.6 ? '#111111' : '#ffffff';
+  };
 
   // Le linee e le stazioni vengono lette dall'elenco nell'HTML: è l'unica fonte dei contenuti.
   function leggiLinee() {
@@ -101,17 +107,28 @@ window.PortflavioApp = window.PortflavioApp || {};
     // un fiume morbido attraversa la mappa, come nelle mappe della metro
     crea('path', { class: 'fiume', d: 'M-400,610 C-100,600 120,700 330,650 S640,560 820,590 S1080,720 1300,660 S1600,600 1700,620' }, svg);
 
+    // bagliore delle linee nel tema scuro, come insegne al neon
+    const bagliore = crea('filter', { id: 'bagliore', x: '-30%', y: '-30%', width: '160%', height: '160%' }, defs);
+    crea('feGaussianBlur', { stdDeviation: 7 }, bagliore);
+
+    const gBagliore = crea('g', { class: 'bagliore', filter: 'url(#bagliore)' }, svg);
+    const gBordi = crea('g', { class: 'bordi' }, svg);
     const gLinee = crea('g', {}, svg);
     const gPercorso = crea('g', {}, svg);
+    const gArchi = crea('g', {}, svg);
     const gTreni = crea('g', {}, svg);
     const gEtichette = crea('g', {}, svg);
     const gStazioni = crea('g', {}, svg);
 
     LINEE.forEach((linea, i) => {
       const ritardo = i * 0.25;
+      crea('path', { d: linea.solida, 'data-linea': linea.id, style: `--c:${linea.colore};--d:${ritardo}s`, pathLength: 1 }, gBagliore);
+      crea('path', { d: linea.solida + (linea.tratteggio ? ` ${linea.tratteggio}` : ''), 'data-linea': linea.id, style: `--d:${ritardo}s` }, gBordi);
       const g = crea('g', { class: 'linea', 'data-linea': linea.id, style: `--c:${linea.colore};--d:${ritardo}s` }, gLinee);
       linea.pathEl = crea('path', { d: linea.solida, class: 'solida', pathLength: 1 }, g);
       if (linea.tratteggio) crea('path', { d: linea.tratteggio, class: 'tratteggio' }, g);
+      // un impulso di luce scorre lungo la linea attiva
+      crea('path', { d: linea.solida, class: 'flusso', pathLength: 1 }, g);
       const presa = crea('path', { d: linea.solida + (linea.tratteggio ? ` ${linea.tratteggio}` : ''), class: 'presa' }, g);
       presa.addEventListener('pointerenter', () => g.classList.add('evidenziata'));
       presa.addEventListener('pointerleave', () => g.classList.remove('evidenziata'));
@@ -158,6 +175,14 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (rotazione) etichetta.setAttribute('transform', `rotate(${rotazione} ${x} ${y})`);
       etichetta.textContent = nodo.nome;
 
+      // zoom semantico: avvicinandosi compare l'ente o la prima competenza
+      const dettaglio = nodo.futura ? null : (nodo.ente || nodo.tech[0]);
+      if (dettaglio) {
+        const sotto = crea('text', { class: 'sottoetichetta', x, y: y + 15, 'text-anchor': ancora, 'data-linea': linea.id }, gEtichette);
+        if (rotazione) sotto.setAttribute('transform', `rotate(${rotazione} ${x} ${y})`);
+        sotto.textContent = dettaglio;
+      }
+
       nodo.g = g;
       nodo.t = etichetta;
       g.addEventListener('click', () => { if (!trascinato) seleziona(nodo, { vola: false }); });
@@ -169,6 +194,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     });
 
     const hubG = crea('g', { class: 'hub', tabindex: 0, role: 'button', 'aria-label': 'PORT' }, gStazioni);
+    crea('circle', { class: 'anello-esterno', cx: HUB.x, cy: HUB.y, r: 36 }, hubG);
     crea('circle', { class: 'anello', cx: HUB.x, cy: HUB.y, r: 22 }, hubG);
     const hubTesto = crea('text', { x: 578, y: 350, 'text-anchor': 'end' }, hubG);
     hubTesto.textContent = 'PORT';
@@ -209,28 +235,56 @@ window.PortflavioApp = window.PortflavioApp || {};
       return punti;
     }
 
-    /* ---------- Treni ---------- */
-    const treni = LINEE.map((linea, i) => {
-      const g = crea('g', { class: 'treno', 'data-linea': linea.id, style: `--c:${linea.colore}` }, gTreni);
-      crea('rect', { x: -13, y: -6.5, width: 26, height: 13, rx: 6.5 }, g);
-      crea('circle', { cx: 5, cy: 0, r: 2.5 }, g);
-      return { linea, g, durata: 9000 + i * 1700, fase: i * 0.37 };
-    });
+    /* ---------- Treni: viaggiano da fermata a fermata e sostano in stazione ---------- */
+    const VELOCITA = 0.12;
+    const SOSTA = 1100;
+    const treni = [];
+
+    function preparaTreni() {
+      misuraLinee();
+      LINEE.forEach((linea, i) => {
+        const fermate = [0, ...linea.nodi.map((n) => n.len).filter((l) => l != null)].sort((a, b) => a - b);
+        [0, fermate.length - 1].forEach((partenza, k) => {
+          if (fermate.length < 2) return;
+          const g = crea('g', { class: 'treno', 'data-linea': linea.id, style: `--c:${linea.colore}` }, gTreni);
+          crea('circle', { class: 'faro', cx: 9, cy: 0, r: 9 }, g);
+          crea('rect', { x: -13, y: -6.5, width: 26, height: 13, rx: 6.5 }, g);
+          crea('circle', { class: 'luce', cx: 7, cy: 0, r: 2.5 }, g);
+          treni.push({ linea, g, fermate, indice: partenza, dir: k === 0 ? 1 : -1, stato: 'sosta', t0: -i * 700 - k * 1900, da: fermate[partenza], a: fermate[partenza] });
+        });
+      });
+    }
+
+    function posa(treno, l, dir) {
+      const p = treno.linea.pathEl;
+      const a = p.getPointAtLength(l);
+      const b = p.getPointAtLength(Math.min(Math.max(l + dir, 0), treno.linea.tot));
+      const angolo = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+      treno.g.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${angolo})`);
+    }
 
     function muoviTreni(ora) {
       treni.forEach((treno) => {
-        if (!treno.len) treno.len = treno.linea.pathEl.getTotalLength();
-        const ciclo = ((ora / treno.durata) + treno.fase) % 2;
-        const l = easing(ciclo < 1 ? ciclo : 2 - ciclo) * treno.len;
-        const a = treno.linea.pathEl.getPointAtLength(l);
-        const b = treno.linea.pathEl.getPointAtLength(Math.min(l + 1, treno.len));
-        const angolo = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-        treno.g.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${angolo})`);
+        if (treno.stato === 'sosta') {
+          posa(treno, treno.a, treno.dir);
+          if (ora - treno.t0 < SOSTA) return;
+          let prossimo = treno.indice + treno.dir;
+          if (prossimo < 0 || prossimo >= treno.fermate.length) { treno.dir *= -1; prossimo = treno.indice + treno.dir; }
+          treno.da = treno.fermate[treno.indice];
+          treno.a = treno.fermate[prossimo];
+          treno.indice = prossimo;
+          treno.durata = Math.abs(treno.a - treno.da) / VELOCITA;
+          treno.stato = 'corsa';
+          treno.t0 = ora;
+        }
+        const p = Math.min((ora - treno.t0) / treno.durata, 1);
+        posa(treno, treno.da + (treno.a - treno.da) * easing(p), treno.dir);
+        if (p >= 1) { treno.stato = 'sosta'; treno.t0 = ora; }
       });
       requestAnimationFrame(muoviTreni);
     }
 
-    if (!ridotto) window.setTimeout(() => requestAnimationFrame(muoviTreni), 1800);
+    if (!ridotto) window.setTimeout(() => { preparaTreni(); requestAnimationFrame(muoviTreni); }, 1800);
 
     /* ---------- Zoom e spostamento ---------- */
     let vb = { x: 0, y: 0, w: CONTENUTO.w, h: CONTENUTO.h };
@@ -242,6 +296,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     function applica() {
       svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+      svg.classList.toggle('vicino', vb.w < 640);
       aggiornaMinimappa();
       nascondiSuggerimento();
     }
@@ -423,6 +478,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       svg.classList.toggle('filtra', Boolean(id));
       svg.querySelectorAll('[data-linea]').forEach((n) => n.classList.toggle('attiva', n.dataset.linea === id));
       Array.from(legenda.children).forEach((b, i) => b.setAttribute('aria-pressed', String(LINEE[i].id === id)));
+      if (id) scorri(LINEE.find((l) => l.id === id));
       if (id) inquadra(LINEE.find((l) => l.id === id).nodi.concat(HUB), 160, 120);
     }
 
@@ -438,6 +494,25 @@ window.PortflavioApp = window.PortflavioApp || {};
     function pulisciStato() {
       [HUB, ...stazioni].forEach((n) => n.g.classList.remove('selezionata', 'collegata', 'in-percorso'));
       stazioni.forEach((n) => n.t.classList.remove('evidenza'));
+      gArchi.replaceChildren();
+    }
+
+    // l'impulso di luce scorre sulla linea scelta, o su tutte quando si è a PORT
+    function scorri(lineaAttiva) {
+      LINEE.forEach((l) => l.g.classList.toggle('scorre', lineaAttiva === 'tutte' || l === lineaAttiva));
+    }
+
+    // archi tra stazioni che condividono competenze, come rotte aeree sopra la mappa
+    function disegnaArchi(nodo, altri) {
+      altri.forEach((altro, i) => {
+        const mx = (nodo.x + altro.x) / 2;
+        const my = (nodo.y + altro.y) / 2;
+        const dx = altro.x - nodo.x;
+        const dy = altro.y - nodo.y;
+        const k = 0.28;
+        const d = `M${nodo.x},${nodo.y} Q${mx - dy * k},${my + dx * k} ${altro.x},${altro.y}`;
+        crea('path', { class: 'arco', d, pathLength: 1, style: `--c:${altro.linea.colore};--d:${0.05 + i * 0.08}s` }, gArchi);
+      });
     }
 
     // il modulo contatti e il pulsante condividi sono nodi veri, gestiti da contact.js: vanno conservati
@@ -471,12 +546,16 @@ window.PortflavioApp = window.PortflavioApp || {};
       nodo.g.classList.add('selezionata');
 
       if (nodo.hub) {
+        scorri('tutte');
         mostraHub();
       } else {
         const altri = collegati(nodo);
         altri.forEach((s) => { s.g.classList.add('collegata'); s.t.classList.add('evidenza'); });
+        scorri(nodo.linea);
+        disegnaArchi(nodo, altri);
         mostraStazione(nodo, altri);
       }
+      suona(nodo.hub ? 0 : LINEE.indexOf(nodo.linea) + 1);
 
       apriPannello();
       if (spostaVista) {
@@ -493,12 +572,13 @@ window.PortflavioApp = window.PortflavioApp || {};
       const prec = pos > 0 ? linea.nodi[pos - 1].id : 'PORT';
       const succ = linea.nodi[pos + 1]?.id || '';
       contenuto.style.setProperty('--c', linea.colore);
+      contenuto.style.setProperty('--ct', testoSu(linea.colore));
 
       let h = `<div class="pan-testa"><span class="sigla" style="--c:${linea.colore}" aria-hidden="true">${esc(linea.id)}</span><span class="pan-linea">${esc(linea.nome)} &middot; ${pos + 1}/${linea.nodi.length}</span>
         <div class="pan-nav"><button type="button" data-vai="${prec}" aria-label="Stazione precedente">${ICONA_PREC}</button><button type="button" data-vai="${succ}" ${succ ? '' : 'disabled'} aria-label="Stazione successiva">${ICONA_SUCC}</button></div></div>`;
+      // il cartello della stazione, come quelli smaltati sulle banchine
+      h += `<div class="cartello${nodo.futura ? ' futura' : ''}" style="--c:${linea.colore};--ct:${testoSu(linea.colore)}"><span class="cartello-tag">${esc(nodo.tag)} &middot; ${esc(nodo.num)}</span><h2 class="cartello-nome">${esc(nodo.titolo || nodo.nome)}</h2></div>`;
       h += striscia(linea, nodo);
-      h += `<span class="pan-tag">${esc(nodo.tag)} &middot; ${esc(nodo.num)}</span>`;
-      h += `<h2 class="pan-titolo">${esc(nodo.titolo || nodo.nome)}</h2>`;
       if (nodo.ente) h += `<p class="pan-ente">${esc(nodo.ente)}</p>`;
       nodo.desc.forEach((p) => { h += `<p class="pan-desc">${esc(p)}</p>`; });
       if (nodo.tech.length) {
@@ -533,6 +613,25 @@ window.PortflavioApp = window.PortflavioApp || {};
         <h2 class="pan-titolo">Portfolio personale di Flavio</h2>
         <div class="tabellone" role="group" aria-label="Tabellone delle linee"><div class="ora"><span>PORT</span><span data-orologio>${orario()}</span></div>${righe}<div class="scorrimento" aria-hidden="true"><span>${esc(scorrimento)}</span></div></div>
         <p class="pan-desc">Ogni linea è una sezione. Tocca una stazione per aprirla, isola una linea dalla legenda, cerca una competenza o calcola un percorso tra due stazioni.</p>`);
+      contenuto.querySelectorAll('.tabellone .riga span:nth-child(2)').forEach((el, i) => paletteRotanti(el, 250 + i * 180));
+    }
+
+    // le lettere del tabellone girano come le palette prima di fermarsi sul testo giusto
+    function paletteRotanti(el, ritardo) {
+      if (ridotto) return;
+      const finale = el.textContent;
+      const segni = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const inizio = performance.now() + ritardo;
+      const durata = 650;
+      const passo = (ora) => {
+        if (!el.isConnected) return;
+        const p = (ora - inizio) / durata;
+        if (p < 0) { requestAnimationFrame(passo); return; }
+        const fermi = Math.floor(Math.min(p, 1) * finale.length);
+        el.textContent = finale.split('').map((c, i) => (i < fermi || c === ' ' ? c : segni[Math.floor(Math.random() * segni.length)])).join('');
+        if (p < 1) requestAnimationFrame(passo); else el.textContent = finale;
+      };
+      requestAnimationFrame(passo);
     }
 
     window.setInterval(() => {
@@ -581,26 +680,60 @@ window.PortflavioApp = window.PortflavioApp || {};
     let risultati = [];
     let attivo = 0;
 
+    // la barra di ricerca è anche una palette di comandi, come nelle app professionali
+    function elencoComandi() {
+      const scuro = document.documentElement.dataset.theme === 'dark';
+      return [
+        { nome: 'Viaggio guidato', tasto: 'V', azione: () => bottoneViaggio.click() },
+        { nome: 'Calcola percorso', azione: () => apriPercorso(corrente && !corrente.hub ? corrente.id : undefined) },
+        { nome: vista.classList.contains('mostra-elenco') ? 'Torna alla mappa' : 'Vista elenco', tasto: 'L', azione: () => bottoneElenco.click() },
+        { nome: scuro ? 'Tema chiaro' : 'Tema scuro', azione: () => cambiaTema() },
+        { nome: suoniAttivi ? 'Disattiva suoni' : 'Attiva suoni', azione: () => attivaSuoni(!suoniAttivi) },
+        { nome: 'Mappa intera', tasto: '0', azione: mappaIntera },
+        { nome: 'Torna a PORT', tasto: 'Esc', azione: () => { filtra(null); seleziona(HUB); } },
+        { nome: 'Scorciatoie', tasto: '?', azione: apriAiuto },
+        ...LINEE.map((l) => ({ nome: `Linea ${l.nome}`, sigla: l.id, colore: l.colore, azione: () => filtra(l.id) }))
+      ];
+    }
+
+    function voceRisultato(r, i) {
+      const attr = `type="button" role="option" id="ris-${i}" aria-selected="${i === 0}" class="${i === 0 ? 'attivo' : ''}" data-i="${i}"`;
+      if (r.tipo === 'comando') {
+        const icona = r.c.sigla
+          ? `<span class="sigla" style="--c:${r.c.colore}" aria-hidden="true">${esc(r.c.sigla)}</span>`
+          : '<span class="sigla sigla-neutra" aria-hidden="true">&rsaquo;</span>';
+        return `<li><button ${attr}>${icona}<span>${esc(r.c.nome)}</span>${r.c.tasto ? `<kbd>${esc(r.c.tasto)}</kbd>` : ''}</button></li>`;
+      }
+      const n = r.nodo;
+      return `<li><button ${attr}><span class="sigla" style="--c:${n.linea.colore}" aria-hidden="true">${esc(n.linea.id)}</span><span>${esc(n.nome)}<small>${esc([n.ente, ...n.tech].filter(Boolean).join(' \u00B7 '))}</small></span></button></li>`;
+    }
+
     function cerca() {
       const q = input.value.trim().toLowerCase();
-      if (!q) { chiudiRisultati(); pulisciStato(); if (corrente) corrente.g.classList.add('selezionata'); return; }
+      const comandi = elencoComandi();
 
-      risultati = stazioni.map((nodo) => {
-        const campi = [nodo.nome, nodo.titolo, nodo.ente, ...nodo.tech, nodo.linea.nome].filter(Boolean).map((t) => t.toLowerCase());
-        const punteggio = Math.max(...campi.map((t, i) => (t.startsWith(q) ? 3 : t.includes(q) ? 1 : 0) * (i === 0 ? 2 : 1)));
-        return { nodo, punteggio };
-      }).filter((r) => r.punteggio > 0).sort((a, b) => b.punteggio - a.punteggio).slice(0, 8).map((r) => r.nodo);
+      if (!q) {
+        pulisciStato();
+        if (corrente) corrente.g.classList.add('selezionata');
+        if (document.activeElement !== input) { chiudiRisultati(); return; }
+        risultati = comandi.map((c) => ({ tipo: 'comando', c }));
+      } else {
+        const trovate = stazioni.map((nodo) => {
+          const campi = [nodo.nome, nodo.titolo, nodo.ente, ...nodo.tech, nodo.linea.nome].filter(Boolean).map((t) => t.toLowerCase());
+          const punteggio = Math.max(...campi.map((t, i) => (t.startsWith(q) ? 3 : t.includes(q) ? 1 : 0) * (i === 0 ? 2 : 1)));
+          return { tipo: 'stazione', nodo, punteggio };
+        }).filter((r) => r.punteggio > 0).sort((a, b) => b.punteggio - a.punteggio).slice(0, 8);
+        const azioni = comandi.filter((c) => c.nome.toLowerCase().includes(q)).slice(0, 4).map((c) => ({ tipo: 'comando', c }));
+        risultati = [...trovate, ...azioni];
+        pulisciStato();
+        trovate.forEach((r) => r.nodo.g.classList.add('collegata'));
+      }
 
       attivo = 0;
-      lista.innerHTML = risultati.length
-        ? risultati.map((n, i) => `<li><button type="button" role="option" id="ris-${i}" aria-selected="${i === 0}" class="${i === 0 ? 'attivo' : ''}" data-i="${i}"><span class="sigla" style="--c:${n.linea.colore}" aria-hidden="true">${esc(n.linea.id)}</span><span>${esc(n.nome)}<small>${esc([n.ente, ...n.tech].filter(Boolean).join(' · '))}</small></span></button></li>`).join('')
-        : '<li class="vuoto">Nessuna stazione</li>';
+      lista.innerHTML = risultati.length ? risultati.map(voceRisultato).join('') : '<li class="vuoto">Nessuna stazione</li>';
       lista.classList.add('aperti');
       input.setAttribute('aria-expanded', 'true');
       if (risultati.length) input.setAttribute('aria-activedescendant', 'ris-0');
-
-      pulisciStato();
-      risultati.forEach((n) => n.g.classList.add('collegata'));
     }
 
     function chiudiRisultati() {
@@ -610,15 +743,17 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
 
     function scegli(i) {
-      const nodo = risultati[i];
-      if (!nodo) return;
+      const r = risultati[i];
+      if (!r) return;
       chiudiRisultati();
+      input.value = '';
       input.blur();
-      seleziona(nodo);
+      if (r.tipo === 'comando') r.c.azione();
+      else seleziona(r.nodo);
     }
 
     input.addEventListener('input', cerca);
-    input.addEventListener('focus', () => { if (input.value) cerca(); });
+    input.addEventListener('focus', cerca);
     input.addEventListener('keydown', (e) => {
       if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && risultati.length) {
         e.preventDefault();
@@ -801,7 +936,56 @@ window.PortflavioApp = window.PortflavioApp || {};
       try { localStorage.setItem('pf-tema', scuro ? 'dark' : 'light'); } catch (error) { /* preferenza solo per questa visita */ }
     }
     bottoneTema.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'dark'));
-    bottoneTema.addEventListener('click', () => tema(document.documentElement.dataset.theme !== 'dark'));
+    // il nuovo tema si apre a cerchio dal pulsante, con la View Transitions API dove disponibile
+    function cambiaTema() {
+      const scuro = document.documentElement.dataset.theme !== 'dark';
+      if (!document.startViewTransition || ridotto) { tema(scuro); return; }
+      const r = bottoneTema.getBoundingClientRect();
+      document.documentElement.style.setProperty('--vt-x', `${r.left + r.width / 2}px`);
+      document.documentElement.style.setProperty('--vt-y', `${r.top + r.height / 2}px`);
+      document.startViewTransition(() => tema(scuro));
+    }
+    bottoneTema.addEventListener('click', cambiaTema);
+
+    /* ---------- Suoni (spenti di default) ---------- */
+    const bottoneSuono = $('btnSuono');
+    let suoniAttivi = false;
+    let audio = null;
+    try { suoniAttivi = localStorage.getItem('pf-suoni') === '1'; } catch (error) { suoniAttivi = false; }
+    bottoneSuono.setAttribute('aria-pressed', String(suoniAttivi));
+
+    function attivaSuoni(on) {
+      suoniAttivi = on;
+      bottoneSuono.setAttribute('aria-pressed', String(on));
+      try { localStorage.setItem('pf-suoni', on ? '1' : '0'); } catch (error) { /* solo per questa visita */ }
+      if (on) suona(0);
+      avvisa(on ? 'Suoni attivati' : 'Suoni disattivati');
+    }
+    bottoneSuono.addEventListener('click', () => attivaSuoni(!suoniAttivi));
+
+    // due note morbide, come l'annuncio di una stazione; ogni linea ha la sua tonalità
+    function suona(tono) {
+      if (!suoniAttivi) return;
+      try {
+        audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+        const base = [523.25, 587.33, 659.25, 698.46, 783.99][tono] || 523.25;
+        [base, base * 1.25].forEach((frequenza, i) => {
+          const osc = audio.createOscillator();
+          const vol = audio.createGain();
+          const t = audio.currentTime + i * 0.13;
+          osc.type = 'sine';
+          osc.frequency.value = frequenza;
+          vol.gain.setValueAtTime(0, t);
+          vol.gain.linearRampToValueAtTime(0.07, t + 0.02);
+          vol.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
+          osc.connect(vol).connect(audio.destination);
+          osc.start(t);
+          osc.stop(t + 0.75);
+        });
+      } catch (error) {
+        /* audio non disponibile */
+      }
+    }
 
     /* ---------- Scorciatoie ---------- */
     const aiuto = $('aiuto');
@@ -810,6 +994,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     $('maniglia').addEventListener('click', () => apriPannello(!pannello.classList.contains('aperto')));
 
     document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); input.focus(); return; }
       if (e.target.closest('input, textarea, select') || aiuto.open || e.metaKey || e.ctrlKey || e.altKey) return;
       const tasto = e.key.toLowerCase();
       if (tasto === '/') { e.preventDefault(); input.focus(); return; }
@@ -831,6 +1016,31 @@ window.PortflavioApp = window.PortflavioApp || {};
         if (prossimo) { seleziona(prossimo); prossimo.g.focus({ preventScroll: true }); }
       }
     });
+
+    /* ---------- Apertura: una volta per visita ---------- */
+    const intro = $('intro');
+    let introVista = false;
+    try { introVista = sessionStorage.getItem('pf-intro') === '1'; } catch (error) { introVista = false; }
+
+    if (intro && !ridotto && !introVista) {
+      let chiusa = false;
+      const chiudi = () => {
+        if (chiusa) return;
+        chiusa = true;
+        intro.classList.add('esci');
+        svg.classList.remove('in-attesa');
+        window.setTimeout(() => intro.remove(), 800);
+      };
+      svg.classList.add('in-attesa');
+      intro.classList.add('attiva');
+      paletteRotanti(intro.querySelector('.intro-scritta'), 350);
+      window.setTimeout(chiudi, 2400);
+      intro.addEventListener('click', chiudi);
+      document.addEventListener('keydown', chiudi, { once: true });
+      try { sessionStorage.setItem('pf-intro', '1'); } catch (error) { /* si rivedrà alla prossima visita */ }
+    } else {
+      intro?.remove();
+    }
 
     /* ---------- Avvio ---------- */
     new ResizeObserver(() => imposta(vb.x + vb.w / 2, vb.y + vb.h / 2, vb.w)).observe(vista);
