@@ -836,7 +836,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     function elencoComandi() {
       const scuro = document.documentElement.dataset.theme === 'dark';
       return [
-        { nome: 'Viaggio guidato', tasto: 'V', azione: () => bottoneViaggio.click() },
+        { nome: viaggioAttivo() ? (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio') : 'Viaggio guidato', tasto: 'V', azione: () => bottoneViaggio.click() },
         { nome: 'Calcola percorso', azione: () => apriPercorso(corrente && !corrente.hub ? corrente.id : undefined) },
         { nome: vista.classList.contains('mostra-elenco') ? 'Torna alla mappa' : 'Vista elenco', tasto: 'L', azione: () => bottoneElenco.click() },
         { nome: scuro ? 'Tema chiaro' : 'Tema scuro', azione: () => cambiaTema() },
@@ -1012,19 +1012,56 @@ window.PortflavioApp = window.PortflavioApp || {};
     /* ---------- Viaggio guidato ---------- */
     const giro = [HUB, ...LINEE.flatMap((l) => l.nodi)];
     const bottoneViaggio = $('btnViaggio');
+    const iconaViaggio = bottoneViaggio.querySelector('svg');
     const barra = $('viaggioBarra');
     let timerViaggio = null;
     let passo = 0;
     let inPausa = false;
+    let scadenza = 0;
+    let residuo = 0;
+    const viaggioAttivo = () => barra.classList.contains('attiva');
+
+    // il tempo su ogni fermata dipende da quanto c'è da leggere: da 5 a 15 secondi
+    function durataTappa(nodo) {
+      if (nodo.hub) return 8000;
+      const testo = [nodo.titolo || nodo.nome, nodo.ente, ...nodo.desc, ...nodo.tech].filter(Boolean).join(' ');
+      const parole = testo.split(/\s+/).length;
+      return Math.min(Math.max(5000, 2000 + parole * 280), 15000);
+    }
+
+    // pulsante in testata e pulsante nella barra mostrano sempre lo stesso stato: ▶ o ⏸
+    function aggiornaComandiViaggio() {
+      const attivo = viaggioAttivo();
+      const mostraPausa = attivo && !inPausa;
+      iconaViaggio.innerHTML = mostraPausa ? '<path d="M7 5h3v14H7zM14 5h3v14h-3z"/>' : '<path d="M7 4l12 8-12 8z"/>';
+      bottoneViaggio.setAttribute('aria-pressed', String(attivo));
+      bottoneViaggio.title = !attivo ? 'Viaggio guidato' : (inPausa ? 'Riprendi il viaggio' : 'Metti in pausa il viaggio');
+      bottoneViaggio.setAttribute('aria-label', bottoneViaggio.title);
+      $('viaggioPausa').innerHTML = mostraPausa ? ICONA_PAUSA : ICONA_PLAY;
+      $('viaggioPausa').setAttribute('aria-label', inPausa ? 'Riprendi' : 'Pausa');
+      barra.classList.toggle('in-pausa', inPausa);
+    }
+
+    function programmaTappa(ms) {
+      window.clearTimeout(timerViaggio);
+      scadenza = performance.now() + ms;
+      barra.style.setProperty('--tappa', `${ms}ms`);
+      timerViaggio = window.setTimeout(prossimaTappa, ms);
+    }
+
+    function prossimaTappa() {
+      passo += 1;
+      if (passo >= giro.length) { fermaViaggio(); seleziona(HUB); return; }
+      tappaViaggio();
+    }
 
     function avviaViaggio() {
       if (percorsoAttivo()) chiudiPercorso(false);
       filtra(null);
       passo = 0;
       inPausa = false;
-      $('viaggioPausa').innerHTML = ICONA_PAUSA;
-      bottoneViaggio.setAttribute('aria-pressed', 'true');
       barra.classList.add('attiva');
+      aggiornaComandiViaggio();
       tappaViaggio();
     }
 
@@ -1035,34 +1072,47 @@ window.PortflavioApp = window.PortflavioApp || {};
       vola(nodo.x, nodo.y + scostamento(520), 520, 900);
       $('viaggioTesto').textContent = `${passo + 1}/${giro.length}${prossima ? ` · Prossima: ${prossima.nome}` : ''}`;
       $('viaggioProgresso').style.width = `${(passo + 1) / giro.length * 100}%`;
-      window.clearTimeout(timerViaggio);
-      timerViaggio = window.setTimeout(() => {
-        if (inPausa) return;
-        passo += 1;
-        if (passo >= giro.length) { fermaViaggio(); seleziona(HUB); return; }
-        tappaViaggio();
-      }, 3400);
+      // il conto alla rovescia della fermata riparte da capo
+      barra.classList.remove('conta');
+      void barra.offsetWidth;
+      barra.classList.add('conta');
+      if (inPausa) { residuo = durataTappa(nodo); return; }
+      programmaTappa(durataTappa(nodo));
+    }
+
+    function pausaViaggio(pausa) {
+      if (!viaggioAttivo() || pausa === inPausa) return;
+      inPausa = pausa;
+      if (pausa) {
+        residuo = Math.max(scadenza - performance.now(), 1200);
+        window.clearTimeout(timerViaggio);
+      } else {
+        programmaTappa(residuo);
+      }
+      aggiornaComandiViaggio();
     }
 
     function fermaViaggio() {
-      if (!barra.classList.contains('attiva')) return;
+      if (!viaggioAttivo()) return;
       window.clearTimeout(timerViaggio);
       timerViaggio = null;
-      bottoneViaggio.setAttribute('aria-pressed', 'false');
-      barra.classList.remove('attiva');
+      inPausa = false;
+      barra.classList.remove('attiva', 'conta');
+      aggiornaComandiViaggio();
     }
 
-    bottoneViaggio.addEventListener('click', () => (barra.classList.contains('attiva') ? fermaViaggio() : avviaViaggio()));
+    bottoneViaggio.addEventListener('click', () => (viaggioAttivo() ? pausaViaggio(!inPausa) : avviaViaggio()));
     $('viaggioStop').addEventListener('click', fermaViaggio);
-    $('viaggioPausa').addEventListener('click', () => {
-      inPausa = !inPausa;
-      $('viaggioPausa').innerHTML = inPausa ? ICONA_PLAY : ICONA_PAUSA;
-      $('viaggioPausa').setAttribute('aria-label', inPausa ? 'Riprendi' : 'Pausa');
-      if (!inPausa) {
-        passo += 1;
-        if (passo < giro.length) tappaViaggio(); else fermaViaggio();
-      }
-    });
+    $('viaggioPausa').addEventListener('click', () => pausaViaggio(!inPausa));
+
+    // se durante il viaggio tocchi o scorri la scheda per leggere, il viaggio si mette in pausa
+    const pausaPerLettura = () => {
+      if (!viaggioAttivo() || inPausa) return;
+      pausaViaggio(true);
+      avvisa('Viaggio in pausa: premi ▶ per riprendere');
+    };
+    contenuto.addEventListener('wheel', pausaPerLettura, { passive: true });
+    contenuto.addEventListener('touchstart', pausaPerLettura, { passive: true });
 
     /* ---------- Vista elenco ---------- */
     const bottoneElenco = $('btnElenco');
