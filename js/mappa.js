@@ -166,7 +166,7 @@ window.PortflavioApp = window.PortflavioApp || {};
         default: x += 16;
       }
       const etichetta = crea('text', {
-        class: `etichetta-mappa${nodo.futura ? ' futura' : ''}${nodo.titolo === 'SLIDE' ? ' forte' : ''}`,
+        class: `etichetta-mappa${nodo.futura ? ' futura' : ''}`,
         x,
         y,
         'text-anchor': ancora,
