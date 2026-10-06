@@ -396,7 +396,13 @@ window.PortflavioApp = window.PortflavioApp || {};
     const mappaIntera = () => { const f = adatta(); vola(f.cx, f.cy, f.w); };
 
     svg.addEventListener('wheel', (e) => { e.preventDefault(); zoomA(Math.exp(e.deltaY * 0.0015), e.clientX, e.clientY); }, { passive: false });
-    svg.addEventListener('dblclick', (e) => { if (!e.target.closest('.stazione, .hub')) zoomA(0.6, e.clientX, e.clientY); });
+    // doppio click per ingrandire solo con il mouse: sui touch i tocchi ravvicinati non fanno zoom
+    let ultimoPuntatore = 'mouse';
+    svg.addEventListener('pointerdown', (e) => { ultimoPuntatore = e.pointerType; });
+    svg.addEventListener('dblclick', (e) => {
+      if (ultimoPuntatore !== 'mouse' || e.target.closest('.stazione, .hub')) return;
+      zoomA(0.6, e.clientX, e.clientY);
+    });
 
     const puntatori = new Map();
     let trascinato = false;
@@ -441,18 +447,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       applica();
     });
 
-    let ultimoTocco = { t: 0, x: 0, y: 0 };
     const fineTrascinamento = (e) => {
-      // doppio tocco su un punto vuoto della mappa: ingrandisce lì
-      if (e.type === 'pointerup' && e.pointerType === 'touch' && !trascinato && puntatori.size === 1 && !e.target.closest('.stazione, .hub, .linea')) {
-        const ora = performance.now();
-        if (ora - ultimoTocco.t < 320 && Math.hypot(e.clientX - ultimoTocco.x, e.clientY - ultimoTocco.y) < 30) {
-          zoomA(0.5, e.clientX, e.clientY);
-          ultimoTocco.t = 0;
-        } else {
-          ultimoTocco = { t: ora, x: e.clientX, y: e.clientY };
-        }
-      }
       puntatori.delete(e.pointerId);
       if (puntatori.size < 2) inizioPinch = null;
       if (puntatori.size === 0) {
