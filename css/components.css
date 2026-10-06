@@ -403,6 +403,33 @@
   overflow: hidden;
 }
 
+/* conto alla rovescia della fermata: una sottile linea che si riempie sotto la barra */
+.viaggio-barra::after {
+  content: '';
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--bg);
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.viaggio-barra.conta::after {
+  animation: conta-tappa var(--tappa, 6s) linear forwards;
+}
+
+.viaggio-barra.in-pausa::after {
+  animation-play-state: paused;
+}
+
+@keyframes conta-tappa {
+  to { transform: scaleX(1); }
+}
+
 .viaggio-barra .traccia span {
   display: block;
   width: 0;
