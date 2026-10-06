@@ -1,8 +1,11 @@
 /* ---------- Mappa ---------- */
 #mappa {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
+  transform-origin: 0 0;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -13,8 +16,20 @@
   cursor: grabbing;
 }
 
-.griglia-punto {
-  fill: var(--griglia);
+/* griglia di puntini disegnata dal CSS: segue zoom e spostamenti senza pesare sulla mappa */
+.vista {
+  background-image: radial-gradient(circle at 2px 2px, var(--griglia-punto) 1.5px, transparent 2px);
+  background-size: var(--griglia-passo, 40px) var(--griglia-passo, 40px);
+  background-position: var(--griglia-x, 0) var(--griglia-y, 0);
+}
+
+/* mentre la mappa si muove: un solo livello grafico, nessuna animazione da ridisegnare */
+.vista.in-movimento #mappa {
+  will-change: transform;
+}
+
+.vista.in-movimento #mappa * {
+  animation-play-state: paused !important;
 }
 
 .fiume {
@@ -104,6 +119,10 @@
 
 .stazione:focus-visible .punto {
   stroke: var(--ink);
+}
+
+.stazione.visitata:not(.selezionata) .punto {
+  fill: color-mix(in srgb, var(--c) 28%, var(--punto));
 }
 
 .stazione.selezionata .punto {
@@ -593,7 +612,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 2px;
+  padding: 12px 8px;
 }
 
 .striscia::before {
@@ -1209,7 +1228,7 @@
 }
 
 [data-theme="dark"] .linea.scorre .flusso {
-  filter: drop-shadow(0 0 4px #fff);
+  stroke-width: 4;
 }
 
 /* il neon rende scure le etichette troppo pesanti: alleggerisce il bordo */
@@ -1460,3 +1479,81 @@
 @keyframes ruota { to { transform: rotate(360deg); } }
 @keyframes intro-linea { to { width: var(--l); } }
 @keyframes intro-snodo { to { transform: scale(1); } }
+
+/* ---------- Esplorazione e competenze nel pannello di PORT ---------- */
+.esplorazione {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.esplorazione-testa {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.esplorazione-barra {
+  height: 8px;
+  border-radius: 8px;
+  background-color: var(--rule);
+  overflow: hidden;
+}
+
+.esplorazione-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #d7262b, #1f4fa3 40%, #0f8a4a 70%, #e8a200);
+  background-size: 400px 100%;
+  transition: width 0.6s var(--ease);
+}
+
+.competenze {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.competenze button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.competenze button:hover {
+  border-color: var(--ink);
+}
+
+.competenze span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background-color: var(--ink);
+  color: var(--bg);
+  font-size: 0.66rem;
+}
+
+/* scorrimento laterale tra stazioni: il contenuto entra dal lato giusto */
+.pannello[data-scorri="avanti"] .pannello-contenuto > * {
+  animation-name: entra-destra;
+}
+
+.pannello[data-scorri="indietro"] .pannello-contenuto > * {
+  animation-name: entra-sinistra;
+}
+
+@keyframes entra-destra { from { opacity: 0; transform: translateX(40px); } }
+@keyframes entra-sinistra { from { opacity: 0; transform: translateX(-40px); } }
