@@ -1,6 +1,6 @@
 // Service worker: il sito resta consultabile anche offline.
 // Rete prima di tutto, così ogni aggiornamento arriva subito; la cache serve solo senza connessione.
-const CACHE = 'portflavio-v6';
+const CACHE = 'portflavio-v7';
 const FILE = [
   './',
   'index.html',
