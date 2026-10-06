@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Portfolio personale di Flavio">
-  <meta name="theme-color" content="#ded9d2">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#fbfaf7">
+  <meta name="color-scheme" content="light dark">
 
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://portflavio.vercel.app; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; script-src 'self';">
@@ -30,7 +30,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <script src="js/early.js"></script>
 
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -41,478 +44,297 @@
 
 <body>
   <a class="skip-link" href="#main-content">Vai al contenuto principale</a>
-  <div class="custom-cursor"></div>
 
-  <header>
-    <nav class="schede-container" aria-label="Navigazione principale">
-      <a href="#project" class="scheda-link" aria-label="Progetti - 2 progetti disponibili">
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">P</span>
-          <span class="parola">Project</span>
-          <span class="numero">2</span>
-        </article>
-      </a>
-
-      <a href="#others" class="scheda-link" aria-label="Altri lavori">
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">O</span>
-          <span class="parola">Others</span>
-          <span class="numero">0</span>
-        </article>
-      </a>
-
-      <a href="#road" class="scheda-link" aria-label="Percorso - 2 elementi">
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">R</span>
-          <span class="parola">Road</span>
-          <span class="numero">2</span>
-        </article>
-      </a>
-
-      <a href="#text" class="scheda-link" aria-label="Text - contatti e riferimenti">
-        <article class="scheda">
-          <span class="lettera" aria-hidden="true">T</span>
-          <span class="parola">Text</span>
-          <span class="numero">6</span>
-        </article>
-      </a>
-    </nav>
+  <header class="testata">
+    <h1>Portfolio personale di Flavio</h1>
+    <div class="cerca" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <label class="sr-only" for="cercaInput">Cerca stazione o competenza</label>
+      <input id="cercaInput" type="search" placeholder="Cerca stazione o competenza" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="risultati" aria-autocomplete="list">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="risultati" id="risultati" role="listbox" aria-label="Risultati"></ul>
+    </div>
+    <div class="strumenti">
+      <button class="strumento" id="btnViaggio" type="button" aria-pressed="false" title="Viaggio guidato"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l12 8-12 8z"/></svg><span class="testo">Viaggio</span></button>
+      <button class="strumento" id="btnPercorso" type="button" aria-pressed="false" title="Calcola percorso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg><span class="testo">Percorso</span></button>
+      <button class="strumento" id="btnElenco" type="button" aria-pressed="false" title="Vista elenco"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="testo">Elenco</span></button>
+      <button class="strumento" id="btnTema" type="button" aria-pressed="false" title="Tema scuro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="sr-only">Tema scuro</span></button>
+      <button class="strumento" id="btnAiuto" type="button" title="Scorciatoie da tastiera"><span aria-hidden="true">?</span><span class="sr-only">Scorciatoie da tastiera</span></button>
+    </div>
   </header>
 
-  <main id="main-content">
-    <h1 class="sr-only">Portfolio personale di Flavio</h1>
-    <section id="project" class="text-page-container reveal">
-      <div class="sezione-contenuto">
-        <div class="text-content">
-          <h2 class="text-title">Projects</h2>
-          <div class="text-description">
-            <div class="scroll-container">
-              <div class="sub-schede-container">
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[IN SVILUPPO]</span>
-                    <span class="card-numero">01</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">SLIDE</h3>
-                    <p class="card-desc card-desc-spaced">Cabina fotografica vintage online per creare ricordi
-                      pronti da condividere, una posa per volta.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <a href="https://slidemylife.com/" target="_blank" rel="noopener noreferrer">Visita sito</a>
-                    </div>
-                  </div>
-                </div>
+  <nav class="legenda" id="legenda" aria-label="Linee"></nav>
 
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[COMING SOON]</span>
-                    <span class="card-numero">02</span>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-desc card-desc-spaced">Qui troverai i miei prossimi progetti, le applicazioni
-                      web in via di sviluppo e molto altro.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Loading...</span>
-                      <span>Next Project</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="dot-indicator"></div>
-            </div>
-          </div>
-        </div>
+  <main class="corpo" id="main-content">
+    <div class="vista" id="vista">
+      <svg id="mappa" role="group" aria-label="Mappa del portfolio: quattro linee, Project, Others, Road e Text, che partono da PORT"></svg>
+      <div class="minimappa" id="minimappa" aria-hidden="true"></div>
+      <div class="suggerimento" id="suggerimento" aria-hidden="true"></div>
+      <div class="zoom" role="group" aria-label="Zoom">
+        <button type="button" id="zoomPiu" aria-label="Ingrandisci">+</button>
+        <button type="button" id="zoomMeno" aria-label="Riduci">&minus;</button>
+        <button type="button" id="zoomReset" aria-label="Mostra tutta la mappa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       </div>
-    </section>
-
-    <section id="others" class="text-page-container reveal">
-      <div class="sezione-contenuto">
-        <div class="text-content">
-          <h2 class="text-title">Others</h2>
-          <div class="text-description">
-            <div class="scroll-container">
-              <div class="sub-schede-container">
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">01</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Claude Code 101</h3>
-                    <p class="card-desc">Anthropic.</p>
-                    <p class="card-desc card-desc-spaced">Fondamenti di Claude Code per lavorare su codebase,
-                      automatizzare attivita di sviluppo e gestire workflow di coding assistito dall'AI.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Claude Code</span>
-                      <span>AI Coding</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">02</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">SQL for Data Analysis</h3>
-                    <p class="card-desc">Simplilearn.</p>
-                    <p class="card-desc card-desc-spaced">Analisi dei dati tramite interrogazioni complesse su
-                      Server Microsoft SQL.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>SQL</span>
-                      <span>Data Analysis</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">03</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Introduction to SQL</h3>
-                    <p class="card-desc">Simplilearn.</p>
-                    <p class="card-desc card-desc-spaced">Gestione Database relazionali e fondamenti di
-                      scrittura di query SQL.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Relational DB</span>
-                      <span>Queries</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">04</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Excel Avanzato + VBA</h3>
-                    <p class="card-desc">IFOA - Training Institute.</p>
-                    <p class="card-desc card-desc-spaced">Competenze avanzate in Microsoft Excel, analisi dei
-                      dati e programmazione Macro con VBA.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Microsoft Excel</span>
-                      <span>VBA</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">05</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Introduction to Generative AI</h3>
-                    <p class="card-desc">Google Cloud Skills Boost.</p>
-                    <p class="card-desc card-desc-spaced">Principi fondamentali di intelligenza artificiale
-                      generativa e applicazioni pratiche su Google Cloud.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Generative AI</span>
-                      <span>Google Cloud</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">06</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Programmatore Python</h3>
-                    <p class="card-desc">Fondazione ALESS Don Milani - ETS.</p>
-                    <p class="card-desc card-desc-spaced">Principi fondamentali della programmazione procedurale
-                      e orientata agli oggetti con linguaggio Python.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Python</span>
-                      <span>Programmazione</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">07</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Cybersecurity</h3>
-                    <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc card-desc-spaced">Principi fondamentali di sicurezza e reti.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Cisco Academy</span>
-                      <span>Security</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[DIPLOMA CEFI]</span>
-                    <span class="card-numero">08</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Amministratore di Rete Linux</h3>
-                    <p class="card-desc">Istituto Cefi Informatica.</p>
-                    <p class="card-desc card-desc-spaced">Corso di formazione per l'amministrazione,
-                      configurazione e sicurezza di reti basate su sistemi Linux.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>SysAdmin</span>
-                      <span>Networking</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">09</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Linux Unhatched</h3>
-                    <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc card-desc-spaced">Fondamenti di Linux (CLI).</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Cisco Academy</span>
-                      <span>Linux</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[CERTIFICAZIONE]</span>
-                    <span class="card-numero">10</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">HTML Essentials</h3>
-                    <p class="card-desc">Cisco Networking Academy.</p>
-                    <p class="card-desc card-desc-spaced">Fondamenti e best practice del web development.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>HTML</span>
-                      <span>Web Dev</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[COMING SOON]</span>
-                    <span class="card-numero">11</span>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-desc card-desc-spaced">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Loading...</span>
-                      <span>Next Cert</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="dot-indicator"></div>
-            </div>
-          </div>
-        </div>
+      <div class="viaggio-barra" id="viaggioBarra">
+        <span id="viaggioTesto"></span>
+        <span class="traccia" aria-hidden="true"><span id="viaggioProgresso"></span></span>
+        <button type="button" id="viaggioPausa" aria-label="Pausa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg></button>
+        <button type="button" id="viaggioStop" aria-label="Termina viaggio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg></button>
       </div>
-    </section>
 
-    <section id="road" class="text-page-container reveal">
-      <div class="sezione-contenuto">
-        <div class="text-content">
-          <h2 class="text-title">Road</h2>
-          <div class="text-description">
-            <div class="scroll-container">
-              <div class="sub-schede-container">
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[ESPERIENZA]</span>
-                    <span class="card-numero">01</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">IT Support Specialist</h3>
-                    <p class="card-desc">Assinde S.r.l.</p>
-                    <p class="card-desc card-desc-spaced">Interfaccia tecnica tra azienda e team di sviluppo.
-                      Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale
-                      interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>SQL</span>
-                      <span>Database Management</span>
-                      <span>Data Analysis</span>
-                      <span>IT Support</span>
-                      <span>IT Asset Management</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[ESPERIENZA]</span>
-                    <span class="card-numero">02</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Sistemista IT</h3>
-                    <p class="card-desc">5 Emme Informatica S.p.A.</p>
-                    <p class="card-desc card-desc-spaced">Esperienza di supporto sistemistico e IT presso le
-                      strutture del Senato della Repubblica Italiana.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>IT Support</span>
-                      <span>Sistemista</span>
-                      <span>Supporto Hardware/Software</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[ESPERIENZA]</span>
-                    <span class="card-numero">03</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Programmatore Python Junior</h3>
-                    <p class="card-desc">Access Point Coop. Soc. Onlus.</p>
-                    <p class="card-desc card-desc-spaced">Sviluppo, manutenzione e ottimizzazione del codice
-                      Python per la creazione di un videogioco a uso interno aziendale.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Python</span>
-                      <span>Game Programming</span>
-                      <span>OOP</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[ESPERIENZA]</span>
-                    <span class="card-numero">04</span>
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-titolo">Assistenza Helpdesk IT</h3>
-                    <p class="card-desc">Tecnotrans S.R.L.</p>
-                    <p class="card-desc card-desc-spaced">Supporto tecnico di primo livello, risoluzione
-                      incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>IT Helpdesk</span>
-                      <span>Troubleshooting</span>
-                      <span>Assistenza</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="sub-scheda card-astratta">
-                  <div class="card-header">
-                    <span class="card-tag">[COMING SOON]</span>
-                    <span class="card-numero">05</span>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-desc card-desc-spaced">Qui troverai i prossimi step della mia carriera
-                      professionale.</p>
-                  </div>
-                  <div class="card-footer">
-                    <div class="card-tech">
-                      <span>Loading...</span>
-                      <span>Next Step</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="dot-indicator"></div>
-            </div>
-          </div>
-        </div>
+      <div class="elenco" id="elenco">
+        <section class="elenco-linea" data-linea="P" data-colore="#d7262b" data-solida="M600,380 V260" data-tratteggio="M600,260 V160" style="--c:#d7262b" aria-labelledby="linea-P">
+          <h2 id="linea-P"><span class="sigla" aria-hidden="true">P</span><span class="linea-nome">Project</span> <span class="numero">2</span></h2>
+          <ol>
+            <li class="voce" data-x="600" data-y="260" data-et="r" data-etichetta="SLIDE">
+              <article>
+                <span class="voce-tag">[IN SVILUPPO]</span><span class="voce-num">01</span>
+                <h3 class="voce-titolo">SLIDE</h3>
+                <p class="voce-desc">Cabina fotografica vintage online per creare ricordi pronti da condividere, una posa per volta.</p>
+                <a class="voce-link" href="https://slidemylife.com/" target="_blank" rel="noopener noreferrer">Visita sito</a>
+              </article>
+            </li>
+            <li class="voce voce-futura" data-x="600" data-y="165" data-et="r" data-etichetta="Next Project">
+              <article>
+                <span class="voce-tag">[COMING SOON]</span><span class="voce-num">02</span>
+                <p class="voce-desc">Qui troverai i miei prossimi progetti, le applicazioni web in via di sviluppo e molto altro.</p>
+                <ul class="voce-tech"><li>Loading...</li><li>Next Project</li></ul>
+              </article>
+            </li>
+          </ol>
+        </section>
+        <section class="elenco-linea" data-linea="O" data-colore="#1f4fa3" data-solida="M600,380 H262 Q220,380 220,338 V162 Q220,120 262,120 H430" data-tratteggio="M430,120 H510" style="--c:#1f4fa3" aria-labelledby="linea-O">
+          <h2 id="linea-O"><span class="sigla" aria-hidden="true">O</span><span class="linea-nome">Others</span> <span class="numero">0</span></h2>
+          <ol>
+            <li class="voce" data-x="510" data-y="380" data-et="bl" data-etichetta="Claude Code 101">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">01</span>
+                <h3 class="voce-titolo">Claude Code 101</h3>
+                <p class="voce-ente">Anthropic.</p>
+                <p class="voce-desc">Fondamenti di Claude Code per lavorare su codebase, automatizzare attivita di sviluppo e gestire workflow di coding assistito dall'AI.</p>
+                <ul class="voce-tech"><li>Claude Code</li><li>AI Coding</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="430" data-y="380" data-et="bl" data-etichetta="SQL for Data Analysis">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">02</span>
+                <h3 class="voce-titolo">SQL for Data Analysis</h3>
+                <p class="voce-ente">Simplilearn.</p>
+                <p class="voce-desc">Analisi dei dati tramite interrogazioni complesse su Server Microsoft SQL.</p>
+                <ul class="voce-tech"><li>SQL</li><li>Data Analysis</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="350" data-y="380" data-et="bl" data-etichetta="Introduction to SQL">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">03</span>
+                <h3 class="voce-titolo">Introduction to SQL</h3>
+                <p class="voce-ente">Simplilearn.</p>
+                <p class="voce-desc">Gestione Database relazionali e fondamenti di scrittura di query SQL.</p>
+                <ul class="voce-tech"><li>Relational DB</li><li>Queries</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="270" data-y="380" data-et="bl" data-etichetta="Excel Avanzato + VBA">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">04</span>
+                <h3 class="voce-titolo">Excel Avanzato + VBA</h3>
+                <p class="voce-ente">IFOA - Training Institute.</p>
+                <p class="voce-desc">Competenze avanzate in Microsoft Excel, analisi dei dati e programmazione Macro con VBA.</p>
+                <ul class="voce-tech"><li>Microsoft Excel</li><li>VBA</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="220" data-y="300" data-et="l" data-etichetta="Introduction to Generative AI">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">05</span>
+                <h3 class="voce-titolo">Introduction to Generative AI</h3>
+                <p class="voce-ente">Google Cloud Skills Boost.</p>
+                <p class="voce-desc">Principi fondamentali di intelligenza artificiale generativa e applicazioni pratiche su Google Cloud.</p>
+                <ul class="voce-tech"><li>Generative AI</li><li>Google Cloud</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="220" data-y="230" data-et="l" data-etichetta="Programmatore Python">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">06</span>
+                <h3 class="voce-titolo">Programmatore Python</h3>
+                <p class="voce-ente">Fondazione ALESS Don Milani - ETS.</p>
+                <p class="voce-desc">Principi fondamentali della programmazione procedurale e orientata agli oggetti con linguaggio Python.</p>
+                <ul class="voce-tech"><li>Python</li><li>Programmazione</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="220" data-y="160" data-et="l" data-etichetta="Cybersecurity">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">07</span>
+                <h3 class="voce-titolo">Cybersecurity</h3>
+                <p class="voce-ente">Cisco Networking Academy.</p>
+                <p class="voce-desc">Principi fondamentali di sicurezza e reti.</p>
+                <ul class="voce-tech"><li>Cisco Academy</li><li>Security</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="280" data-y="120" data-et="tr" data-etichetta="Amministratore di Rete Linux">
+              <article>
+                <span class="voce-tag">[DIPLOMA CEFI]</span><span class="voce-num">08</span>
+                <h3 class="voce-titolo">Amministratore di Rete Linux</h3>
+                <p class="voce-ente">Istituto Cefi Informatica.</p>
+                <p class="voce-desc">Corso di formazione per l'amministrazione, configurazione e sicurezza di reti basate su sistemi Linux.</p>
+                <ul class="voce-tech"><li>SysAdmin</li><li>Networking</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="355" data-y="120" data-et="tr" data-etichetta="Linux Unhatched">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">09</span>
+                <h3 class="voce-titolo">Linux Unhatched</h3>
+                <p class="voce-ente">Cisco Networking Academy.</p>
+                <p class="voce-desc">Fondamenti di Linux (CLI).</p>
+                <ul class="voce-tech"><li>Cisco Academy</li><li>Linux</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="430" data-y="120" data-et="tr" data-etichetta="HTML Essentials">
+              <article>
+                <span class="voce-tag">[CERTIFICAZIONE]</span><span class="voce-num">10</span>
+                <h3 class="voce-titolo">HTML Essentials</h3>
+                <p class="voce-ente">Cisco Networking Academy.</p>
+                <p class="voce-desc">Fondamenti e best practice del web development.</p>
+                <ul class="voce-tech"><li>HTML</li><li>Web Dev</li></ul>
+              </article>
+            </li>
+            <li class="voce voce-futura" data-x="510" data-y="120" data-et="tr" data-etichetta="Next Cert">
+              <article>
+                <span class="voce-tag">[COMING SOON]</span><span class="voce-num">11</span>
+                <p class="voce-desc">Qui troverai i prossimi corsi, certificazioni e traguardi formativi del mio percorso professionale.</p>
+                <ul class="voce-tech"><li>Loading...</li><li>Next Cert</li></ul>
+              </article>
+            </li>
+          </ol>
+        </section>
+        <section class="elenco-linea" data-linea="R" data-colore="#0f8a4a" data-solida="M600,380 H860 L1000,520 H1060" data-tratteggio="M1060,520 H1140" style="--c:#0f8a4a" aria-labelledby="linea-R">
+          <h2 id="linea-R"><span class="sigla" aria-hidden="true">R</span><span class="linea-nome">Road</span> <span class="numero">2</span></h2>
+          <ol>
+            <li class="voce" data-x="700" data-y="380" data-et="tr" data-etichetta="IT Support Specialist">
+              <article>
+                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">01</span>
+                <h3 class="voce-titolo">IT Support Specialist</h3>
+                <p class="voce-ente">Assinde S.r.l.</p>
+                <p class="voce-desc">Interfaccia tecnica tra azienda e team di sviluppo. Verifica e analisi dei dati su database aziendali tramite SQL, aggiornamento del gestionale interno, supporto tecnico, gestione hardware aziendale, centralino e inventario IT.</p>
+                <ul class="voce-tech"><li>SQL</li><li>Database Management</li><li>Data Analysis</li><li>IT Support</li><li>IT Asset Management</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="800" data-y="380" data-et="tr" data-etichetta="Sistemista IT">
+              <article>
+                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">02</span>
+                <h3 class="voce-titolo">Sistemista IT</h3>
+                <p class="voce-ente">5 Emme Informatica S.p.A.</p>
+                <p class="voce-desc">Esperienza di supporto sistemistico e IT presso le strutture del Senato della Repubblica Italiana.</p>
+                <ul class="voce-tech"><li>IT Support</li><li>Sistemista</li><li>Supporto Hardware/Software</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="920" data-y="440" data-et="r" data-etichetta="Programmatore Python Junior">
+              <article>
+                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">03</span>
+                <h3 class="voce-titolo">Programmatore Python Junior</h3>
+                <p class="voce-ente">Access Point Coop. Soc. Onlus.</p>
+                <p class="voce-desc">Sviluppo, manutenzione e ottimizzazione del codice Python per la creazione di un videogioco a uso interno aziendale.</p>
+                <ul class="voce-tech"><li>Python</li><li>Game Programming</li><li>OOP</li></ul>
+              </article>
+            </li>
+            <li class="voce" data-x="1030" data-y="520" data-et="b" data-etichetta="Assistenza Helpdesk IT">
+              <article>
+                <span class="voce-tag">[ESPERIENZA]</span><span class="voce-num">04</span>
+                <h3 class="voce-titolo">Assistenza Helpdesk IT</h3>
+                <p class="voce-ente">Tecnotrans S.R.L.</p>
+                <p class="voce-desc">Supporto tecnico di primo livello, risoluzione incidenti hardware e software, assistenza postazioni di lavoro e utenti interni aziendali.</p>
+                <ul class="voce-tech"><li>IT Helpdesk</li><li>Troubleshooting</li><li>Assistenza</li></ul>
+              </article>
+            </li>
+            <li class="voce voce-futura" data-x="1140" data-y="520" data-et="t" data-etichetta="Next Step">
+              <article>
+                <span class="voce-tag">[COMING SOON]</span><span class="voce-num">05</span>
+                <p class="voce-desc">Qui troverai i prossimi step della mia carriera professionale.</p>
+                <ul class="voce-tech"><li>Loading...</li><li>Next Step</li></ul>
+              </article>
+            </li>
+          </ol>
+        </section>
+        <section class="elenco-linea" data-linea="T" data-colore="#e8a200" data-solida="M600,380 V560 L680,640 H860" style="--c:#e8a200" aria-labelledby="linea-T">
+          <h2 id="linea-T"><span class="sigla" aria-hidden="true">T</span><span class="linea-nome">Text</span> <span class="numero">6</span></h2>
+          <ol>
+            <li class="voce" data-x="600" data-y="470" data-et="l" data-etichetta="Contattami" data-tipo="modulo">
+              <article>
+                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">01</span>
+                <h3 class="voce-titolo">Contattami</h3>
+              </article>
+            </li>
+            <li class="voce" data-x="600" data-y="555" data-et="l" data-etichetta="LinkedIn">
+              <article>
+                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">02</span>
+                <h3 class="voce-titolo">LinkedIn</h3>
+                <a class="voce-link" href="https://www.linkedin.com/in/flavio-iachini-b306b8198" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </article>
+            </li>
+            <li class="voce" data-x="730" data-y="640" data-et="b" data-etichetta="Condividimi" data-tipo="condividi">
+              <article>
+                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">03</span>
+                <h3 class="voce-titolo">Condividimi</h3>
+              </article>
+            </li>
+            <li class="voce" data-x="840" data-y="640" data-et="b" data-etichetta="Privacy">
+              <article>
+                <span class="voce-tag">[CONTATTAMI]</span><span class="voce-num">04</span>
+                <h3 class="voce-titolo">Privacy</h3>
+                <a class="voce-link" href="privacy.html">Privacy</a>
+              </article>
+            </li>
+          </ol>
+        </section>
       </div>
-    </section>
+    </div>
 
-    <section id="text" class="text-page-container reveal">
-      <div class="sezione-contenuto sezione-text">
-        <div class="text-content">
-          <h2 class="text-title">Text</h2>
-          <div class="text-description">
-            <div class="text-card-shell">
-              <div class="sub-scheda card-astratta contact-form-card">
-                <div class="card-header">
-                  <span class="card-tag">[CONTATTAMI]</span>
-                  <span class="card-numero">01</span>
-                </div>
-                <div class="card-body contact-form-body">
-                  <form class="contact-form" id="contactForm" novalidate>
-                    <input type="text" id="contactCompanyFax" name="company_fax" class="contact-honeypot" tabindex="-1" autocomplete="new-password" inputmode="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-hidden="true">
-                    <label class="contact-field">
-                      <span class="sr-only">La tua email</span>
-                      <input type="email" id="contactEmail" name="email" placeholder="La tua email" autocomplete="email" inputmode="email" aria-describedby="contactStatus" required>
-                    </label>
-                    <div class="contact-suggestions" aria-label="Suggerimenti dominio email">
-                      <button type="button" class="contact-suggestion" data-domain="@gmail.com">@gmail.com</button>
-                      <button type="button" class="contact-suggestion" data-domain="@outlook.com">@outlook.com</button>
-                    </div>
-
-                    <label class="contact-field">
-                      <span class="sr-only">Scrivi il tuo messaggio</span>
-                      <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." aria-describedby="contactStatus" required></textarea>
-                    </label>
-                  </form>
-                  <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
-                </div>
-
-                <div class="card-footer contact-form-footer">
-                  <div class="card-tech">
-                    <a class="contact-chip-link" href="https://www.linkedin.com/in/flavio-iachini-b306b8198" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                    <button type="button" class="contact-chip-button" id="sharePortfolioButton">Condividimi</button>
-                    <a class="contact-chip-link" href="privacy.html">Privacy</a>
-                  </div>
-                  <button type="submit" form="contactForm" class="contact-submit">Invia</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
+    <aside class="pannello" id="pannello" aria-label="Dettagli stazione">
+      <button class="pannello-maniglia" id="maniglia" type="button" aria-label="Apri o chiudi il pannello" aria-expanded="true"></button>
+      <div class="pannello-contenuto" id="contenuto" aria-live="polite"></div>
+    </aside>
   </main>
 
+  <div class="riserva" hidden>
+    <div class="contact-form-card" id="moduloContatti">
+      <form class="contact-form" id="contactForm" novalidate>
+        <input type="text" id="contactCompanyFax" name="company_fax" class="contact-honeypot" tabindex="-1" autocomplete="new-password" inputmode="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-hidden="true">
+        <label class="contact-field">
+          <span class="sr-only">La tua email</span>
+          <input type="email" id="contactEmail" name="email" placeholder="La tua email" autocomplete="email" inputmode="email" aria-describedby="contactStatus" required>
+        </label>
+        <div class="contact-suggestions" aria-label="Suggerimenti dominio email">
+          <button type="button" class="contact-suggestion" data-domain="@gmail.com">@gmail.com</button>
+          <button type="button" class="contact-suggestion" data-domain="@outlook.com">@outlook.com</button>
+        </div>
+        <label class="contact-field">
+          <span class="sr-only">Scrivi il tuo messaggio</span>
+          <textarea id="contactMessage" name="message" rows="5" placeholder="Scrivimi qui..." aria-describedby="contactStatus" required></textarea>
+        </label>
+      </form>
+      <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+      <button type="submit" form="contactForm" class="contact-submit">Invia</button>
+    </div>
+    <button type="button" class="pan-bottone" id="sharePortfolioButton">Condividimi</button>
+  </div>
+
+  <dialog class="aiuto" id="aiuto" aria-labelledby="aiutoTitolo">
+    <h2 id="aiutoTitolo">Scorciatoie</h2>
+    <dl>
+      <dt><kbd>/</kbd></dt><dd>Cerca una stazione o una competenza</dd>
+      <dt><kbd>&larr;</kbd> <kbd>&rarr;</kbd></dt><dd>Stazione precedente e successiva</dd>
+      <dt><kbd>+</kbd> <kbd>&minus;</kbd></dt><dd>Zoom</dd>
+      <dt><kbd>0</kbd></dt><dd>Mappa intera</dd>
+      <dt><kbd>V</kbd></dt><dd>Viaggio guidato</dd>
+      <dt><kbd>L</kbd></dt><dd>Vista elenco</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Torna a PORT</dd>
+    </dl>
+    <form method="dialog"><button class="pan-bottone" type="submit">Chiudi</button></form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script src="js/site-config.js"></script>
-  <script src="js/effects.js"></script>
   <script src="js/ui.js"></script>
-  <script src="js/carousel.js"></script>
+  <script src="js/mappa.js"></script>
   <script src="js/contact.js"></script>
   <script src="js/main.js"></script>
 </body>
