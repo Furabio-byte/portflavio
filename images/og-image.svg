@@ -1,13 +1,29 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#DED9D2"/>
-  <rect x="48" y="48" width="1104" height="534" rx="28" fill="#B29A88"/>
-  <rect x="86" y="86" width="1028" height="458" rx="22" fill="#DED9D2" fill-opacity="0.18" stroke="#000000" stroke-opacity="0.08"/>
-
-  <text x="110" y="225" fill="#000000" font-family="Georgia, 'Times New Roman', serif" font-size="96" font-weight="700">PORTFLAVIO</text>
-  <text x="112" y="290" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="30" opacity="0.82">Portfolio personale di Flavio</text>
-  <text x="112" y="352" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="26" opacity="0.68">Progetti, certificazioni, percorso professionale e contatti.</text>
-
-  <line x1="112" y1="408" x2="356" y2="408" stroke="#000000" stroke-opacity="0.18" stroke-width="2"/>
-
-  <text x="112" y="474" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">portflavio.it</text>
+  <rect width="1200" height="630" fill="#FBFAF7"/>
+  <path d="M-60 520 C 180 500 320 590 520 550 S 860 470 1040 500 S 1200 560 1260 540" stroke="#CFE3F2" stroke-width="34" stroke-linecap="round"/>
+  <g stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M800 330 V140" stroke="#D7262B"/>
+    <path d="M800 330 H560 Q520 330 520 290 V150" stroke="#1F4FA3"/>
+    <path d="M800 330 H1000 L1120 450" stroke="#0F8A4A"/>
+    <path d="M800 330 V470 L870 540 H1040" stroke="#E8A200"/>
+  </g>
+  <g fill="#FFFFFF" stroke-width="6">
+    <circle cx="800" cy="210" r="11" stroke="#D7262B"/>
+    <circle cx="660" cy="330" r="11" stroke="#1F4FA3"/>
+    <circle cx="520" cy="220" r="11" stroke="#1F4FA3"/>
+    <circle cx="920" cy="330" r="11" stroke="#0F8A4A"/>
+    <circle cx="1060" cy="390" r="11" stroke="#0F8A4A"/>
+    <circle cx="800" cy="420" r="11" stroke="#E8A200"/>
+    <circle cx="960" cy="540" r="11" stroke="#E8A200"/>
+  </g>
+  <circle cx="800" cy="330" r="30" fill="#FFFFFF" stroke="#111111" stroke-width="9"/>
+  <text x="80" y="250" fill="#111111" font-family="Inter, Arial, Helvetica, sans-serif" font-size="120" font-weight="800" letter-spacing="-4">PORT</text>
+  <text x="84" y="318" fill="#111111" font-family="Inter, Arial, Helvetica, sans-serif" font-size="30" font-weight="600">Portfolio personale di Flavio</text>
+  <g font-family="Inter, Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#FFFFFF">
+    <circle cx="100" cy="392" r="18" fill="#D7262B"/><text x="93" y="400">P</text>
+    <circle cx="146" cy="392" r="18" fill="#1F4FA3"/><text x="138" y="400">O</text>
+    <circle cx="192" cy="392" r="18" fill="#0F8A4A"/><text x="185" y="400">R</text>
+    <circle cx="238" cy="392" r="18" fill="#E8A200"/><text x="231" y="400">T</text>
+  </g>
+  <text x="84" y="560" fill="#111111" font-family="Inter, Arial, Helvetica, sans-serif" font-size="22" font-weight="700">portflavio.it</text>
 </svg>
