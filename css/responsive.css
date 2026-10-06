@@ -63,6 +63,20 @@ html:not(.js) .riserva {
     margin-right: -20px;
   }
 
+  .b-intestazione {
+    gap: 12px;
+  }
+
+  .b-micro {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .b-snodo {
+    width: 56px;
+    height: 56px;
+  }
+
   .b-campi,
   .b-griglia,
   .b-doppia {

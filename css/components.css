@@ -1826,13 +1826,25 @@
   padding: 18px 16px 48px;
 }
 
+.biglietto-finestra:focus {
+  outline: none;
+}
+
+/* barra comandi: una capsula scura che resta leggibile anche sopra la carta chiara */
 .biglietto-azioni {
   position: sticky;
   top: 0;
   z-index: 2;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 18px;
+  padding: 5px;
+  border-radius: 999px;
+  background-color: rgba(16, 16, 18, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.7);
 }
 
 .biglietto-azioni form {
@@ -1842,13 +1854,12 @@
 .biglietto-azioni .pan-bottone {
   background-color: #f2f1ec;
   color: #111;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
 }
 
 .biglietto-azioni .pan-bottone.secondario {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: transparent;
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .biglietto-scena {
