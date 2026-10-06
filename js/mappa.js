@@ -101,9 +101,6 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     /* ---------- Disegno ---------- */
     const defs = crea('defs', {}, svg);
-    const motivo = crea('pattern', { id: 'griglia', width: 40, height: 40, patternUnits: 'userSpaceOnUse' }, defs);
-    crea('circle', { class: 'griglia-punto', cx: 2, cy: 2, r: 1.6 }, motivo);
-    crea('rect', { x: -2000, y: -2000, width: 5200, height: 4800, fill: 'url(#griglia)' }, svg);
     // un fiume morbido attraversa la mappa, come nelle mappe della metro
     crea('path', { class: 'fiume', d: 'M-400,610 C-100,600 120,700 330,650 S640,560 820,590 S1080,720 1300,660 S1600,600 1700,620' }, svg);
 
@@ -264,6 +261,12 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
 
     function muoviTreni(ora) {
+      // mentre la mappa si muove i treni aspettano: la mappa resta un'immagine ferma e scorre fluida
+      if (vista.classList.contains('in-movimento')) {
+        treni.forEach((treno) => { treno.t0 += 16; });
+        requestAnimationFrame(muoviTreni);
+        return;
+      }
       treni.forEach((treno) => {
         if (treno.stato === 'sosta') {
           posa(treno, treno.a, treno.dir);
@@ -294,11 +297,46 @@ window.PortflavioApp = window.PortflavioApp || {};
     const W_MIN = 240;
     const wMax = () => adatta().w * 1.4;
 
+    // Durante zoom e spostamenti la mappa già disegnata viene solo traslata e scalata via CSS
+    // (lavoro della GPU); il ridisegno vero e nitido avviene una volta sola, a gesto finito.
+    let vbDisegnato = null;
+    let timerConsolida = null;
+    let rafApplica = null;
+
     function applica() {
+      if (rafApplica) return;
+      rafApplica = requestAnimationFrame(() => {
+        rafApplica = null;
+        aggiornaMinimappa();
+        aggiornaGriglia();
+        nascondiSuggerimento();
+        if (!vbDisegnato) { consolida(); return; }
+        const scala = vista.clientWidth / vbDisegnato.w;
+        const k = vbDisegnato.w / vb.w;
+        const tx = k * scala * (vbDisegnato.x - vb.x);
+        const ty = k * scala * (vbDisegnato.y - vb.y);
+        vista.classList.add('in-movimento');
+        svg.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${k})`;
+        window.clearTimeout(timerConsolida);
+        timerConsolida = window.setTimeout(consolida, 160);
+      });
+    }
+
+    function consolida() {
+      window.clearTimeout(timerConsolida);
       svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+      svg.style.transform = '';
       svg.classList.toggle('vicino', vb.w < 640);
-      aggiornaMinimappa();
-      nascondiSuggerimento();
+      vbDisegnato = { ...vb };
+      vista.classList.remove('in-movimento');
+    }
+
+    function aggiornaGriglia() {
+      const scala = vista.clientWidth / vb.w;
+      const passo = 40 * scala;
+      vista.style.setProperty('--griglia-passo', `${passo}px`);
+      vista.style.setProperty('--griglia-x', `${(-vb.x * scala) % passo}px`);
+      vista.style.setProperty('--griglia-y', `${(-vb.y * scala) % passo}px`);
     }
 
     function imposta(cx, cy, w) {
@@ -324,9 +362,12 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     // su mobile il pannello copre la parte bassa: il punto va centrato nella parte visibile
     function scostamento(w) {
-      if (window.innerWidth > 960 || !pannello.classList.contains('aperto')) return 0;
+      if (window.innerWidth > 960) return 0;
+      const v = vista.getBoundingClientRect();
+      const cimaFoglio = window.innerHeight - (pannello.offsetHeight - posizioneFoglio(statoFoglio));
+      const coperto = Math.max(0, Math.min(v.bottom, window.innerHeight) - cimaFoglio);
       const altezza = Math.min(Math.max(w, W_MIN), wMax()) / aspetto();
-      return (pannello.offsetHeight / 2) * (altezza / vista.clientHeight);
+      return (coperto / 2) * (altezza / vista.clientHeight);
     }
 
     function inquadra(nodiDaVedere, margineX = 150, margineY = 120) {
@@ -342,7 +383,7 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     function zoomA(fattore, clientX, clientY) {
       cancelAnimationFrame(animazione);
-      const r = svg.getBoundingClientRect();
+      const r = vista.getBoundingClientRect();
       const px = clientX ?? r.left + r.width / 2;
       const py = clientY ?? r.top + r.height / 2;
       const p = { x: vb.x + (px - r.left) / r.width * vb.w, y: vb.y + (py - r.top) / r.height * vb.h };
@@ -394,13 +435,24 @@ window.PortflavioApp = window.PortflavioApp || {};
         svg.setPointerCapture(e.pointerId);
         svg.classList.add('trascina');
       }
-      const r = svg.getBoundingClientRect();
+      const r = vista.getBoundingClientRect();
       vb.x = inizioPan.vb.x - dx / r.width * vb.w;
       vb.y = inizioPan.vb.y - dy / r.height * vb.h;
       applica();
     });
 
+    let ultimoTocco = { t: 0, x: 0, y: 0 };
     const fineTrascinamento = (e) => {
+      // doppio tocco su un punto vuoto della mappa: ingrandisce lì
+      if (e.type === 'pointerup' && e.pointerType === 'touch' && !trascinato && puntatori.size === 1 && !e.target.closest('.stazione, .hub, .linea')) {
+        const ora = performance.now();
+        if (ora - ultimoTocco.t < 320 && Math.hypot(e.clientX - ultimoTocco.x, e.clientY - ultimoTocco.y) < 30) {
+          zoomA(0.5, e.clientX, e.clientY);
+          ultimoTocco.t = 0;
+        } else {
+          ultimoTocco = { t: ora, x: e.clientX, y: e.clientY };
+        }
+      }
       puntatori.delete(e.pointerId);
       if (puntatori.size < 2) inizioPinch = null;
       if (puntatori.size === 0) {
@@ -446,10 +498,9 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     function mostraSuggerimento(nodo) {
       if (trascinato) return;
-      const r = svg.getBoundingClientRect();
       const v = vista.getBoundingClientRect();
-      suggerimento.style.left = `${r.left - v.left + (nodo.x - vb.x) / vb.w * r.width}px`;
-      suggerimento.style.top = `${r.top - v.top + (nodo.y - vb.y) / vb.h * r.height}px`;
+      suggerimento.style.left = `${(nodo.x - vb.x) / vb.w * v.width}px`;
+      suggerimento.style.top = `${(nodo.y - vb.y) / vb.h * v.height}px`;
       suggerimento.style.setProperty('--c', nodo.linea.colore);
       suggerimento.innerHTML = `<small>${esc(nodo.linea.nome)} &middot; ${esc(nodo.num)}</small><strong>${esc(nodo.titolo || nodo.nome)}</strong>${nodo.ente ? `<small>${esc(nodo.ente)}</small>` : ''}`;
       suggerimento.classList.add('vis');
@@ -484,6 +535,23 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     /* ---------- Pannello ---------- */
     let corrente = null;
+
+    // memoria delle stazioni visitate (solo su questo dispositivo)
+    const leggi = (chiave) => { try { return JSON.parse(localStorage.getItem(chiave)) || []; } catch (error) { return []; } };
+    const scrivi = (chiave, valore) => { try { localStorage.setItem(chiave, JSON.stringify(valore)); } catch (error) { /* solo per questa visita */ } };
+    const visitabili = stazioni.filter((s) => !s.futura);
+    const visitate = new Set(leggi('pf-visitate').filter((id) => perId[id]));
+    let recenti = leggi('pf-recenti').filter((id) => perId[id]);
+
+    function segnaVisitata(nodo) {
+      if (nodo.hub) return;
+      if (!nodo.futura) visitate.add(nodo.id);
+      recenti = [nodo.id, ...recenti.filter((id) => id !== nodo.id)].slice(0, 4);
+      scrivi('pf-visitate', [...visitate]);
+      scrivi('pf-recenti', recenti);
+      nodo.g.classList.add('visitata');
+    }
+    visitate.forEach((id) => perId[id].g?.classList.add('visitata'));
 
     function collegati(nodo) {
       const miei = new Set(nodo.tech || []);
@@ -527,10 +595,34 @@ window.PortflavioApp = window.PortflavioApp || {};
       contenuto.scrollTop = 0;
     }
 
-    function apriPannello(aperto = true) {
-      pannello.classList.toggle('aperto', aperto);
-      $('maniglia').setAttribute('aria-expanded', String(aperto));
+    /* foglio mobile a tre posizioni: chiuso (sporge la maniglia), medio, pieno */
+    const SBIRCIA = 64;
+    let statoFoglio = 'medio';
+
+    function posizioneFoglio(stato) {
+      const altezza = pannello.offsetHeight;
+      if (stato === 'pieno') return 0;
+      if (stato === 'chiuso') return Math.max(altezza - SBIRCIA, 0);
+      return Math.max(altezza - Math.min(window.innerHeight * 0.58, 540), 0);
     }
+
+    function impostaFoglio(stato) {
+      statoFoglio = stato;
+      const aperto = stato !== 'chiuso';
+      pannello.classList.toggle('aperto', aperto);
+      pannello.dataset.stato = stato;
+      $('maniglia').setAttribute('aria-expanded', String(aperto));
+      if (window.innerWidth > 960) { pannello.style.removeProperty('--foglio-y'); contenuto.style.paddingBottom = ''; return; }
+      const y = posizioneFoglio(stato);
+      pannello.style.setProperty('--foglio-y', `${y}px`);
+      // la parte del foglio sotto lo schermo diventa spazio di scorrimento: nulla resta tagliato
+      contenuto.style.paddingBottom = `calc(${y}px + 28px + env(safe-area-inset-bottom))`;
+    }
+
+    function apriPannello(aperto = true) {
+      impostaFoglio(aperto ? (statoFoglio === 'pieno' ? 'pieno' : 'medio') : 'chiuso');
+    }
+    window.addEventListener('resize', () => impostaFoglio(statoFoglio));
 
     function striscia(linea, qui) {
       const fermate = linea.nodi.map((n) => `<button type="button" class="${n === qui ? 'qui' : ''}${n.futura ? ' futura' : ''}" data-vai="${n.id}" aria-label="${esc(n.nome)}" title="${esc(n.nome)}"></button>`).join('');
@@ -556,6 +648,7 @@ window.PortflavioApp = window.PortflavioApp || {};
         mostraStazione(nodo, altri);
       }
       suona(nodo.hub ? 0 : LINEE.indexOf(nodo.linea) + 1);
+      segnaVisitata(nodo);
 
       apriPannello();
       if (spostaVista) {
@@ -614,6 +707,24 @@ window.PortflavioApp = window.PortflavioApp || {};
         <div class="tabellone" role="group" aria-label="Tabellone delle linee"><div class="ora"><span>PORT</span><span data-orologio>${orario()}</span></div>${righe}<div class="scorrimento" aria-hidden="true"><span>${esc(scorrimento)}</span></div></div>
         <p class="pan-desc">Ogni linea è una sezione. Tocca una stazione per aprirla, isola una linea dalla legenda, cerca una competenza o calcola un percorso tra due stazioni.</p>`);
       contenuto.querySelectorAll('.tabellone .riga span:nth-child(2)').forEach((el, i) => paletteRotanti(el, 250 + i * 180));
+
+      // quanto della mappa è stato esplorato
+      const fatte = visitabili.filter((s) => visitate.has(s.id)).length;
+      let extra = `<div class="esplorazione"><div class="esplorazione-testa"><span class="pan-sezione">Esplorazione</span><span>${fatte}/${visitabili.length}</span></div>
+        <div class="esplorazione-barra" role="progressbar" aria-label="Stazioni visitate" aria-valuemin="0" aria-valuemax="${visitabili.length}" aria-valuenow="${fatte}"><span style="width:${fatte / visitabili.length * 100}%"></span></div>
+        ${fatte === visitabili.length ? '<p class="pan-desc">Hai visitato tutte le stazioni.</p>' : ''}</div>`;
+
+      if (recenti.length) {
+        extra += `<p class="pan-sezione">Visitate di recente</p><ul class="collegamenti">${recenti.map((id) => perId[id]).map((n) => `<li><button type="button" data-vai="${n.id}" style="--c2:${n.linea.colore}"><span class="sigla" style="--c:${n.linea.colore}" aria-hidden="true">${esc(n.linea.id)}</span>${esc(n.nome)}<small>${esc(n.linea.nome)}</small></button></li>`).join('')}</ul>`;
+      }
+
+      // le competenze più ricorrenti: toccandone una si accendono le stazioni che la contengono
+      const conteggio = new Map();
+      visitabili.forEach((s) => s.tech.forEach((t) => conteggio.set(t, (conteggio.get(t) || 0) + 1)));
+      const competenze = [...conteggio].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'it')).slice(0, 16);
+      extra += `<p class="pan-sezione">Competenze</p><ul class="competenze">${competenze.map(([t, n]) => `<li><button type="button" data-cerca="${esc(t)}">${esc(t)}${n > 1 ? `<span>${n}</span>` : ''}</button></li>`).join('')}</ul>`;
+
+      contenuto.insertAdjacentHTML('beforeend', extra);
     }
 
     // le lettere del tabellone girano come le palette prima di fermarsi sul testo giusto
@@ -690,6 +801,8 @@ window.PortflavioApp = window.PortflavioApp || {};
         { nome: scuro ? 'Tema chiaro' : 'Tema scuro', azione: () => cambiaTema() },
         { nome: suoniAttivi ? 'Disattiva suoni' : 'Attiva suoni', azione: () => attivaSuoni(!suoniAttivi) },
         { nome: 'Mappa intera', tasto: '0', azione: mappaIntera },
+        ...(document.fullscreenEnabled ? [{ nome: document.fullscreenElement ? 'Esci da schermo intero' : 'Schermo intero', tasto: 'F', azione: schermoIntero }] : []),
+        ...(visitate.size ? [{ nome: 'Azzera stazioni visitate', azione: azzeraVisitate }] : []),
         { nome: 'Torna a PORT', tasto: 'Esc', azione: () => { filtra(null); seleziona(HUB); } },
         { nome: 'Scorciatoie', tasto: '?', azione: apriAiuto },
         ...LINEE.map((l) => ({ nome: `Linea ${l.nome}`, sigla: l.id, colore: l.colore, azione: () => filtra(l.id) }))
@@ -947,6 +1060,22 @@ window.PortflavioApp = window.PortflavioApp || {};
     }
     bottoneTema.addEventListener('click', cambiaTema);
 
+    function schermoIntero() {
+      if (!document.fullscreenEnabled) return;
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    }
+
+    function azzeraVisitate() {
+      visitate.clear();
+      recenti = [];
+      scrivi('pf-visitate', []);
+      scrivi('pf-recenti', []);
+      stazioni.forEach((n) => n.g.classList.remove('visitata'));
+      if (corrente?.hub) mostraHub();
+      avvisa('Esplorazione azzerata');
+    }
+
     /* ---------- Suoni (spenti di default) ---------- */
     const bottoneSuono = $('btnSuono');
     let suoniAttivi = false;
@@ -993,63 +1122,88 @@ window.PortflavioApp = window.PortflavioApp || {};
     $('btnAiuto').addEventListener('click', apriAiuto);
     $('maniglia').addEventListener('click', () => {
       if (Date.now() - fineTrascinoFoglio < 350) return;
-      apriPannello(!pannello.classList.contains('aperto'));
+      impostaFoglio(statoFoglio === 'chiuso' ? 'medio' : statoFoglio === 'medio' ? 'chiuso' : 'medio');
     });
 
-    /* ---------- Foglio mobile: si trascina in basso per chiuderlo, in alto per aprirlo ---------- */
-    let trascinoFoglio = null;
+    /* ---------- Gesti sul foglio mobile ----------
+       su e giù: lo trascina tra chiuso, medio e pieno, seguendo il dito;
+       destra e sinistra: stazione precedente e successiva sulla stessa linea */
+    let tocco = null;
     let fineTrascinoFoglio = 0;
-    const SBIRCIA = 64;
 
     pannello.addEventListener('touchstart', (e) => {
       if (window.innerWidth > 960 || e.touches.length !== 1) return;
-      if (e.target.closest('input, textarea, select')) return;
-      const aperto = pannello.classList.contains('aperto');
-      const dallaManiglia = Boolean(e.target.closest('#maniglia'));
-      // a foglio aperto si trascina dalla maniglia, o dal contenuto quando è già in cima
-      if (aperto && !dallaManiglia && contenuto.scrollTop > 0) return;
-      trascinoFoglio = { y0: e.touches[0].clientY, t0: performance.now(), aperto, dy: 0, attivo: false, altezza: pannello.offsetHeight };
+      if (e.target.closest('input, textarea, select, .striscia')) return;
+      tocco = {
+        x0: e.touches[0].clientX,
+        y0: e.touches[0].clientY,
+        t0: performance.now(),
+        dallaManiglia: Boolean(e.target.closest('#maniglia')),
+        inCima: contenuto.scrollTop <= 0,
+        base: posizioneFoglio(statoFoglio),
+        modo: null,
+        dy: 0,
+        dx: 0
+      };
     }, { passive: true });
 
     pannello.addEventListener('touchmove', (e) => {
-      if (!trascinoFoglio) return;
-      const dy = e.touches[0].clientY - trascinoFoglio.y0;
-      if (!trascinoFoglio.attivo) {
-        // parte solo se il gesto va nella direzione giusta: giù se aperto, su se chiuso
-        if (Math.abs(dy) < 8) return;
-        if ((trascinoFoglio.aperto && dy < 0) || (!trascinoFoglio.aperto && dy > 0)) { trascinoFoglio = null; return; }
-        trascinoFoglio.attivo = true;
-        pannello.style.transition = 'none';
+      if (!tocco) return;
+      const dx = e.touches[0].clientX - tocco.x0;
+      const dy = e.touches[0].clientY - tocco.y0;
+      tocco.dx = dx;
+      tocco.dy = dy;
+
+      if (!tocco.modo) {
+        if (Math.hypot(dx, dy) < 8) return;
+        if (Math.abs(dx) > Math.abs(dy) * 1.5 && !tocco.dallaManiglia) { tocco.modo = 'orizzontale'; return; }
+        const giu = dy > 0;
+        // dal contenuto: giù solo se è già in cima, su solo se il foglio non è ancora pieno
+        const puoTrascinare = tocco.dallaManiglia || (giu ? tocco.inCima : statoFoglio !== 'pieno');
+        if (!puoTrascinare) { tocco = null; return; }
+        tocco.modo = 'foglio';
+        pannello.classList.add('trascino');
       }
+      if (tocco.modo !== 'foglio') return;
       e.preventDefault();
-      trascinoFoglio.dy = dy;
-      const chiuso = trascinoFoglio.altezza - SBIRCIA;
-      const base = trascinoFoglio.aperto ? 0 : chiuso;
-      const y = Math.min(Math.max(base + dy, 0), chiuso);
-      pannello.style.transform = `translateY(${y}px)`;
+      const y = Math.min(Math.max(tocco.base + dy, 0), posizioneFoglio('chiuso'));
+      pannello.style.setProperty('--foglio-y', `${y}px`);
     }, { passive: false });
 
-    const fineFoglio = () => {
-      if (!trascinoFoglio) return;
-      const { attivo, dy, t0, aperto, altezza } = trascinoFoglio;
-      trascinoFoglio = null;
-      if (!attivo) return;
+    const fineTocco = () => {
+      if (!tocco) return;
+      const { modo, dx, dy, t0, base } = tocco;
+      tocco = null;
+      if (modo === 'orizzontale') {
+        if (Math.abs(dx) > 60 && corrente && !corrente.hub) {
+          const i = corrente.linea.nodi.indexOf(corrente);
+          const prossimo = dx < 0 ? corrente.linea.nodi[i + 1] : (corrente.linea.nodi[i - 1] || HUB);
+          if (prossimo) {
+            pannello.dataset.scorri = dx < 0 ? 'avanti' : 'indietro';
+            seleziona(prossimo);
+            window.setTimeout(() => { delete pannello.dataset.scorri; }, 450);
+          }
+        }
+        return;
+      }
+      if (modo !== 'foglio') return;
       fineTrascinoFoglio = Date.now();
+      pannello.classList.remove('trascino');
+      // dove si fermerebbe il foglio con lo slancio del dito, poi la posizione più vicina
       const velocita = dy / Math.max(performance.now() - t0, 1);
-      pannello.style.transition = '';
-      pannello.style.transform = '';
-      const soglia = altezza * 0.25;
-      if (aperto) apriPannello(!(dy > soglia || velocita > 0.5));
-      else apriPannello(-dy > soglia || velocita < -0.5);
+      const arrivo = base + dy + velocita * 180;
+      const stati = ['pieno', 'medio', 'chiuso'];
+      const vicino = stati.reduce((a, b) => (Math.abs(posizioneFoglio(b) - arrivo) < Math.abs(posizioneFoglio(a) - arrivo) ? b : a));
+      impostaFoglio(vicino);
     };
-    pannello.addEventListener('touchend', fineFoglio);
-    pannello.addEventListener('touchcancel', fineFoglio);
+    pannello.addEventListener('touchend', fineTocco);
+    pannello.addEventListener('touchcancel', fineTocco);
 
     // a foglio chiuso, toccare la parte che sporge lo apre
     pannello.addEventListener('click', (e) => {
-      if (window.innerWidth > 960 || pannello.classList.contains('aperto') || e.target.closest('#maniglia')) return;
+      if (window.innerWidth > 960 || statoFoglio !== 'chiuso' || e.target.closest('#maniglia')) return;
       if (Date.now() - fineTrascinoFoglio < 350) return;
-      apriPannello(true);
+      impostaFoglio('medio');
     });
 
     document.addEventListener('keydown', (e) => {
@@ -1063,6 +1217,7 @@ window.PortflavioApp = window.PortflavioApp || {};
       if (tasto === '0') mappaIntera();
       if (tasto === 'v') bottoneViaggio.click();
       if (tasto === 'l') bottoneElenco.click();
+      if (tasto === 'f') schermoIntero();
       if (tasto === 'escape') { filtra(null); elenco(false); seleziona(HUB); }
       if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && corrente) {
         e.preventDefault();

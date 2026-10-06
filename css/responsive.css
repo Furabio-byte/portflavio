@@ -60,24 +60,24 @@ html:not(.js) .riserva {
     grid-template-columns: 1fr;
   }
 
+  /* foglio a tre posizioni: la posizione arriva da JavaScript in --foglio-y */
   .js .pannello {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 30;
-    height: min(62vh, 560px);
-    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(100dvh - 16px);
     border-left: none;
     border-top: 1px solid var(--rule);
     border-radius: 22px 22px 0 0;
     box-shadow: 0 -20px 40px -20px rgba(0, 0, 0, 0.35);
-    transform: translateY(calc(100% - 64px));
+    transform: translate3d(0, var(--foglio-y, calc(100% - 64px)), 0);
     transition: transform 0.45s var(--ease);
   }
 
-  .js .pannello.aperto {
-    transform: none;
+  .js .pannello.trascino {
+    transition: none;
   }
 
   .pannello-maniglia {
