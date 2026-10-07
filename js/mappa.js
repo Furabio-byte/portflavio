@@ -687,7 +687,10 @@ window.PortflavioApp = window.PortflavioApp || {};
       $('maniglia').setAttribute('aria-expanded', String(aperto));
       if (window.innerWidth > 960) { pannello.style.removeProperty('--foglio-y'); contenuto.style.paddingBottom = ''; return; }
       const y = posizioneFoglio(stato);
-      pannello.style.setProperty('--foglio-y', `${y}px`);
+      // la posizione è misurata dal fondo del foglio: se la barra del browser cambia l'altezza
+      // dello schermo (Safari e Chrome su iPhone), la parte visibile resta la stessa
+      const visibile = pannello.offsetHeight - y;
+      pannello.style.setProperty('--foglio-y', stato === 'pieno' ? '0px' : `calc(100% - ${visibile}px)`);
       // la parte del foglio sotto lo schermo diventa spazio di scorrimento: nulla resta tagliato
       contenuto.style.paddingBottom = `calc(${y}px + 28px + env(safe-area-inset-bottom))`;
     }
@@ -696,6 +699,10 @@ window.PortflavioApp = window.PortflavioApp || {};
       impostaFoglio(aperto ? (statoFoglio === 'pieno' ? 'pieno' : 'medio') : 'chiuso');
     }
     window.addEventListener('resize', () => impostaFoglio(statoFoglio));
+    // le barre di Safari e Chrome su telefono si mostrano e nascondono senza sempre avvisare con resize
+    const riallineaFoglio = () => { if (!pannello.classList.contains('trascino')) impostaFoglio(statoFoglio); };
+    window.visualViewport?.addEventListener('resize', riallineaFoglio);
+    if (window.ResizeObserver) new ResizeObserver(riallineaFoglio).observe(pannello);
 
     function striscia(linea, qui) {
       const fermate = linea.nodi.map((n) => `<button type="button" class="${n === qui ? 'qui' : ''}${n.futura ? ' futura' : ''}" data-vai="${n.id}" aria-label="${esc(n.nome)}" title="${esc(n.nome)}"></button>`).join('');
