@@ -670,12 +670,20 @@ window.PortflavioApp = window.PortflavioApp || {};
 
     /* foglio mobile a tre posizioni: chiuso (sporge la maniglia), medio, pieno */
     const SBIRCIA = 64;
+    // su iPhone (Safari 26 e Chrome) la barra del browser galleggia sopra la pagina e ne copre il fondo:
+    // il foglio chiuso sporge un po' di più, più quanto lo schermo visibile risulta già ridotto
+    const IOS = window.CSS?.supports?.('-webkit-touch-callout', 'none') && navigator.maxTouchPoints > 0;
+    function sporgenza() {
+      const vv = window.visualViewport;
+      const coperto = vv && vv.scale <= 1.01 ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
+      return SBIRCIA + (IOS ? 26 : 0) + Math.round(coperto);
+    }
     let statoFoglio = 'medio';
 
     function posizioneFoglio(stato) {
       const altezza = pannello.offsetHeight;
       if (stato === 'pieno') return 0;
-      if (stato === 'chiuso') return Math.max(altezza - SBIRCIA, 0);
+      if (stato === 'chiuso') return Math.max(altezza - sporgenza(), 0);
       return Math.max(altezza - Math.min(window.innerHeight * 0.58, 540), 0);
     }
 
