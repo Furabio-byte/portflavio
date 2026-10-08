@@ -676,7 +676,7 @@ window.PortflavioApp = window.PortflavioApp || {};
     function sporgenza() {
       const vv = window.visualViewport;
       const coperto = vv && vv.scale <= 1.01 ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
-      return SBIRCIA + (IOS ? 24 : 0) + Math.round(coperto);
+      return SBIRCIA + (IOS ? 23 : 0) + Math.round(coperto);
     }
     let statoFoglio = 'medio';
 
