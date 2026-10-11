@@ -334,3 +334,21 @@ html:not(.js) .riserva {
     display: none;
   }
 }
+
+/* su telefono la mappa resta ferma: nessuna animazione infinita che ridisegna l'SVG a ogni fotogramma */
+@media (hover: none) and (pointer: coarse) {
+  #treni {
+    display: none;
+  }
+
+  .linea.scorre .flusso {
+    opacity: 0;
+    animation: none;
+  }
+
+  .hub .anello-esterno,
+  .stazione.selezionata .alone,
+  .stato-punto {
+    animation: none;
+  }
+}

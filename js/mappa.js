@@ -342,7 +342,8 @@ window.PortflavioApp = window.PortflavioApp || {};
       requestAnimationFrame(muoviTreni);
     }
 
-    if (!ridotto) window.setTimeout(() => { preparaTreni(); requestAnimationFrame(muoviTreni); }, 1800);
+    // su telefono niente treni: l'animazione continua della mappa rallenta i gesti
+    if (!ridotto && !touch) window.setTimeout(() => { preparaTreni(); requestAnimationFrame(muoviTreni); }, 1800);
 
     /* ---------- Zoom e spostamento ---------- */
     let vb = { x: 0, y: 0, w: CONTENUTO.w, h: CONTENUTO.h };
